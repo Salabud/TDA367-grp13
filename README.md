@@ -4,7 +4,7 @@ Object-Oriented Programming Project Group 13
 Team members: Daniel Esteban Lahti, Anton Bülow, Daniel Kindvall, Leo Tieu
 
 ### Description
-Description of the project
+Zen ant colony simulator.
 
 ### Links and resources
 - Google Drive: https://drive.google.com/drive/folders/1EwCuTN0YxqmnjzWAHLTlHEYnAEkhfmlo?usp=sharing
