@@ -13,9 +13,13 @@ public class World {
         entities = new ArrayList<>();
     }
 
-    public void addEntity(Entity ent){
-        grid[ent.getX()][ent.getY()] = ent;
+    public void addEntity(Entity ent, boolean collision){
+        if(collision) grid[ent.getX()][ent.getY()] = ent;
         entities.add(ent);
+    }
+    public void removeEntity(int x, int y){
+        entities.remove(grid[x][y]);
+        grid[x][y] = null;
     }
 
 

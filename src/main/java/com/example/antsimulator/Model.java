@@ -21,7 +21,7 @@ public class Model extends Application {
         SimulationHandler simulationHandler = new SimulationHandler(new World());
 
         GameCanvas canvas = new GameCanvas(simulationHandler.getWorld(),1000, 1000);
-        root.getChildren().add(canvas);
+
 
         stage.setTitle("Ant Simulator");
         stage.setResizable(false);
@@ -30,16 +30,25 @@ public class Model extends Application {
             Platform.exit(); // stops JavaFX
             System.exit(0); // forces JVM exit
         });
+        GameCanvas bg = new GameCanvas(simulationHandler.getWorld(), 1000,1000);
+        GameCanvas ui = new GameCanvas(simulationHandler.getWorld(), 1000,1000);
+        root.getChildren().add(bg);
+        root.getChildren().add(canvas);
+        root.getChildren().add(ui);
+
 
 
         Thread gameThread = new Thread() {
             @Override
             public void run() {
                 try {
+                    bg.renderBG();
+                    ui.renderUI();
                     while(true){
+                        simulationHandler.getWorld().tick();
                         canvas.render();
                         Thread.sleep(tickrate);
-                        simulationHandler.getWorld().tick();
+
                     }
                 } catch (InterruptedException v) {
                     System.out.println(v);
@@ -49,5 +58,9 @@ public class Model extends Application {
         gameThread.start();
 
         stage.show();
+    }
+
+    public static void main(String[] args){
+        Application.launch(args);
     }
 }
