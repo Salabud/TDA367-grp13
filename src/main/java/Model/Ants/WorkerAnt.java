@@ -9,8 +9,5 @@ public class WorkerAnt extends Ant implements TaskPerformer {
     public void updateTask() {
 
     }
-    @Override
-    public void update() {
 
-    }
 }
