@@ -4,7 +4,8 @@ module com.example.antsimulator {
 
     requires com.dlsc.formsfx;
     requires com.example.antsimulator;
-
+    requires java.sql;
+    exports Model.Tasks;
     opens com.example.antsimulator to javafx.fxml;
     exports com.example.antsimulator;
     exports Model;
