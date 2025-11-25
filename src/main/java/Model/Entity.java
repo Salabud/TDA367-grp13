@@ -30,8 +30,8 @@ public abstract class Entity implements Updateable{
         return this.y;
     }
 
-    public String getType() {
-        return null;
+    public EntityType getType() {
+        return type;
     }
 
     public float getHealth() {

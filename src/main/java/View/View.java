@@ -32,7 +32,7 @@ public class View implements ModelListener {
      */
     public void initialize() {
         // Create canvas components
-        this.worldCanvas = new WorldCanvas();
+        //this.worldCanvas = new WorldCanvas();
         this.entityCanvas = new EntityCanvas();
         this.interfaceCanvas = new InterfaceCanvas();
         
@@ -41,7 +41,7 @@ public class View implements ModelListener {
         // Add other canvases as needed
         
         // Create scene
-        scene = new Scene(root, 800, 600);
+        scene = new Scene(root, 1000, 1000);
         stage.setScene(scene);
         stage.setTitle("Ant Simulator");
         
