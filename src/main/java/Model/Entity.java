@@ -1,12 +1,11 @@
 package Model;
 
-import Model.Ants.Behavior.Status;
+import Model.Ants.Status.Status;
 
 import java.util.List;
 
 public abstract class Entity implements Updateable{
-    private int x;
-    private int y;
+    private Position position;
     private float health;
     private float maxHealth;
     private float hunger;
@@ -16,22 +15,27 @@ public abstract class Entity implements Updateable{
     private EntityType type; //Final?
     private List<Status> statuses;
 
+
     public void setX(int x){
-        this.x = x;
+        this.position.setX(x);
     }
     public int getX() {
-        return this.x;
+        return this.position.getX();
     }
 
     public void setY(int y){
-        this.y = y;
+        this.position.setY(y);
     }
     public int getY() {
-        return this.y;
+        return this.position.getX();
     }
 
-    public String getType() {
-        return null;
+    public Position getPosition(){
+        return this.position;
+    }
+
+    public EntityType getType() {
+        return this.type;
     }
 
     public float getHealth() {

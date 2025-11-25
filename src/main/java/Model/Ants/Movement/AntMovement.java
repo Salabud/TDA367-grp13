@@ -1,4 +1,4 @@
-package Model.Ants.Behavior;
+package Model.Ants.Movement;
 
 public interface AntMovement {
 }

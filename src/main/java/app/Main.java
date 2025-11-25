@@ -1,13 +1,11 @@
+package app;
+
 import Controller.Controller;
 import Model.Model;
 import View.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-/**
- * Main application entry point that wires up the MVC architecture.
- * Follows SOLID principles by keeping components decoupled through observer pattern.
- */
 public class Main extends Application {
 
     @Override

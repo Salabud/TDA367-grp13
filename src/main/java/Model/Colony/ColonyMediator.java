@@ -1,6 +1,7 @@
 package Model.Colony;
 
 import Model.Ants.Ant;
+import Model.Ants.TaskPerformerAnt;
 import Model.Tasks.Task;
 
 import java.sql.Array;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class ColonyMediator {
     private ColonyTaskBoard taskBoard;
 
-    private Task getBestTask(Ant ant){
+    private Task getBestTask(TaskPerformerAnt ant){
         for(Task task : taskBoard.getTaskBoard()){
             if (ant.isAvailableForTask(task)){
                 return task;
@@ -20,7 +21,7 @@ public class ColonyMediator {
         return null;
     }
 
-    public Task assignTask(Ant ant){
+    public Task assignTask(TaskPerformerAnt ant){
         // !! Can return null if no tasks are good/available!!
 
         Task bestTask = getBestTask(ant);
