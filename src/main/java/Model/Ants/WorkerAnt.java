@@ -21,7 +21,7 @@ public class WorkerAnt extends Ant implements TaskPerformer {
     public void assignTask(Task task) {
         this.currentTask = task;
     }
-
+  
     @Override
     public void update() {
         if (currentTask != null) {
