@@ -2,6 +2,7 @@ package View;
 
 import Model.Entity;
 import Model.ModelListener;
+import Model.World.World;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -76,10 +77,10 @@ public class View implements ModelListener {
     }
     
     @Override
-    public void onEntitiesChanged() {
+    public void onEntitiesChanged(World world) {
         // Update specific entity rendering
         if (entityCanvas != null) {
-            entityCanvas.updateEntities();
+            entityCanvas.updateEntities(world.getEntities());
         }
     }
     
