@@ -15,12 +15,12 @@ public class ColonyTaskBoard {
 
     public void addTask(Task task){
         taskBoard.add(task);
-        taskBoard.sort(Comparator.comparingInt(Task::getImportance));
+        taskBoard.sort(Comparator.comparingInt(Task::getPriority));
     }
 
     public void removeTask(Task task){
         taskBoard.remove(task);
-        taskBoard.sort(Comparator.comparingInt(Task::getImportance));
+        taskBoard.sort(Comparator.comparingInt(Task::getPriority));
     }
 
     public ArrayList<Task> getTaskBoard(){

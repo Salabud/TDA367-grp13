@@ -1,4 +1,4 @@
-package Model.Ants.Behavior.State;
+package Model.Ants.State;
 
 import Model.Ants.Ant;
 
