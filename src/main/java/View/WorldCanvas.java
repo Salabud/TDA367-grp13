@@ -1,5 +1,4 @@
 package View;
-
 import javafx.scene.Node;
 
 public class WorldCanvas extends Node implements Renderer {
