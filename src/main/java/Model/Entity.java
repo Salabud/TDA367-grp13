@@ -15,6 +15,9 @@ public abstract class Entity implements Updateable{
     private EntityType type; //Final?
     private List<Status> statuses;
 
+    public void update(){
+
+    }
 
     public void setX(int x){
         this.position.setX(x);
