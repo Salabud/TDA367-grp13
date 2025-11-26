@@ -6,6 +6,7 @@ import Model.Entity;
 
 public class World {
     private List<Entity>[][] entityGrid;
+    private List<Entity> entities;
     private List<Tile>[] tileGrid;
     
 
@@ -17,10 +18,12 @@ public class World {
 
     public void addEntity(Entity entity){
         entityGrid[entity.getX()][entity.getY()].add(entity);
+        entities.add(entity);
     }
 
     public void removeEntity(Entity entity) {
         entityGrid[entity.getX()][entity.getY()].remove(entity);
+        entities.remove(entity);
     }
 
     public Item breakTile(Tile tile){
@@ -31,6 +34,9 @@ public class World {
         //TODO
     }
 
+    public List<Entity> getEntities(){
+        return this.entities;
+    }
 
     public void tick(){
         for (int x=0; x<entityGrid.length; x++){
