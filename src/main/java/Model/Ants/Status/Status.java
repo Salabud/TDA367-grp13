@@ -1,4 +1,4 @@
-package Model.Ants.Behavior;
+package Model.Ants.Status;
 
 public interface Status {
 }

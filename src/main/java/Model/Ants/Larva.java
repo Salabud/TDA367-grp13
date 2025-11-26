@@ -1,8 +1,7 @@
 package Model.Ants;
 
-import Model.Ants.Behavior.Status;
+import Model.Ants.Status.Status;
 import Model.Carryable;
-import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
 import Model.World.World;
 

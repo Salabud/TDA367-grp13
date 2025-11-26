@@ -61,7 +61,7 @@ public class Model extends Application {
      */
     protected void notifyEntitiesChanged() {
         for (ModelListener listener : listeners) {
-            listener.onEntitiesChanged();
+            listener.onEntitiesChanged(worlds.getFirst()); //refactor when we are handling multiple worlds
         }
     }
     

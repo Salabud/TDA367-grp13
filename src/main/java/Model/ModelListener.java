@@ -1,5 +1,7 @@
 package Model;
 
+import Model.World.World;
+
 /**
  * Observer interface for Model changes.
  * Follows Interface Segregation Principle - clients only depend on methods they use.
@@ -13,7 +15,7 @@ public interface ModelListener {
     /**
      * Called when entities in the model have changed.
      */
-    void onEntitiesChanged();
+    void onEntitiesChanged(World world);
     
     /**
      * Called when the game state changes (pause, game over, etc.)

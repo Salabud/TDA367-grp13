@@ -3,8 +3,9 @@ module com.example.antsimulator {
     requires javafx.fxml;
 
     requires com.dlsc.formsfx;
-
-    opens com.example.antsimulator to javafx.fxml;
+    requires java.sql;
+    exports app;
+    exports Model.Tasks;
     exports Model;
     opens Model to javafx.fxml;
     exports View;
@@ -21,6 +22,10 @@ module com.example.antsimulator {
     opens Model.Ants.Behavior to javafx.fxml;
     exports Model.World;
     opens Model.World to javafx.fxml;
-    exports Model.Ants.Behavior.State;
-    opens Model.Ants.Behavior.State to javafx.fxml;
+    exports Model.Ants.State;
+    opens Model.Ants.State to javafx.fxml;
+    exports Model.Ants.Movement;
+    opens Model.Ants.Movement to javafx.fxml;
+    exports Model.Ants.Status;
+    opens Model.Ants.Status to javafx.fxml;
 }
