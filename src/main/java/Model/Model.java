@@ -57,6 +57,12 @@ public class Model extends Application {
             listener.onModelUpdated();
         }
     }
+
+    protected void notifyTilesetChanged() {
+        for (ModelListener listener : listeners){
+            listener.onTilesetChanged(worlds.getFirst()); //refactor when we are handling multiple worlds
+        }
+    }
     
     /**
      * Notify all listeners of an entity change.
@@ -101,6 +107,7 @@ public class Model extends Application {
             world.tick();
         }
         notifyEntitiesChanged();
+        notifyTilesetChanged();
     }
 
     public void addWorld(World world) {
