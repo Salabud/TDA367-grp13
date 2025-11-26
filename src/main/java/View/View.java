@@ -2,6 +2,7 @@ package View;
 
 import Model.Entity;
 import Model.ModelListener;
+import Model.World.World;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -32,7 +33,7 @@ public class View implements ModelListener {
      */
     public void initialize() {
         // Create canvas components
-        this.worldCanvas = new WorldCanvas();
+        //this.worldCanvas = new WorldCanvas();
         this.entityCanvas = new EntityCanvas();
         this.interfaceCanvas = new InterfaceCanvas();
         
@@ -41,7 +42,7 @@ public class View implements ModelListener {
         // Add other canvases as needed
         
         // Create scene
-        scene = new Scene(root, 800, 600);
+        scene = new Scene(root, 1000, 1000);
         stage.setScene(scene);
         stage.setTitle("Ant Simulator");
         
@@ -76,10 +77,10 @@ public class View implements ModelListener {
     }
     
     @Override
-    public void onEntitiesChanged() {
+    public void onEntitiesChanged(World world) {
         // Update specific entity rendering
         if (entityCanvas != null) {
-            entityCanvas.updateEntities();
+            entityCanvas.updateEntities(world.getEntities());
         }
     }
     
