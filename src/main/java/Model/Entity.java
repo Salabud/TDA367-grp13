@@ -1,6 +1,7 @@
 package Model;
 
 import Model.Ants.Status.Status;
+import Model.Datastructures.Position;
 
 import java.util.List;
 
