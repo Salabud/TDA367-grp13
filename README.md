@@ -14,4 +14,6 @@ Zen ant colony simulator.
 - UI Mockup: https://www.figma.com/board/q7ukCD4vDpftUdpE2rMlZQ/TDA367-%7C-Project-Ant?node-id=13484-546&p=f&t=sqWHFeSlsQAX88xd-0
 
 ### Project setup guide
-Download this, update that, build/run program using these commands, etc...
+Runnable: Main.java
+
+Built with maven.
