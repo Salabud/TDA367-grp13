@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 public class WorldCanvas extends Canvas {
 
     private GraphicsContext gc;
-    private int cellsize;
+    private int cellsize; //TODO: Cellsize dynamically reflect window dimensions
     private int gridStrokeSize;
     private final Sprite dirt;
     private final Sprite stone;
@@ -21,19 +21,17 @@ public class WorldCanvas extends Canvas {
     private Color background;
 
     public WorldCanvas() {
-        cellsize = 10;
-        setWidth(1000);
-        setHeight(1000);
+        cellsize = 8;
+        setWidth(800);
+        setHeight(800);
         gc = getGraphicsContext2D();
-        dirt = new Sprite(cellsize, Color.SADDLEBROWN);
+        dirt = new Sprite(cellsize, Color.rgb(50,41,47));
         stone = new Sprite(cellsize, Color.DARKGREY);
         food = new Sprite(cellsize, Color.RED);
 
-        background = Color.SKYBLUE;
+        background = Color.rgb(112,93,86);
 
     }
-
-
     public void render(World world) {
         gc.clearRect(0, 0, getWidth(), getHeight());
         gc.setFill(background);
@@ -42,7 +40,7 @@ public class WorldCanvas extends Canvas {
             switch (tile.getMaterialType()) {
                 case MaterialType.DIRT:
                     gc.setFill(dirt.getColor());
-                    gc.fillRect(tile.getPosition().getX(), tile.getPosition().getY(), dirt.getWidth(), dirt.getHeight());
+                    gc.fillRect(tile.getPosition().getX()*cellsize, tile.getPosition().getY()*cellsize, dirt.getWidth(), dirt.getHeight());
                     break;
                 case MaterialType.FOOD:
                     break;

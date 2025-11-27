@@ -30,6 +30,7 @@ public class Model {
             world.tick();
         }
         notifyEntitiesChanged();
+        notifyTilesetChanged();
     }
 
     public void startTicking() {
@@ -114,7 +115,7 @@ public class Model {
             listener.onGameStateChanged(newState);
         }
         notifyEntitiesChanged();
-        notifyTilesetChanged();
+
     }
 
     public void addWorld(World world) {
