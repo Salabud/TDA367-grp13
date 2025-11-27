@@ -14,5 +14,10 @@ public class TaskPerformerAnt extends Ant{
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        if (currentTask != null) {
+            currentTask.execute(this);
+        }
+        super.update();
+    }
 }

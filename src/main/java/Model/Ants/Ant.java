@@ -2,6 +2,7 @@ package Model.Ants;
 
 import Model.Ants.Behavior.AntBehavior;
 import Model.Ants.Movement.AntMovement;
+import Model.Ants.Movement.NoMovement;
 import Model.Ants.State.AntState;
 import Model.Ants.Status.Status;
 import Model.Colony.AntColony;
@@ -30,6 +31,6 @@ public abstract class Ant extends Entity {
 
     @Override
     public void update() {
-
+        this.movement.move(this);
     }
 }

@@ -3,11 +3,14 @@ package Model.World;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Ants.Ant;
 import Model.Ants.AntFactory;
+import Model.Ants.TaskPerformerAnt;
 import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
 import Model.Colony.ColonyTaskBoard;
 import Model.Entity;
+import Model.Tasks.TemporaryTestTask;
 
 public class World {
     private List<Entity>[][] entityGrid;
@@ -34,7 +37,8 @@ public class World {
         AntColony colony = new AntColony(mediator, taskBoard);
         
         AntFactory factory = AntFactory.getInstance();
-        factory.createWorkerAnt(this, colony, 0, 50, 50, mediator);
+        TaskPerformerAnt ant = factory.createWorkerAnt(this, colony, 0, 0, 0, mediator);
+        ant.assignTask(new TemporaryTestTask());
         Tile tile1 = new Tile(70, 50, MaterialType.DIRT);
         tiles.add(tile1);
     }

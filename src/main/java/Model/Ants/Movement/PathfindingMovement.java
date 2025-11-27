@@ -20,7 +20,7 @@ public class PathfindingMovement implements AntMovement{
         ant.setPosition(pathToGoal[currentStep]);
         currentStep++;
         if (currentStep == finalStep){
-            notInMovement emptyMovement = new notInMovement();
+            NoMovement emptyMovement = new NoMovement();
             ant.setMovement(emptyMovement);
         }
     }
