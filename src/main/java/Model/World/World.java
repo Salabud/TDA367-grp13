@@ -41,6 +41,17 @@ public class World {
         ant.assignTask(new TemporaryTestTask());
         Tile tile1 = new Tile(70, 50, MaterialType.DIRT);
         tiles.add(tile1);
+
+        /**
+        for (int x = 0; x < 100; x++){
+            for (int y = 50; y < 100; y++){
+                Tile tile = new Tile(x,y,MaterialType.DIRT);
+                tiles.add(tile);
+                tileGrid[x][y].add(tile);
+            }
+        }
+         */
+
     }
 
     public void addEntity(Entity entity){

@@ -42,7 +42,7 @@ public class WorldCanvas extends Canvas {
             switch (tile.getMaterialType()) {
                 case MaterialType.DIRT:
                     gc.setFill(dirt.getColor());
-                    gc.fillRect(tile.getPosition().getX(), tile.getPosition().getY(), dirt.getWidth(), dirt.getHeight());
+                    gc.fillRect(tile.getPosition().getX()*cellsize, tile.getPosition().getY()*cellsize, dirt.getWidth(), dirt.getHeight());
                     break;
                 case MaterialType.FOOD:
                     break;
