@@ -19,8 +19,6 @@ public class SpriteRegistry {
         Larva = new Sprite(cellsize*0.8, cellsize*0.8, Color.WHITE);
         Food = new Sprite(cellsize*0.8, cellsize*0.8, Color.RED);
         Queen = new Sprite(cellsize*0.8, cellsize*0.8, Color.YELLOW);
-
-
     }
 
     public static SpriteRegistry getInstance(){
