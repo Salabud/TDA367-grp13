@@ -5,4 +5,5 @@ public enum EntityType {
     QUEEN,
     LARVA,
     FOOD,
+    ITEM
 }
