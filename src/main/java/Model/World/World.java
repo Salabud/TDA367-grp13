@@ -87,9 +87,8 @@ public class World {
         }
     }
 
-    public Item killEntity(Entity entity){
+    public void killEntity(Entity entity){
         removeEntity(entity);
-        return new Item(null, MaterialType.CORPSE);
     }
 
     public void breakTile(Tile tile){

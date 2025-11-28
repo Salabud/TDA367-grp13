@@ -39,7 +39,6 @@ public class TemporaryTestTask implements Task{
 
     @Override
     public void execute(TaskPerformerAnt ant) {
-        // Only set PathfindingMovement if the ant doesn't already have one
         if (ant.getMovement() instanceof NoMovement) {
             ant.setMovement(new PathfindingMovement(
                 ant.getPosition(), 
