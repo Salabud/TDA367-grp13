@@ -1,14 +1,16 @@
 package Model.World;
-import Model.EntityType;
+
+import Model.Datastructures.Position;
 import Model.Entity;
+import Model.EntityType;
 
 public class Item extends Entity {
-    private final MaterialType materialType;
-    private EntityType itemType; //Kanske borde ta denna diskussionen igen...
+    private MaterialType materialType;
 
-    public Item(EntityType itemType, MaterialType materialType) {
+    public Item(int x, int y, MaterialType materialType){
+        this.type = EntityType.ITEM;
+        this.position = new Position(x,y);
         this.materialType = materialType;
-        this.itemType = itemType;
     }
 
     public MaterialType getMaterialType() {
