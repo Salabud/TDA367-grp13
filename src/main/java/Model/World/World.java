@@ -3,24 +3,54 @@ package Model.World;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Ants.AntFactory;
+import Model.Ants.TaskPerformerAnt;
+import Model.Colony.AntColony;
+import Model.Colony.ColonyMediator;
+import Model.Colony.ColonyTaskBoard;
 import Model.Entity;
+import Model.Tasks.TemporaryTestTask;
 
 public class World {
-    private List<Entity> allEntities;
+    private List<Entity> entities;
     private List<Entity>[][] entityGrid;
     private Tile[][] tileGrid;
+    private List<Tile> tiles;
     private final int gridSize;    
 
     public World(){
-        this.gridSize = 100; //TODO: Temporary demo size
+        this.gridSize = 100; //Temporary demo size
         this.entityGrid = new List[gridSize][gridSize];
-        for (int x = 0; x < gridSize; x++) {
-            for (int y = 0; y < gridSize; y++) {
+        this.tileGrid = new Tile[gridSize][gridSize];
+        this.entities = new ArrayList<>();
+        this.tiles = new ArrayList<>();
+        for (int x=0; x<gridSize; x++) {
+            for (int y=0; y < gridSize; y++) {
                 entityGrid[x][y] = new ArrayList<>();
             }
         }
-        this.tileGrid = new Tile[gridSize][gridSize];
-        this.allEntities = new ArrayList<>();
+
+        //Hardcoded starting world
+        ColonyMediator mediator = new ColonyMediator();
+        ColonyTaskBoard taskBoard = new ColonyTaskBoard();
+        AntColony colony = new AntColony(mediator, taskBoard);
+        
+        AntFactory factory = AntFactory.getInstance();
+        TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 0, 0, mediator);
+        TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, mediator);
+        ant1.assignTask(new TemporaryTestTask());
+        ant2.assignTask(new TemporaryTestTask());
+
+        Tile tile1 = new Tile(70, 50, MaterialType.DIRT);
+        tiles.add(tile1);
+
+        for (int x = 20; x < 100; x++){
+            for (int y = 50; y < 70; y++){
+                Tile tile = new Tile(x,y,MaterialType.DIRT);
+                tiles.add(tile);
+                tileGrid[x][y] = tile;
+            }
+        }
     }
 
     public void addEntity(Entity entity){
@@ -46,33 +76,26 @@ public class World {
         return new Item(null, MaterialType.CORPSE);
     }
 
-    public Item breakTile(Tile tile){
-        int x = tile.getX();
-        int y = tile.getY();
+    public void breakTile(Tile tile){
+        int x = tile.getPosition().getX();
+        int y = tile.getPosition().getY();
         if (inBounds(x, y) && tileGrid[x][y] == tile) {
             tileGrid[x][y] = null;
-            return new Item(null, tile.getMaterialType());
+            //return new Item(null, tile.getMaterialType()); TODO: Tile hanterar sin övergång till item
         }
         return null;
     }
 
-    public void addTile(Tile tile){
-        int x = tile.getX();
-        int y = tile.getY();
+    public void addTile(Tile tile, int x, int y, MaterialType materialType){
+        tile = new Tile(x, y, materialType);
         if (inBounds(x, y) && tileGrid[x][y] == null) {
-            tileGrid[x][y] = tile;
+          tiles.add(tile);
+          tileGrid[x][y] = tile;
         }
     }
 
     public List<Entity> getEntities(){
         return allEntities;
-    }
-
-    public Tile getTile(int x, int y) {
-        if (inBounds(x, y)) {
-            return tileGrid[x][y];
-        }
-        return null;
     }
 
     private boolean inBounds(int x, int y) {
@@ -81,23 +104,24 @@ public class World {
     }
 
     public void tick(){
-        for (int x=0; x<entityGrid.length; x++){
-            for (int y=0; y<entityGrid[x].length; y++){
-                for (Entity entity : entityGrid[x][y]){
-                    entity.update();
-                }
-            }
+        // Iterate over entities list, not entityGrid, since entities can move
+        for (Entity entity : entities) {
+            entity.update();
         }
     }
-// public static void main(String[] args) {
 
-//     World world = new World();
+    public Tile[][] getTileGrid() {
+        return tileGrid;
+    }
 
-//     Entity e = new Entity();
-//     world.addEntity(e);
-
-//     System.out.println(world.getEntities());                // Test 1
-//     System.out.println(world.entityGrid[10][10]);           // Test 2
-//     System.out.println(world.entityGrid[0][0]);             // Test 3
-//     }
+    public List<Tile> getTiles() {
+        return tiles;
+    }
+  
+    public Tile getTile(int x, int y) {
+      if (inBounds(x, y)) {
+          return tileGrid[x][y];
+      }
+      return null;
+    }
 }

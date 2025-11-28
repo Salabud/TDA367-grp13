@@ -4,8 +4,7 @@ import Model.Ants.Behavior.AntBehavior;
 import Model.Ants.Movement.AntMovement;
 import Model.Ants.QueenAnt;
 import Model.Ants.TaskPerformerAnt;
-import Model.Ants.Behavior.FeedBehavior;
-import Model.Position;
+import Model.Datastructures.Position;
 
 public class FeedQueenTask implements Task {
     private QueenAnt queen;
@@ -30,7 +29,6 @@ public class FeedQueenTask implements Task {
     public AntMovement getMovementStrategy() {
         return null;
     }
-
     public void execute(TaskPerformerAnt ant) {
         /*if (!ant.getPosition().equals(queenPosition)) {
             ant.setAntState(new WalkingState());

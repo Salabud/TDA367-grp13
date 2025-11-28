@@ -2,35 +2,44 @@ package app;
 
 import Controller.Controller;
 import Model.Model;
+import Model.World.World;
 import View.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.animation.AnimationTimer;
 
 public class Main extends Application {
+    private Model model;
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Create Model (Subject in Observer pattern)
-        Model model = new Model();
-        
-        // Create View (Observer of Model)
+        World world = new World();
+        model = new Model();
+        model.addWorld(world);
         View view = new View(stage);
-        
-        // Create Controller (Mediator between View and Model)
         Controller controller = new Controller(model, view);
-        
-        // Register View as observer of Model (Dependency Inversion - depends on interface)
         model.addListener(view);
-        
-        // Register Controller as input handler for View
         view.setInputHandler(controller);
-        
-        // Initialize and show the view
         view.initialize();
         stage.show();
-        
-        // Start the model (game loop, etc.)
-        model.start(stage);
+
+        model.startTicking();
+
+        // TODO: flytta till View?
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                view.renderInterface();
+            }
+        }.start();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        if (model != null) {
+            model.stopTicking();
+        }
+        super.stop();
     }
 
     public static void main(String[] args) {

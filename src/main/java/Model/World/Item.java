@@ -1,8 +1,8 @@
 package Model.World;
-
 import Model.EntityType;
+import Model.Entity;
 
-public class Item {
+public class Item extends Entity{
     private final MaterialType materialType;
     private EntityType itemType; //Kanske borde ta denna diskussionen igen...
 
@@ -15,7 +15,3 @@ public class Item {
         return materialType;
     }
 
-    public EntityType getItemType() {
-        return itemType;
-    }
-}
