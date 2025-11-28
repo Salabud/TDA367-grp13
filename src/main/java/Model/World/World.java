@@ -58,7 +58,7 @@ public class World {
         int y = entity.getY();
         if (inBounds(x, y)) {
             entityGrid[x][y].add(entity);
-            allEntities.add(entity);
+            entities.add(entity);
         }
     }
 
@@ -67,7 +67,7 @@ public class World {
         int y = entity.getY();
         if (inBounds(x, y)) {
             entityGrid[x][y].remove(entity);
-            allEntities.remove(entity);
+            entities.remove(entity);
         }
     }
 
@@ -83,7 +83,6 @@ public class World {
             tileGrid[x][y] = null;
             //return new Item(null, tile.getMaterialType()); TODO: Tile hanterar sin övergång till item
         }
-        return null;
     }
 
     public void addTile(Tile tile, int x, int y, MaterialType materialType){
@@ -95,7 +94,7 @@ public class World {
     }
 
     public List<Entity> getEntities(){
-        return allEntities;
+        return entities;
     }
 
     private boolean inBounds(int x, int y) {
