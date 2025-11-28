@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Ants.AntFactory;
+import Model.Ants.Larva;
 import Model.Ants.TaskPerformerAnt;
 import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
@@ -40,11 +41,26 @@ public class World {
         ant1.assignTask(new TemporaryTestTask());
         ant2.assignTask(new TemporaryTestTask());
 
-        Tile tile1 = new Tile(70, 50, MaterialType.DIRT);
-        tiles.add(tile1);
+        Tile tile1 = new Tile(24, 29, MaterialType.DIRT);
+        addTile(tile1);
+
+        //Showcase entities
+        Item dirt = new Item(20,20, MaterialType.DIRT);
+        addEntity(dirt);
+        Item food = new Item(22,20,MaterialType.FOOD);
+        addEntity(food);
+        Larva larva1 = factory.createLarva(this, colony, 3,24,20,mediator);
+
 
         for (int x = 20; x < 100; x++){
             for (int y = 50; y < 70; y++){
+                Tile tile = new Tile(x,y,MaterialType.DIRT);
+                tiles.add(tile);
+                tileGrid[x][y] = tile;
+            }
+        }
+        for (int x = 20; x < 70; x++){
+            for (int y = 30; y < 40; y++){
                 Tile tile = new Tile(x,y,MaterialType.DIRT);
                 tiles.add(tile);
                 tileGrid[x][y] = tile;
@@ -70,6 +86,10 @@ public class World {
         tile = new Tile(x, y, materialType);
         tiles.add(tile);
         tileGrid[x][y] = tile;
+    }
+    public void addTile(Tile tile){
+        tiles.add(tile);
+        tileGrid[tile.getPosition().getX()][tile.getPosition().getY()] = tile;
     }
 
     public List<Entity> getEntities(){

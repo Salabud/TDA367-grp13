@@ -19,15 +19,23 @@ public class WorldCanvas extends Canvas {
     private final Sprite stone;
     private final Sprite food;
     private Color background;
+    private int outlineThickness;
+
+
 
     public WorldCanvas() {
         cellsize = 8;
         setWidth(800);
         setHeight(800);
         gc = getGraphicsContext2D();
+        outlineThickness = 2;
+
+        //Tiles
         dirt = new Sprite(cellsize, Color.rgb(50,41,47));
         stone = new Sprite(cellsize, Color.DARKGREY);
         food = new Sprite(cellsize, Color.RED);
+
+
 
         background = Color.rgb(112,93,86);
 
@@ -48,6 +56,27 @@ public class WorldCanvas extends Canvas {
                     break;
                 case MaterialType.GRASS:
                     break;
+            }
+        }
+        for (int x = 0; x < 100; x++){
+            for (int y = 0; y < 100; y++){
+                gc.setFill(Color.BLACK);
+                //northern outlines
+                if (world.getTileGrid()[x][y] != null && y > 0 && world.getTileGrid()[x][y-1] == null){
+                    gc.fillRect(x*cellsize,y*cellsize, cellsize, outlineThickness);
+                }
+                //southern outlines
+                if (world.getTileGrid()[x][y] != null && y < 99  && world.getTileGrid()[x][y+1] == null){
+                    gc.fillRect(x*cellsize,y*cellsize+cellsize, cellsize+outlineThickness, outlineThickness);
+                }
+                //eastern outlines
+                if (world.getTileGrid()[x][y] != null && x < 99 && world.getTileGrid()[x+1][y] == null){
+                    gc.fillRect(x*cellsize + cellsize,y*cellsize,  outlineThickness, cellsize);
+                }
+                //western outlines
+                if (world.getTileGrid()[x][y] != null && x > 0 && world.getTileGrid()[x-1][y] == null){
+                    gc.fillRect(x*cellsize,y*cellsize,outlineThickness, cellsize+outlineThickness);
+                }
             }
         }
 
