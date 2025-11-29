@@ -21,14 +21,15 @@ public class Model {
         this.worlds = new ArrayList<>();
         this.listeners = new ArrayList<>();
         this.tickrate = 60;
-        this.gameState = "RUNNING";
+        this.gameState = "MAIN_MENU";
         this.isRunning = false;
     }
 
     public void update() {
-        for (World world : worlds) {
-            world.tick();
+        if(gameState.equals("RUNNING")){
+            for (World world : worlds) world.tick();
         }
+
         notifyEntitiesChanged();
         notifyTilesetChanged();
     }

@@ -4,6 +4,7 @@ import Model.Model;
 import View.View;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import View.MainMenu;
 
 /**
  * Controller class - Mediator between Model and View.
@@ -85,7 +86,8 @@ public class Controller implements InputHandler {
 
     private void setupButtonHandlers(){
         view.speedButton.setOnAction(e -> handleSpeedButton());
-    }
+
+        }
 
     private void handleSpeedButton(){
         System.out.println("Click");

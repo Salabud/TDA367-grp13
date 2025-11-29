@@ -3,6 +3,7 @@ package View;
 import Controller.InputHandler;
 import Model.ModelListener;
 import Model.World.World;
+import app.Main;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -25,7 +26,7 @@ public class View implements ModelListener {
     private WorldCanvas worldCanvas;
     private EntityCanvas entityCanvas;
     private InterfaceCanvas interfaceCanvas;
-    private Pane canvasLayer;
+    private Pane mainPane;
 
 
     //UI elements
@@ -42,15 +43,18 @@ public class View implements ModelListener {
     }
     
     public void initialize() {
+        // initialize the Pane that will be used for the main display
+        mainPane = new Pane();
+
         // Create canvas components
         this.worldCanvas = new WorldCanvas();
         this.entityCanvas = new EntityCanvas();
         this.interfaceCanvas = new InterfaceCanvas();
-        canvasLayer = new Pane();
+
         
         // Layout components
-        canvasLayer.getChildren().addAll(worldCanvas, entityCanvas, speedButton);
-        root.setCenter(canvasLayer);
+        loadMainMenu();
+        root.setCenter(mainPane);
         // Add other canvases as needed
         
         // Create scene
@@ -108,9 +112,23 @@ public class View implements ModelListener {
     @Override
     public void onGameStateChanged(String newState) {
         // Update UI based on game state
+        if(newState.equals("MAIN_MENU")){
+            loadMainMenu();
+        } else if (newState.equals("RUNNING")) {
+            loadRunningGame();
+        }
         if (interfaceCanvas != null) {
             interfaceCanvas.updateGameState(newState);
         }
+    }
+    private void loadMainMenu(){
+        mainPane.getChildren().removeAll();
+        mainPane.getChildren().addAll(MainMenu.getInstance().getNodes());
+        mainPane.setStyle(MainMenu.getInstance().getBackGroundColor());
+    }
+    private void loadRunningGame() {
+        mainPane.getChildren().removeAll();
+        mainPane.getChildren().addAll(worldCanvas, entityCanvas, speedButton);
     }
 
     public void renderInterface() {
