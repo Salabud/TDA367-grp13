@@ -9,6 +9,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 
+/**
+ * Main application class, entry point for the Ant Simulator.
+ * Sets up MVC components and starts the JavaFX application.
+ */
 public class Main extends Application {
     private Model model;
 
@@ -28,7 +32,6 @@ public class Main extends Application {
 
         model.startTicking();
 
-        // TODO: flytta till View?
         new AnimationTimer() {
             @Override
             public void handle(long now) {

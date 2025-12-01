@@ -11,8 +11,8 @@ import javafx.stage.Stage;
 import java.util.Arrays;
 
 /**
- * View class - Observer of Model, displays game state.
- * Follows Single Responsibility Principle - handles rendering only.
+ * View class, Observer of Model, displays game state.
+ * Follows Single Responsibility Principle, handles rendering only.
  * Implements ModelListener to observe model changes.
  */
 public class View implements ModelListener {

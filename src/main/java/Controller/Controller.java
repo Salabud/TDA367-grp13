@@ -11,8 +11,8 @@ import View.GameInterface;
 //Ludvig ---- I would like to rename this class to GameInterfaceController. We need separate controllers for different game states, so I'm not sure what "Controller.java" would be used for
 /**
  * Controller class - Mediator between Model and View.
- * Follows Single Responsibility Principle - handles user input and coordinates actions.
- * Implements InputHandler to process View events.
+ * Follows Single Responsibility Principle, handles user input and coordinates actions.
+ * Extensibly implements InputHandler (following the observer pattern) to process View events.
  */
 public class Controller implements InputHandler {
     private Model model;
@@ -28,11 +28,13 @@ public class Controller implements InputHandler {
         suppressFirstClick = true;
 
     }
-    
-    // InputHandler implementation
+
+    /**
+     * Handles key press events.
+     * @param event : The key event to handle.
+     */
     @Override
     public void handleKeyPress(KeyEvent event) {
-        // Process keyboard input and update model accordingly
         switch (event.getCode()) {
             case W:
             case UP:
@@ -58,7 +60,11 @@ public class Controller implements InputHandler {
                 break;
         }
     }
-    
+
+    /**
+     * Handles mouse click events.
+     * @param event : The mouse event to handle.
+     */
     @Override
     public void handleMouseClick(MouseEvent event) {
         if(suppressFirstClick){
@@ -81,10 +87,13 @@ public class Controller implements InputHandler {
 
         }
     }
-    
+
+    /**
+     * Handles mouse move events (for e.g. hover effects).
+     * @param event : The mouse event to handle.
+     */
     @Override
     public void handleMouseMove(MouseEvent event) {
-        // Handle mouse movement (e.g., hover effects)
         double worldX = event.getX();
         double worldY = event.getY();
         
@@ -127,6 +136,9 @@ public class Controller implements InputHandler {
         model.setGameState("MAIN_MENU");
     }
 
+    /**
+     * Handles world tick speed button toggle.
+     */
     private void handleSpeedButton(){
         Button btn = gameInterface.getSpeedButton();
         if(btn.getText().equals("x3")){

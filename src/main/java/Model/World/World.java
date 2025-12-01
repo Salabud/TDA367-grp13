@@ -12,13 +12,16 @@ import Model.Colony.ColonyTaskBoard;
 import Model.Entity;
 import Model.Tasks.TemporaryTestTask;
 
+/**
+ * Represents the world in which entities exist and interact.
+ * Manages the grid of tiles and entities, and handles updates.
+ */
 public class World {
-    private List<Entity> entities;
+    private List<Entity> entities; // Current entities in the world, for easy iteration
     private List<Entity>[][] entityGrid;
     private Tile[][] tileGrid;
-    private List<Tile> tiles;
+    private List<Tile> tiles; // Current tiles in the world, for easy rendering access
     private final int gridSize;
-
     private boolean tilesChanged;
 
     public World(){
@@ -75,6 +78,10 @@ public class World {
         }
     }
 
+    /**
+     * Adds an entity to the world at its current position.
+     * @param entity : The entity to be added.
+     */
     public void addEntity(Entity entity){
         int x = entity.getX();
         int y = entity.getY();
@@ -84,6 +91,10 @@ public class World {
         }
     }
 
+    /**
+     * Removes an entity from the world.
+     * @param entity : The entity to be removed.
+     */
     public void removeEntity(Entity entity) {
         int x = entity.getX();
         int y = entity.getY();
@@ -93,10 +104,18 @@ public class World {
         }
     }
 
+    /**
+     * We might not need this tbh.
+     */
     public void killEntity(Entity entity){
         removeEntity(entity);
     }
 
+    /**
+     * Breaks a tile into an item and removes it from the world.
+     * TODO: Might need to follow single responsibility principle here.
+     * @param tile : The tile to be broken.
+     */
     public void breakTile(Tile tile){
         int x = tile.getPosition().getX();
         int y = tile.getPosition().getY();
@@ -107,6 +126,13 @@ public class World {
         }
     }
 
+    /**
+     * Creates and adds a tile to the world at specified position if empty.
+     * @param tile : The tile to be added.
+     * @param x : The x-coordinate of the tile.
+     * @param y : The y-coordinate of the tile.
+     * @param materialType : The material type of the tile.
+     */
     public void addTile(Tile tile, int x, int y, MaterialType materialType){
         tile = new Tile(x, y, materialType);
         if (inBounds(x, y) && tileGrid[x][y] == null) {
@@ -115,6 +141,11 @@ public class World {
           tilesChanged = true;
         }
     }
+
+    /**
+     * Adds a tile to the world at its position.
+     * @param tile : The tile to be added.
+     */
     public void addTile(Tile tile){
         tiles.add(tile);
         tileGrid[tile.getPosition().getX()][tile.getPosition().getY()] = tile;
@@ -125,26 +156,48 @@ public class World {
         return entities;
     }
 
+    /**
+     * Checks if the given coordinates are within the bounds of the world grid.
+     * @param x : The x-coordinate to check.
+     * @param y : The y-coordinate to check.
+     * @return True if the coordinates are within bounds, false otherwise.
+     */
     private boolean inBounds(int x, int y) {
         boolean withinGrid = x >= 0 && x < gridSize && y >= 0 && y < gridSize;
         return withinGrid;
     }
 
+    /**
+     * Updates all entities in the world one simulation tick.
+     */
     public void tick(){
-        // Iterate over entities list, not entityGrid, since entities can move
         for (Entity entity : entities) {
             entity.update();
         }
     }
 
+    /**
+     * Gets the tile grid of the world.
+     * @return The tile grid as Tile[][].
+     */
     public Tile[][] getTileGrid() {
         return tileGrid;
     }
 
+    /**
+     * Gets the list of tiles in the world. 
+     * @return The list of tiles as List<Tile>.
+     */
     public List<Tile> getTiles() {
         return tiles;
     }
   
+    /**
+     * Gets the tile at the specified coordinates.
+     * @param x : The x-coordinate of the tile.
+     * @param y : The y-coordinate of the tile.
+     * @return The tile at the specified coordinates, or null if out of bounds.
+     */
     public Tile getTile(int x, int y) {
       if (inBounds(x, y)) {
           return tileGrid[x][y];
