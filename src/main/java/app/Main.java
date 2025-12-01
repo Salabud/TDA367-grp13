@@ -23,6 +23,7 @@ public class Main extends Application {
         model.addListener(view);
         view.setInputHandler(mainMenuController);
         view.initialize();
+        model.initialise();
         stage.show();
 
         model.startTicking();

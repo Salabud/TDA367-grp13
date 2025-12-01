@@ -26,14 +26,23 @@ public class Model {
         this.gameState = "MAIN_MENU";
         this.isRunning = false;
     }
+    public void initialise(){
+        setGameState("MAIN_MENU");
+    }
 
     public void update() {
-        if(gameState.equals("RUNNING")){
-            for (World world : worlds) world.tick();
-        }
+        for (World world : worlds) {
+            if(gameState.equals("RUNNING")){
+                world.tick();
+            }
+            if(world.checkTilesChanged()){ //Re-render tileset only if there have been changes
+                notifyTilesetChanged();
+                world.setTilesChanged(false);
+            }
 
+        };
         notifyEntitiesChanged();
-        notifyTilesetChanged();
+
     }
 
     public void startTicking() {
@@ -105,9 +114,11 @@ public class Model {
     public void setGameState(String gameState) {
         this.gameState = gameState;
         if ("PAUSED".equals(gameState)) {
-            stopTicking();
+            //stopTicking();
         } else if ("RUNNING".equals(gameState)) {
-            startTicking();
+            //startTicking();
+        } else if ("MAIN_MENU".equals(gameState)){
+
         }
         notifyGameStateChanged(gameState);
     }
@@ -139,5 +150,8 @@ public class Model {
     }
     public int getStartingTickrate(){
         return startingTickrate;
+    }
+    public World getWorld(){
+        return worlds.getFirst();
     }
 }

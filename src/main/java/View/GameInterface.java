@@ -19,15 +19,18 @@ public class GameInterface {
         exitButton = new Button("Exit");
         exitButton.setLayoutY(0);
         exitButton.setLayoutX(0);
+        exitButton.setFocusTraversable(false);
         nodes.add(exitButton);
 
         pauseButton = new Button("Pause");
         pauseButton.setLayoutX(300);
         pauseButton.setPrefWidth(100);
+        pauseButton.setFocusTraversable(false);
         nodes.add(pauseButton);
 
         speedButton = new Button("x3");
         speedButton.setLayoutX(400);
+        speedButton.setFocusTraversable(false);
         nodes.add(speedButton);
     }
     public Button getPauseButton(){

@@ -1,5 +1,6 @@
 package View;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,40 +27,43 @@ public class MainMenu {
     private MainMenu(){
         nodes = new ArrayList<>();
         backGroundColor = "-fx-background-color: rgb(112,93,86);";
-        buttonColor = "-fx-base: rgb(50, 41 ,47);";
-
+        buttonColor = "-fx-base: rgb(50, 41 ,47); -fx-padding: -20 0 0 0; -fx-font-family: 'Daydream'; -fx-font-size: 30px;";
+        Font.loadFont(getClass().getResourceAsStream("/fonts/Daydream.otf"), 40);
 
         titleLabel = new Label("Ant Simulator");
         titleLabel.setFont(new Font(60));
-        titleLabel.setLayoutX(200);
+        titleLabel.setLayoutX(0);
+        titleLabel.setMinWidth(800);
+        titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setLayoutY(50);
+        titleLabel.setStyle("-fx-font-family: 'Daydream'; -fx-font-size: 40px; -fx-text-fill: rgb(250, 149, 0)");
         nodes.add(titleLabel);
 
-        newGameButton = new Button("New Game");
-        newGameButton.setFont(new Font(30));
+        newGameButton = new Button("New Colony");
         newGameButton.setLayoutX(100);
         newGameButton.setLayoutY(200);
         newGameButton.setMinWidth(600);
         newGameButton.setMinHeight(100);
         newGameButton.setStyle(buttonColor);
+        newGameButton.setFocusTraversable(false);
         nodes.add(newGameButton);
 
-        loadGameButton = new Button("Load Game");
-        loadGameButton.setFont(new Font(30));
+        loadGameButton = new Button("Load Colony");
         loadGameButton.setLayoutX(100);
         loadGameButton.setLayoutY(350);
         loadGameButton.setMinWidth(600);
         loadGameButton.setMinHeight(100);
-        loadGameButton.setStyle(buttonColor);;
+        loadGameButton.setStyle(buttonColor);
+        loadGameButton.setFocusTraversable(false);
         nodes.add(loadGameButton);
 
         settingsButton = new Button("Settings");
-        settingsButton.setFont(new Font(30));
         settingsButton.setLayoutX(100);
         settingsButton.setLayoutY(500);
         settingsButton.setMinWidth(600);
         settingsButton.setMinHeight(100);
         settingsButton.setStyle(buttonColor);
+        settingsButton.setFocusTraversable(false);
         nodes.add(settingsButton);
 
     }

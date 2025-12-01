@@ -1,15 +1,11 @@
 package View;
 
-import Controller.Controller;
 import Controller.InputHandler;
 import Model.ModelListener;
 import Model.World.World;
-import app.Main;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
@@ -25,6 +21,7 @@ public class View implements ModelListener {
     private BorderPane root;
     private InputHandler inputHandler;
     private GameInterface gameInterface;
+    private MusicHandler musicHandler;
 
     // Canvas components for rendering
     private WorldCanvas worldCanvas;
@@ -60,12 +57,13 @@ public class View implements ModelListener {
         scene = new Scene(root,800,800);
         stage.setScene(scene);
         stage.setTitle("Ant Simulator");
+        stage.setResizable(false);
         
         // Set up input handlers if controller is registered
         setupInputHandlers();
 
         // Start the Main Menu
-        loadMainMenu();
+        //loadMainMenu();
     }
     
     /**
@@ -108,6 +106,7 @@ public class View implements ModelListener {
         // Update specific entity rendering
         if (entityCanvas != null) {
             entityCanvas.updateEntities(world.getEntities());
+
         }
     }
     
@@ -119,6 +118,9 @@ public class View implements ModelListener {
         } else if (newState.equals("RUNNING")) {
             loadRunningGame();
         }
+        //Play music
+        MusicHandler.getInstance().update(newState);
+
         if (interfaceCanvas != null) {
             interfaceCanvas.updateGameState(newState);
         }
@@ -132,6 +134,7 @@ public class View implements ModelListener {
         mainPane.getChildren().clear();
         mainPane.getChildren().addAll(worldCanvas, entityCanvas);
         mainPane.getChildren().addAll(gameInterface.getNodes());
+
     }
 
     public void renderInterface() {

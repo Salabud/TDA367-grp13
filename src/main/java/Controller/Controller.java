@@ -1,6 +1,8 @@
 package Controller;
 
 import Model.Model;
+import Model.World.MaterialType;
+import Model.World.Tile;
 import View.View;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
@@ -16,12 +18,14 @@ public class Controller implements InputHandler {
     private Model model;
     private View view;
     private GameInterface gameInterface;
+    private boolean suppressFirstClick;
     
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
         gameInterface = view.getGameInterface();
         setupButtonHandlers();
+        suppressFirstClick = true;
 
     }
     
@@ -57,12 +61,25 @@ public class Controller implements InputHandler {
     
     @Override
     public void handleMouseClick(MouseEvent event) {
-        // Convert screen coordinates to world coordinates
-        double worldX = event.getX();
-        double worldY = event.getY();
-        
-        // Process click (e.g., select entity, place task, etc.)
-        // model.handleWorldClick(worldX, worldY);
+        if(suppressFirstClick){
+            suppressFirstClick = false;
+        } else {
+            // Convert screen coordinates to world coordinates
+            double worldX = event.getX();
+            double worldY = event.getY();
+
+
+            //Testing stuff, not meant to stick around
+            int intX = (int)(worldX/8);
+            int intY = (int)(worldY/8);
+            //model.getWorld().addTile(new Tile(intX, intY, MaterialType.DIRT)); //clicking places dirt
+            for (int i = intX-1; i < intX + 2; i++){
+                for (int a = intY-1; a < intY + 2; a++){
+                    model.getWorld().addTile(new Tile(i, a, MaterialType.DIRT)); //clicking places dirt
+                }
+            }
+
+        }
     }
     
     @Override
@@ -112,7 +129,6 @@ public class Controller implements InputHandler {
 
     private void handleSpeedButton(){
         Button btn = gameInterface.getSpeedButton();
-        System.out.println("Click");
         if(btn.getText().equals("x3")){
             btn.setText("x1");
             model.setTickrate(20);

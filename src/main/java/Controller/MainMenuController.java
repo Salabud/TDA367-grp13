@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Model;
 import View.View;
+import app.Main;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import View.MainMenu;
@@ -31,7 +32,9 @@ public class MainMenuController implements InputHandler{
     }
 
     private void setupButtonHandlers(){
-        MainMenu.getInstance().getNewGameButton().setOnAction(e -> handleNewGameButton());
+        MainMenu.getInstance().getNewGameButton().setOnAction(e -> {
+            handleNewGameButton();
+        });
     }
 
     private void handleNewGameButton() {

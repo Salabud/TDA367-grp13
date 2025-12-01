@@ -41,9 +41,9 @@ public class WorldCanvas extends Canvas {
 
     }
     public void render(World world) {
-        gc.clearRect(0, 0, getWidth(), getHeight());
+        //gc.clearRect(0, 0, getWidth(), getHeight());
         gc.setFill(background);
-        gc.fillRect(0,0,1000,1000);
+        gc.fillRect(0,0,getWidth(),getHeight());
         for (Tile tile : world.getTiles()){
             switch (tile.getMaterialType()) {
                 case MaterialType.DIRT:
