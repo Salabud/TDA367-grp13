@@ -25,6 +25,10 @@ public abstract class Ant extends Entity {
         return movement;
     }
 
+    /**
+     * Sätter myrans movement strategy
+     * @param movement
+     */
     public void setMovement(AntMovement movement) {
         this.movement = movement;
     }

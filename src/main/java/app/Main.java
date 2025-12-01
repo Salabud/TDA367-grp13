@@ -25,7 +25,6 @@ public class Main extends Application {
 
         model.startTicking();
 
-        // TODO: flytta till View?
         new AnimationTimer() {
             @Override
             public void handle(long now) {
