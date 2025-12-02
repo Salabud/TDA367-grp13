@@ -63,14 +63,4 @@ public abstract class Ant extends Being {
         return obj;
     }
 
-    /**
-     * Create a JSON Object of the entity
-     * @return
-     */
-    @Override
-    public JSONObject toJSON(){
-        JSONObject obj = super.toJSON();
-        //TODO implement after refactoring of Entity
-        return obj;
-    }
 }
