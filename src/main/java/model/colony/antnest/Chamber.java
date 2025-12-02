@@ -20,7 +20,7 @@ public class Chamber {
     public static final int DEFAULT_RADIUS = 4;
     public static final int MIN_RADIUS = 4;
     private List<Position> tilePositions;
-    private int capaticy;
+    private int capaticy; //TODO: Have this as an entity list of e.g. food items, larva, corpses
     
     /**
      * Constructor for Chamber with default radius.

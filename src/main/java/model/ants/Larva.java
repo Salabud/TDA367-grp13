@@ -27,7 +27,6 @@ public class Larva extends Ant implements Carryable {
 
     }
 
-
     public void becomeWorker(){
 
     }

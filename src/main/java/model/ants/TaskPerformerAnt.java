@@ -23,8 +23,7 @@ public class TaskPerformerAnt extends Ant{
 
     @Override
     public void update() {
-        //System.out.println("taskPerformerAnt update");
-        if(getHunger() < 30 && !(currentTask instanceof EatTask)){
+        if(getHunger() < 30 && !(currentTask instanceof EatTask)){ //30 placeholder for now
             mediator.reportHungry(this);
         }
         if (currentTask != null) {
