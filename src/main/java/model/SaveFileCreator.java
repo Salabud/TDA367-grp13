@@ -1,6 +1,5 @@
 package Model;
 
-import Model.Ants.WorkerAnt;
 import Model.World.Tile;
 import Model.World.World;
 import org.json.JSONArray;
