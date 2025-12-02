@@ -11,6 +11,7 @@ import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
 import Model.Colony.ColonyTaskBoard;
 import Model.Entity;
+import Model.Tasks.FeedQueenTask;
 import Model.Tasks.MoveRandomlyTask;
 import Model.Tasks.TemporaryTestTask;
 
@@ -47,9 +48,10 @@ public class World {
         AntFactory factory = AntFactory.getInstance();
         TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, mediator);
         TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, mediator);
-        ant1.assignTask(new MoveRandomlyTask());
-        ant2.assignTask(new TemporaryTestTask());
         QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, mediator);
+        ant1.assignTask(new FeedQueenTask(queen));
+        ant2.assignTask(new TemporaryTestTask());
+
 
         Tile tile1 = new Tile(24, 28, MaterialType.DIRT);
         addTile(tile1);

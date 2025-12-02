@@ -17,7 +17,6 @@ public class MoveRandomlyTask implements Task{
         if(!(ant.getMovement() instanceof RandomMovement)){
             ant.setMovement(movementStrategy);
         }
-        movementStrategy.move(ant);
     }
 
     @Override
