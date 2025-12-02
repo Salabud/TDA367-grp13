@@ -2,6 +2,7 @@ package Model.Tasks;
 
 import Model.Ants.Behavior.AntBehavior;
 import Model.Ants.Movement.AntMovement;
+import Model.Ants.Movement.PathfindingMovement;
 import Model.Ants.QueenAnt;
 import Model.Ants.TaskPerformerAnt;
 import Model.Datastructures.Position;
@@ -12,6 +13,14 @@ import Model.Datastructures.Position;
 public class FeedQueenTask implements Task {
     private QueenAnt queen;
     private boolean isComplete = false;
+    private PathfindingMovement movementStrategy;
+    /***
+     *
+     * @param queen the queen to feed
+     */
+    public FeedQueenTask(QueenAnt queen) {
+        this.queen = queen;
+    }
 
     public boolean isAssigned(){
         return false;
@@ -30,8 +39,14 @@ public class FeedQueenTask implements Task {
     }
 
     public AntMovement getMovementStrategy() {
-        return null;
+        return movementStrategy;
     }
+
+    /***
+     * Currently only moves to queen
+     * TODO: find food first (once food is implemented), feed queen (once feeding is implemented)
+     * @param ant The ant to perform the task
+     */
     public void execute(TaskPerformerAnt ant) {
         /*if (!ant.getPosition().equals(queenPosition)) {
             ant.setAntState(new WalkingState());
@@ -51,6 +66,19 @@ public class FeedQueenTask implements Task {
             ant.setCurrentTask(null);
             ant.setAntState(new IdleState());
         }*/
+
+        if(!ant.getPosition().equals(queen.getPosition())){
+            if(!(ant.getMovement() instanceof PathfindingMovement)){
+                ant.setMovement(new PathfindingMovement(
+                        ant.getPosition(),
+                        getTargetLocation(),
+                        ant.getWorld().getTileGrid()
+                ));
+            }
+        }
+        else {
+            //ant.feedQueen();
+        }
     }
 
     public boolean isComplete() {
