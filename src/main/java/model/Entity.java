@@ -73,4 +73,17 @@ public abstract class Entity implements Updateable {
     public World getWorld() {
         return this.world;
     }
+
+    /**
+     * Create a JSON Object of the entity
+     * @return
+     */
+    public JSONObject toJSON(){
+        JSONObject obj = new JSONObject();
+        obj.put("x", position.getX());
+        obj.put("y", position.getY());
+        obj.put("entityId", entityId);
+        obj.put("entityType", type);
+        return obj;
+    }
 }

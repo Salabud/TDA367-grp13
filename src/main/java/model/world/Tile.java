@@ -1,6 +1,7 @@
 package model.world;
 
-import model.datastructures.Position;
+import Model.Datastructures.Position;
+import org.json.JSONObject;
 
 /**
  * Represents a static tile in the world grid with a specific material type.
@@ -20,5 +21,13 @@ public class Tile {
 
     public Position getPosition() {
         return position;
+    }
+
+    public JSONObject toJSON(){
+        JSONObject obj = new JSONObject();
+        obj.put("x", position.getX());
+        obj.put("y", position.getY());
+        obj.put("materialType", materialType);
+        return obj;
     }
 }

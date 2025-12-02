@@ -1,12 +1,14 @@
 package model.ants;
 
-import model.ants.behavior.AntBehavior;
-import model.ants.movement.AntMovement;
-import model.ants.state.AntState;
-import model.ants.status.Status;
-import model.Being;
-import model.colony.AntColony;
-import model.colony.ColonyMediator;
+import Model.Ants.Behavior.AntBehavior;
+import Model.Ants.Movement.AntMovement;
+import Model.Ants.State.AntState;
+import Model.Ants.Status.Status;
+import Model.Being;
+import Model.Colony.AntColony;
+import Model.Colony.ColonyMediator;
+import Model.Entity;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -38,5 +40,16 @@ public abstract class Ant extends Being {
         //System.out.println("ant update");
         this.movement.move(this);
         super.update();
+    }
+
+    /**
+     * Create a JSON Object of the entity
+     * @return
+     */
+    @Override
+    public JSONObject toJSON(){
+        JSONObject obj = super.toJSON();
+        //TODO implement after refactoring of Entity
+        return obj;
     }
 }
