@@ -19,9 +19,9 @@ public class SaveFileCreator {
         JSONArray tileArray = new JSONArray();
         for (Tile tile : world.getTiles()){
             JSONObject tileObject = new JSONObject();
-            tileObject.put("Material", tile.getMaterialType().toString());
-            tileObject.put("X", tile.getPosition().getX());
-            tileObject.put("Y", tile.getPosition().getY());
+            tileObject.put("material", tile.getMaterialType().toString());
+            tileObject.put("x", tile.getPosition().getX());
+            tileObject.put("y", tile.getPosition().getY());
             tileArray.put(tileObject);
         }
         json.put("tiles", tileArray);

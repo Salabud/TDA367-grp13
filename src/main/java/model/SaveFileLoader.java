@@ -39,7 +39,7 @@ public class SaveFileLoader {
 
         for (int i = 0; i < tiles.length(); i++) {
             JSONObject obj = tiles.getJSONObject(i);
-            String material = obj.getString("Material");
+            String material = obj.getString("material");
             MaterialType materialType;
             try {
                 materialType = MaterialType.valueOf(material);
@@ -48,8 +48,8 @@ public class SaveFileLoader {
             }
             // Create and add tile
             loadedWorld.addTile(new Tile(
-                    obj.getInt("X"),
-                    obj.getInt("Y"),
+                    obj.getInt("x"),
+                    obj.getInt("y"),
                     materialType
             ));
         }
