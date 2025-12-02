@@ -1,6 +1,7 @@
 package Model.Colony;
 
 import Model.Ants.Ant;
+import Model.Datastructures.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ public class AntColony {
     List<Ant> ants;
     ColonyMediator mediator;
     ColonyTaskBoard taskBoard;
+    List<Position> knownFoodPositions;
 
     public AntColony(ColonyMediator mediator, ColonyTaskBoard taskBoard){
         ants = new ArrayList<>();
+        knownFoodPositions = new ArrayList<>();
         this.mediator = mediator;
         this.taskBoard = taskBoard;
     }
@@ -24,5 +27,14 @@ public class AntColony {
         this.ants.add(ant);
     }
 
+    public List<Position> getFoodPositions(){
+        return this.knownFoodPositions;
+    }
 
+    public void addFoodPosition(Position position){
+        this.knownFoodPositions.add(position);
+    }
+    public void deleteFoodPosition(Position position){
+        this.knownFoodPositions.remove(position);
+    }
 }

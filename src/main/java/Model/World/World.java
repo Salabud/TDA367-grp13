@@ -10,6 +10,7 @@ import Model.Ants.TaskPerformerAnt;
 import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
 import Model.Colony.ColonyTaskBoard;
+import Model.Datastructures.Position;
 import Model.Entity;
 import Model.Tasks.FeedQueenTask;
 import Model.Tasks.MoveRandomlyTask;
@@ -44,6 +45,8 @@ public class World {
         ColonyMediator mediator = new ColonyMediator();
         ColonyTaskBoard taskBoard = new ColonyTaskBoard();
         AntColony colony = new AntColony(mediator, taskBoard);
+        mediator.setAntColony(colony);
+        mediator.setColonyTaskBoard(taskBoard);
         
         AntFactory factory = AntFactory.getInstance();
         TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, mediator);
@@ -58,12 +61,13 @@ public class World {
         tilesChanged = true;
 
         //Showcase entities
-        Item dirt = new Item(24,27, MaterialType.DIRT);
+        Item dirt = new Item(new Position(27, 24), MaterialType.DIRT);
         addEntity(dirt);
-        Item food = new Item(24,29,MaterialType.FOOD);
+        Item food = new Item(new Position(28, 24), MaterialType.FOOD);
         addEntity(food);
-        Item food2 = new Item(25,28,MaterialType.FOOD);
+        Item food2 = new Item(new Position(25,25), MaterialType.FOOD);
         addEntity(food2);
+        colony.addFoodPosition(new Position(25, 25));
         Larva larva1 = factory.createLarva(this, colony, 3,23,28,mediator);
 
 

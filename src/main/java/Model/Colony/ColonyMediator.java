@@ -4,10 +4,12 @@ import Model.Ants.Ant;
 import Model.Ants.TaskPerformerAnt;
 import Model.Colony.AntNest.Tunnel;
 import Model.Datastructures.Position;
+import Model.Tasks.EatTask;
 import Model.Tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Mediator class for managing communication and task assignment within an ant colony between ants,
@@ -17,7 +19,7 @@ import java.util.HashMap;
  */
 public class ColonyMediator {
     private ColonyTaskBoard taskBoard;
-
+    private AntColony antColony;
     /**
      * Suggests the most appropriate available task for the given ant.
      * If the ant is suitable for the task, it gets assigned the task.
@@ -58,6 +60,10 @@ public class ColonyMediator {
         this.taskBoard = taskBoard;
     }
 
+    public void setAntColony(AntColony antColony){
+        this.antColony = antColony;
+    }
+
     // Discovery Reporting ===========================================
     
     /**
@@ -87,5 +93,26 @@ public class ColonyMediator {
     public void reportTunnelNeedsDigging(Tunnel tunnel) {
         // TODO: Create and add DigTunnelTask
         // taskBoard.addTask(new DigTunnelTask(tunnel));
+    }
+
+    public void reportHungry(TaskPerformerAnt ant){
+        Position foodPosition = getBestFoodPosition(ant.getPosition());
+        if(foodPosition == null){
+            return;
+        }
+        ant.assignTask(new EatTask(foodPosition));
+        antColony.deleteFoodPosition(foodPosition);
+    }
+
+    /***
+     * TODO: Implement a better way of picking a food
+     * @return
+     */
+    private Position getBestFoodPosition(Position position){
+        List<Position> foodPositions = antColony.getFoodPositions();
+        if(!foodPositions.isEmpty()){
+            return foodPositions.getFirst();
+        }
+        return null;
     }
 }

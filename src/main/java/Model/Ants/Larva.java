@@ -23,7 +23,7 @@ public class Larva extends Ant implements Carryable {
     }
 
     @Override
-    public void move(int x, int y) {
+    public void move(Position position) {
 
     }
 
