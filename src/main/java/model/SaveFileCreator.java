@@ -31,6 +31,7 @@ public class SaveFileCreator {
 
         json.put("tiles", tileArray);
 
+        JSONArray entityArray = new JSONArray();
         for (Entity entity : world.getEntities()){
             entityArray.put(entity.toJSON());
         }
