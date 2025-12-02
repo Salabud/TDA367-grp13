@@ -1,6 +1,7 @@
 package Model.Ants;
 
 import Model.Ants.State.AntState;
+import Model.Tasks.EatTask;
 import Model.Tasks.Task;
 
 /** Abstract class for ants that can perform tasks. E.g. WorkerAnt, QueenAnt, (TODO: SoldierAnt)*/
@@ -24,9 +25,13 @@ public class TaskPerformerAnt extends Ant{
     @Override
     public void update() {
         //System.out.println("taskPerformerAnt update");
+        if(getHunger() < 30 && !(currentTask instanceof EatTask)){
+            mediator.reportHungry(this);
+        }
         if (currentTask != null) {
             currentTask.execute(this);
         }
+
         //System.out.println("ant tick");
         super.update();
     }
