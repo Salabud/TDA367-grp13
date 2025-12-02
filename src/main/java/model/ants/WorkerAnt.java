@@ -2,6 +2,8 @@ package Model.Ants;
 
 import java.util.List;
 
+import Model.AntType;
+import Model.BeingType;
 import Model.Colony.ColonyMediator;
 import Model.Datastructures.Position;
 import Model.EntityType;
@@ -13,10 +15,12 @@ import org.json.JSONObject;
 /** Represents a worker ant in the simulation. */
 public class WorkerAnt extends TaskPerformerAnt {
 
-    public WorkerAnt(EntityType type, World world, int colonyId, int x, int y, ColonyMediator mediator){
-        this.type = EntityType.WORKER_ANT;
+    public WorkerAnt(World world, int colonyId, int x, int y, ColonyMediator mediator){
+        this.type = EntityType.BEING;
+        this.beingType = BeingType.ANT;
+        this.antType = AntType.WORKER_ANT;
         this.world = world;
-        this.colonyId = colonyId;
+        this.colonyId = colonyId; //TODO Should this be in Ant.java?
         this.position = new Position(x,y);
         this.mediator = mediator;
     }
@@ -36,7 +40,7 @@ public class WorkerAnt extends TaskPerformerAnt {
     public JSONObject toJSON(){
         JSONObject obj = super.toJSON();
         obj.put("colonyId", colonyId);
-        //TODO implement after refactoring of Entity
+        //TODO
         return obj;
     }
 }

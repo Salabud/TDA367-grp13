@@ -1,8 +1,11 @@
 package view;
 
-import model.Entity;
-import model.EntityType;
-import model.world.Item;
+import Model.Ants.Ant;
+import Model.Being;
+import Model.BeingType;
+import Model.Entity;
+import Model.EntityType;
+import Model.World.Item;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -50,18 +53,6 @@ public class EntityCanvas extends Canvas {
         gc.clearRect(0, 0, getWidth(), getHeight());
         for (Entity entity : entities) {
             switch (entity.getType()) {
-                case EntityType.WORKER_ANT:
-                    gc.setFill(workerAnt.getColor());
-                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, workerAnt.getWidth(), workerAnt.getHeight());
-                    break;
-                case EntityType.LARVA:
-                    gc.setFill(larva.getColor());
-                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, larva.getWidth(), larva.getHeight());
-                    break;
-                case EntityType.QUEEN:
-                    gc.setFill(queen.getColor());
-                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, queen.getWidth(), queen.getHeight());
-                    break;
                 case EntityType.ITEM:
                     Item item = (Item) entity;
                     switch(item.getMaterialType()){
@@ -75,6 +66,30 @@ public class EntityCanvas extends Canvas {
                         }
                     }
                     break;
+                case BEING:
+                    Being being = (Being) entity;
+                    switch(being.getBeingType()){
+                        case ANT:
+                            Ant ant = (Ant) being;
+                            switch(ant.getAntType()){
+                                case WORKER_ANT:
+                                    gc.setFill(workerAnt.getColor());
+                                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, workerAnt.getWidth(), workerAnt.getHeight());
+                                    break;
+                                case LARVA:
+                                    gc.setFill(larva.getColor());
+                                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, larva.getWidth(), larva.getHeight());
+                                    break;
+                                case QUEEN:
+                                    gc.setFill(queen.getColor());
+                                    gc.fillOval(entity.getX()*cellsize, entity.getY()*cellsize, queen.getWidth(), queen.getHeight());
+                                    break;
+                            }
+                    }
+                    break;
+
+
+
 
             }
         }

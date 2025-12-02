@@ -213,7 +213,7 @@ public class Model {
      * Save the world into a json object
      */
     public void saveColony(){
-        SaveFileCreator.getInstance().save(worlds.getFirst(), "SAVE");
+        SaveFileCreator.getInstance().save(this, "SAVE");
     }
     public void loadColony() throws IOException {
         stopTicking();

@@ -1,7 +1,8 @@
-package model;
+package Model;
 
-import model.datastructures.Position;
-import model.world.World;
+import Model.Datastructures.Position;
+import Model.World.World;
+import org.json.JSONObject;
 
 /**
  * Abstract base class for all entities in the simulation.
@@ -12,6 +13,7 @@ public abstract class Entity implements Updateable {
     protected Position position;
     protected int movementInterval;
     protected EntityType type; //Final?
+    private int entityId;
 
     public void update() {
         //System.out.println("entity update");
@@ -84,6 +86,7 @@ public abstract class Entity implements Updateable {
         obj.put("y", position.getY());
         obj.put("entityId", entityId);
         obj.put("entityType", type);
+        obj.put("movementInterval", movementInterval);
         return obj;
     }
 }

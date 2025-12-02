@@ -15,20 +15,28 @@ public class SaveFileCreator {
     private SaveFileCreator(){
     }
 
-    public void save(World world, String saveName){
+    public void save(Model model, String saveName){
         JSONObject json = new JSONObject();
+
+        World world = model.getWorld();
         JSONArray tileArray = new JSONArray();
-        JSONArray entityArray = new JSONArray();
         for (Tile tile : world.getTiles()){
             tileArray.put(tile.toJSON());
         }
+        json.put("tiles", tileArray);
+
+        JSONArray entityArray = new JSONArray();
         for (Entity entity : world.getEntities()){
-            //TODO Await refactoring of Entity
             entityArray.put(entity.toJSON());
         }
-
-        json.put("tiles", tileArray);
         json.put("entities", entityArray);
+
+        JSONObject colony = world.getAntColony().toJSON();
+        json.put("colony", colony);
+
+        JSONArray statuses = new JSONArray();
+        json.put("statuses", statuses);
+
         try(FileWriter fileWriter = new FileWriter(saveName + ".json")) {
             fileWriter.write(json.toString(4));
         } catch (IOException e) {

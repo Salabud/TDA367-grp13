@@ -1,11 +1,13 @@
 package model.ants;
 
-import model.ants.status.Status;
-import model.Carryable;
-import model.colony.ColonyMediator;
-import model.datastructures.Position;
-import model.EntityType;
-import model.world.World;
+import Model.AntType;
+import Model.Ants.Status.Status;
+import Model.BeingType;
+import Model.Carryable;
+import Model.Colony.ColonyMediator;
+import Model.Datastructures.Position;
+import Model.EntityType;
+import Model.World.World;
 
 import java.util.List;
 
@@ -13,7 +15,10 @@ import java.util.List;
 public class Larva extends Ant implements Carryable {
     public Larva(World world, int colonyId, int x, int y, ColonyMediator mediator){
         this.position = new Position(x,y);
-        type = EntityType.LARVA;
+        type = EntityType.BEING;
+        beingType = BeingType.ANT;
+        antType = AntType.LARVA;
+
     }
     public Larva(World world, int colonyId, int x, int y, int age,
                  String nickname, ColonyMediator mediator, float health, float maxHealth, float hunger,

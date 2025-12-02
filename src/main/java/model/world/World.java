@@ -3,17 +3,15 @@ package model.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.ants.AntFactory;
-import model.ants.Larva;
-import model.ants.QueenAnt;
-import model.ants.TaskPerformerAnt;
-import model.colony.AntColony;
-import model.colony.ColonyMediator;
-import model.colony.ColonyTaskBoard;
-import model.datastructures.Position;
-import model.Entity;
-import model.tasks.FeedQueenTask;
-import model.tasks.TemporaryTestTask;
+import Model.Ants.*;
+import Model.Colony.AntColony;
+import Model.Colony.ColonyMediator;
+import Model.Colony.ColonyTaskBoard;
+import Model.Datastructures.Position;
+import Model.Entity;
+import Model.Tasks.FeedQueenTask;
+import Model.Tasks.MoveRandomlyTask;
+import Model.Tasks.TemporaryTestTask;
 
 /**
  * Represents the world in which entities exist and interact.
@@ -26,6 +24,9 @@ public class World {
     private List<Tile> tiles; // Current tiles in the world, for easy rendering access
     private final int gridSize;
     private boolean tilesChanged;
+    private ColonyMediator colonyMediator;
+    private AntColony colony;
+    private ColonyTaskBoard taskBoard;
 
     public World(){
         this.tilesChanged = false;
@@ -60,16 +61,16 @@ public class World {
             }
         }
 
-        ColonyMediator mediator = new ColonyMediator();
-        ColonyTaskBoard taskBoard = new ColonyTaskBoard();
-        AntColony colony = new AntColony(mediator, taskBoard);
-        mediator.setAntColony(colony);
-        mediator.setColonyTaskBoard(taskBoard);
+        colonyMediator = new ColonyMediator();
+        taskBoard = new ColonyTaskBoard();
+        colony = new AntColony(colonyMediator, taskBoard);
+        colonyMediator.setAntColony(colony);
+        colonyMediator.setColonyTaskBoard(taskBoard);
 
         AntFactory factory = AntFactory.getInstance();
-        TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, mediator);
-        TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, mediator);
-        QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, mediator);
+        TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, colonyMediator);
+        TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, colonyMediator);
+        QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, colonyMediator);
         ant1.assignTask(new FeedQueenTask(queen));
         ant2.assignTask(new TemporaryTestTask());
 
@@ -86,7 +87,7 @@ public class World {
         Item food2 = new Item(new Position(25,25), MaterialType.FOOD);
         addEntity(food2);
         colony.addFoodPosition(new Position(25, 25));
-        Larva larva1 = factory.createLarva(this, colony, 3,23,28,mediator);
+        Larva larva1 = factory.createLarva(this, colony, 3,23,28,colonyMediator);
 
 
         return this;

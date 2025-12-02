@@ -1,5 +1,8 @@
 package Model;
 
+import Model.Ants.Status.Status;
+import Model.Datastructures.Position;
+import Model.World.Item;
 import Model.World.MaterialType;
 import Model.World.Tile;
 import Model.World.World;
@@ -9,6 +12,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaveFileLoader {
     private static SaveFileLoader INSTANCE;
@@ -35,23 +40,61 @@ public class SaveFileLoader {
 
         World loadedWorld = new World();
 
+        // Load tiles
         JSONArray tiles = json.getJSONArray("tiles");
-
         for (int i = 0; i < tiles.length(); i++) {
             JSONObject obj = tiles.getJSONObject(i);
             String material = obj.getString("materialType");
             MaterialType materialType;
-            try {
-                materialType = MaterialType.valueOf(material);
-            } catch (IllegalArgumentException e) {
-                throw new IOException("Invalid material type in save: " + material);
-            }
+            materialType = MaterialType.valueOf(material);
             // Create and add tile
             loadedWorld.addTile(new Tile(
                     obj.getInt("x"),
                     obj.getInt("y"),
                     materialType
             ));
+        }
+
+        //Load entities
+        JSONArray entities = json.getJSONArray("entities");
+        for (Object obj : entities){
+            JSONObject entity = (JSONObject) obj;
+
+            // Load Entity properties
+            EntityType entityType = EntityType.valueOf(entity.getString("entityType"));
+            Position position = new Position(entity.getInt("x"), entity.getInt("y"));
+            int movementInterval = entity.getInt("movementInterval");
+
+            switch (entityType){
+                case ITEM -> {
+                    // Load Item properties and add it to the world
+                    MaterialType materialType = MaterialType.valueOf(entity.getString("materialType"));
+                    loadedWorld.getEntities().add(new Item(position, materialType));
+                }
+                case BEING -> {
+                    // Load Being properties
+                    float health = entity.getFloat("health");
+                    float maxHealth = entity.getFloat("maxHealth");
+                    float hunger = entity.getFloat("hunger");
+                    float maxHunger = entity.getFloat("maxHunger");
+                    int age = entity.getInt("age");
+                    float hungerDepletionRate = entity.getFloat("hungerDepletionRate");
+                    List<Status> statuses = new ArrayList<>();
+                    //TODO add statuses
+                    BeingType beingType = BeingType.valueOf(entity.getString("beingType"));
+                    switch(beingType){
+                        case ANT -> {
+                            // Load Ant properties
+                            AntType antType = AntType.valueOf(entity.getString("antType"));
+                        }
+                        default -> {}
+                    }
+
+
+                    //TODO
+                }
+                default ->{}
+            }
         }
 
         return loadedWorld;

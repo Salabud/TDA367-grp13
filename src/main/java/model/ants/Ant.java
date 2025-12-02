@@ -1,10 +1,12 @@
 package model.ants;
 
+import Model.AntType;
 import Model.Ants.Behavior.AntBehavior;
 import Model.Ants.Movement.AntMovement;
 import Model.Ants.State.AntState;
 import Model.Ants.Status.Status;
 import Model.Being;
+import Model.BeingType;
 import Model.Colony.AntColony;
 import Model.Colony.ColonyMediator;
 import Model.Entity;
@@ -22,6 +24,8 @@ public abstract class Ant extends Being {
     protected AntState state;
     protected AntBehavior behavior;
     protected AntMovement movement;
+    protected AntType antType;
+
 
     public AntMovement getMovement() {
         return movement;
@@ -42,6 +46,10 @@ public abstract class Ant extends Being {
         super.update();
     }
 
+    public AntType getAntType(){
+        return antType;
+    }
+
     /**
      * Create a JSON Object of the entity
      * @return
@@ -49,6 +57,8 @@ public abstract class Ant extends Being {
     @Override
     public JSONObject toJSON(){
         JSONObject obj = super.toJSON();
+        obj.put("nickname", nickname);
+        obj.put("antType", antType);
         //TODO implement after refactoring of Entity
         return obj;
     }
