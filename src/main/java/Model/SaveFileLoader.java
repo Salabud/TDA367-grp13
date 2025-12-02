@@ -39,7 +39,7 @@ public class SaveFileLoader {
 
         for (int i = 0; i < tiles.length(); i++) {
             JSONObject obj = tiles.getJSONObject(i);
-            String material = obj.getString("material");
+            String material = obj.getString("materialType");
             MaterialType materialType;
             try {
                 materialType = MaterialType.valueOf(material);
