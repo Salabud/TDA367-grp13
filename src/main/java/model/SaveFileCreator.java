@@ -1,5 +1,6 @@
 package Model;
 
+import Model.Ants.WorkerAnt;
 import Model.World.Tile;
 import Model.World.World;
 import org.json.JSONArray;
@@ -19,9 +20,15 @@ public class SaveFileCreator {
 
         World world = model.getWorld();
         JSONArray tileArray = new JSONArray();
+        JSONArray entityArray = new JSONArray();
         for (Tile tile : world.getTiles()){
             tileArray.put(tile.toJSON());
         }
+        for (Entity entity : world.getEntities()){
+            //TODO Await refactoring of Entity
+            entityArray.put(entity.toJSON());
+        }
+
         json.put("tiles", tileArray);
 
         JSONArray entityArray = new JSONArray();

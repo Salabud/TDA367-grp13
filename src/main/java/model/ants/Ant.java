@@ -62,5 +62,4 @@ public abstract class Ant extends Being {
         //TODO implement after refactoring of Entity
         return obj;
     }
-
 }
