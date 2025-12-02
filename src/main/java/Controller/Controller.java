@@ -1,13 +1,17 @@
 package Controller;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import Model.Datastructures.Position;
 import Model.Model;
+import Model.World.Item;
 import Model.World.MaterialType;
 import Model.World.Tile;
+import View.GameInterface;
 import View.View;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import View.GameInterface;
 //Ludvig ---- I would like to rename this class to GameInterfaceController. We need separate controllers for different game states, so I'm not sure what "Controller.java" would be used for
 /**
  * Controller class - Mediator between Model and View.
@@ -118,7 +122,9 @@ public class Controller implements InputHandler {
         gameInterface.getSpeedButton().setOnAction(e -> handleSpeedButton());
         gameInterface.getExitButton().setOnAction(e -> handleExitButton());
         gameInterface.getPauseButton().setOnAction(e -> handlePauseButton());
-        }
+        gameInterface.getFoodButton().setOnAction(e -> handleFoodButton());
+        gameInterface.getPoisonButton().setOnAction(e -> handlePoisonButton());
+    }
 
     private void handlePauseButton() {
         Button btn = gameInterface.getPauseButton();
@@ -150,6 +156,29 @@ public class Controller implements InputHandler {
             model.setTickrate(60);
         }
 
+    }
+    /**
+     * Handles adding food item to the world when food button is pressed.
+     */
+    private void handleFoodButton() {
+        int gridSize = model.getWorld().getGridSize();
+        int x = ThreadLocalRandom.current().nextInt(gridSize);
+        int y = 0;
+
+        Item food = new Item(new Position(x, y), MaterialType.FOOD);
+        model.getWorld().addEntity(food);
+    }
+
+    /**
+     * Handles adding poison item to the world when poison button is pressed.
+     */
+    private void handlePoisonButton() {
+        int gridSize = model.getWorld().getGridSize();
+        int x = ThreadLocalRandom.current().nextInt(gridSize);
+        int y = 0;
+
+        Item poison = new Item(new Position(x, y), MaterialType.POISON);
+        model.getWorld().addEntity(poison);
     }
     
     /**

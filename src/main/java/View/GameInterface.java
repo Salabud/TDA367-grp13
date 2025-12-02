@@ -1,10 +1,10 @@
 package View;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 
 public class GameInterface {
     private List<Node> nodes;
@@ -12,6 +12,8 @@ public class GameInterface {
     private Button exitButton;
     private Button speedButton;
     private Button pauseButton;
+    private Button foodButton;
+    private Button poisonButton;
 
     public GameInterface(){
         nodes = new ArrayList<>();
@@ -32,7 +34,18 @@ public class GameInterface {
         speedButton.setLayoutX(400);
         speedButton.setFocusTraversable(false);
         nodes.add(speedButton);
+
+        foodButton = new Button("Apple");
+        foodButton.setLayoutX(500);
+        foodButton.setFocusTraversable(false);
+        nodes.add(foodButton);
+
+        poisonButton = new Button("Poison");
+        poisonButton.setLayoutX(600);
+        poisonButton.setFocusTraversable(false);
+        nodes.add(poisonButton);
     }
+
     public Button getPauseButton(){
         return  pauseButton;
     }
@@ -45,5 +58,10 @@ public class GameInterface {
     public List<Node> getNodes(){
         return nodes;
     }
-
+    public Button getFoodButton(){
+        return foodButton;
+    }
+    public Button getPoisonButton(){
+        return poisonButton;
+    }
 }

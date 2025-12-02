@@ -13,7 +13,6 @@ import Model.Colony.ColonyTaskBoard;
 import Model.Datastructures.Position;
 import Model.Entity;
 import Model.Tasks.FeedQueenTask;
-import Model.Tasks.MoveRandomlyTask;
 import Model.Tasks.TemporaryTestTask;
 
 /**
@@ -213,9 +212,15 @@ public class World {
       }
       return null;
     }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
     public boolean checkTilesChanged(){
         return tilesChanged;
     }
+    
     public void setTilesChanged(boolean bool){
         this.tilesChanged = bool;
     }
