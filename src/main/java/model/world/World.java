@@ -93,7 +93,7 @@ public class World {
         TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 60, 34, colonyMediator);
         QueenAnt queen = factory.createQueenAnt(this, colony, 0, 20, 60, colonyMediator);
         ant1.assignTask(new FeedQueenTask(queen));
-        ant2.assignTask(new TemporaryTestTask());
+        ant2.assignTask(new FeedQueenTask(queen));
 
         //Showcase entities
         //Item dirt = new Item(new Position(27, 24), MaterialType.DIRT);

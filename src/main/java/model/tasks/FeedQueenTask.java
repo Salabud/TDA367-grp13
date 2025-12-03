@@ -29,7 +29,9 @@ public class FeedQueenTask extends Task {
 
     @Override
     public Position getTargetLocation() {
-        return queen.getPosition();
+        int randomX = (int)(Math.random()*100);
+        int randomY = (int)(Math.random()*100);
+        return new Position(randomX, randomY);
     }
 
     /**
@@ -59,7 +61,7 @@ public class FeedQueenTask extends Task {
             case WORKING:
                 // TODO: implement feeding behavior
                 // ant.feedQueen();
-                setPhase(TaskPhase.COMPLETE);
+                setPhase(TaskPhase.MOVING_TO_TARGET);
                 break;
             case COMPLETE:
                 break;
