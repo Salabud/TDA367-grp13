@@ -3,6 +3,8 @@ package view;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,59 +22,76 @@ public class GameInterface {
     private String font;
 
     public GameInterface(){
-        font = "-fx-base: rgb(50, 41 ,47); -fx-padding: -10 0 0 0; -fx-font-family: 'Daydream'; -fx-font-size: 15px;";
+
+        font = "-fx-base: rgb(50, 41 ,47); -fx-padding: 0 0 0 0; -fx-font-size: 30px; -fx-font-family: 'Segoe UI Emoji';";
 
         nodes = new ArrayList<>();
+        //▶️⏩️🔍
+        //🪏⛰️
 
-        exitButton = new Button(" Exit ");
+        exitButton = new Button("✖\uFE0F");
         exitButton.setLayoutY(0);
         exitButton.setLayoutX(0);
+        exitButton.setPrefSize(40,40);
         exitButton.setFocusTraversable(false);
         exitButton.setStyle(font);
         nodes.add(exitButton);
 
-        saveButton = new Button(" Save ");
-        saveButton.setLayoutX(70);
+        saveButton = new Button("\uD83D\uDCBE");
+        saveButton.setLayoutX(60);
+        saveButton.setPrefSize(40,40);
         saveButton.setFocusTraversable(false);
         saveButton.setStyle(font);
         nodes.add(saveButton);
 
-        pauseButton = new Button(" Pause ");
-        pauseButton.setLayoutX(300);
-        pauseButton.setPrefWidth(100);
+        pauseButton = new Button("⏯️");
+        pauseButton.setLayoutX(340);
+        pauseButton.setPrefWidth(40);
+        pauseButton.setPrefHeight(40);
         pauseButton.setFocusTraversable(false);
         pauseButton.setStyle(font);
         nodes.add(pauseButton);
 
-        speed1Button = new Button(">");
-        speed1Button.setLayoutX(400);
-        speed1Button.setMinWidth(40);
+        speed1Button = new Button("▶\uFE0F");
+        speed1Button.setLayoutX(380);
+        speed1Button.setPrefWidth(40);
+        speed1Button.setPrefHeight(40);
         speed1Button.setFocusTraversable(false);
         speed1Button.setStyle(font);
         nodes.add(speed1Button);
 
 
-        speed2Button = new Button(">>");
-        speed2Button.setLayoutX(440);
-        speed2Button.setMinWidth(40);
-        speed2Button.setFocusTraversable(false);
-        speed2Button.setStyle(font);
-        nodes.add(speed2Button);
-
-        speed3Button = new Button(">>>");
-        speed3Button.setLayoutX(480);
-        speed3Button.setMinWidth(40);
+        speed3Button = new Button("⏩\uFE0F");
+        speed3Button.setLayoutX(420);
+        speed3Button.setPrefSize(40, 40);
         speed3Button.setFocusTraversable(false);
         speed3Button.setStyle(font);
         nodes.add(speed3Button);
 
         tools = new ComboBox<>();
         tools.setFocusTraversable(false);
-        tools.setLayoutX(550);
+        tools.setLayoutX(650);
+        tools.setPrefSize(150,40);
         tools.getItems().addAll(Tool.values());
         tools.setValue(Tool.SELECT);
         tools.setStyle(font);
         nodes.add(tools);
+        tools.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Tool tool) {
+                return switch (tool) {
+                    case SELECT -> "\uD83D\uDD0D";
+                    case PLACE_DIRT -> "⛰\uFE0F";
+                    case SHOVEL -> "\uD83E\uDE8F";
+                    case PLACE_FOOD -> "\uD83C\uDF4E";
+                    case PLACE_POSION -> "☣\uFE0F";
+                };
+            }
+            @Override
+            public Tool fromString(String string) {
+                return null; // not needed for ComboBox
+            }
+        });
 
         setPressedButton(">");
     }
@@ -84,19 +103,12 @@ public class GameInterface {
     public void setPressedButton(String button){
         switch(button){
             case ">":
-                speed1Button.setStyle("-fx-base: rgb(180,180,180);");
-                speed2Button.setStyle("");
-                speed3Button.setStyle("");
-                break;
-            case ">>":
-                speed1Button.setStyle("");
-                speed2Button.setStyle("-fx-base: rgb(180,180,180);");
-                speed3Button.setStyle("");
+                speed1Button.setStyle("-fx-base: rgb(25, 20 ,23); -fx-padding: 0 0 0 0; -fx-font-size: 30px;");
+                speed3Button.setStyle(font);
                 break;
             case ">>>":
-                speed1Button.setStyle("");
-                speed2Button.setStyle("");
-                speed3Button.setStyle("-fx-base: rgb(180,180,180);");
+                speed1Button.setStyle(font);
+                speed3Button.setStyle("-fx-base: rgb(25, 20 ,23); -fx-padding: 0 0 0 0; -fx-font-size: 30px;");
                 break;
         }
     }
@@ -112,9 +124,6 @@ public class GameInterface {
     public Button getSpeed1Button(){
         return speed1Button;
     }
-    public Button getSpeed2Button(){
-        return speed2Button;
-    }
     public Button getSpeed3Button(){
         return speed3Button;
     }
@@ -123,6 +132,9 @@ public class GameInterface {
     }
     public List<Node> getNodes(){
         return nodes;
+    }
+    public String getFont(){
+        return font;
     }
 
 

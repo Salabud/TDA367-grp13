@@ -135,7 +135,9 @@ public class Controller implements InputHandler {
         if ("RUNNING".equals(currentState)) {
             // Pause game logic here
             // model.setGameState("PAUSED");
+
         } else if ("PAUSED".equals(currentState)) {
+
             // Resume game logic here
             // model.setGameState("RUNNING");
         }
@@ -143,7 +145,6 @@ public class Controller implements InputHandler {
 
     private void setupButtonHandlers(){
         gameInterface.getSpeed1Button().setOnAction(e -> handleSpeed1Button());
-        gameInterface.getSpeed2Button().setOnAction(e -> handleSpeed2Button());
         gameInterface.getSpeed3Button().setOnAction(e -> handleSpeed3Button());
         gameInterface.getExitButton().setOnAction(e -> handleExitButton());
         gameInterface.getSaveButton().setOnAction(e -> handleSaveButton());
@@ -168,13 +169,13 @@ public class Controller implements InputHandler {
     }
 
     private void handlePauseButton() {
-        Button btn = gameInterface.getPauseButton();
-        if(btn.getText().equals(" Pause ")){
+        if (model.getGameState().equals("RUNNING")){
             model.setGameState("PAUSED");
-            btn.setText(" Resume ");
-        } else {
+            gameInterface.getPauseButton().setStyle("-fx-base: rgb(25, 20 ,23); -fx-padding: 0 0 0 0; -fx-font-size: 30px;");
+        }
+        else{
+            gameInterface.getPauseButton().setStyle(gameInterface.getFont());
             model.setGameState("RUNNING");
-            btn.setText(" Pause ");
         }
 
     }
@@ -189,10 +190,6 @@ public class Controller implements InputHandler {
     private void handleSpeed1Button(){
         model.setTickrate(60);
         gameInterface.setPressedButton(">");
-    }
-    private void handleSpeed2Button(){
-        model.setTickrate(30);
-        gameInterface.setPressedButton(">>");
     }
     private void handleSpeed3Button(){
         model.setTickrate(20);
