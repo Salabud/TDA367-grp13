@@ -49,8 +49,6 @@ public class World {
     }
     public World withStartWorld(){
         //Hardcoded starting world
-
-
         for (int x = 0; x < 100; x++){
                 Tile tile = new Tile(x,20,MaterialType.GRASS);
                 tiles.add(tile);

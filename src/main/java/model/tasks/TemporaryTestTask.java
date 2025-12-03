@@ -1,6 +1,5 @@
 package model.tasks;
 
-import model.ants.Ant;
 import model.ants.behavior.AntBehavior;
 import model.ants.movement.AntMovement;
 import model.ants.movement.NoMovement;
@@ -11,10 +10,12 @@ import model.datastructures.Position;
 /**
  * A temporary task used for testing movement implementations.
  */
-public class TemporaryTestTask implements Task{
-    private Ant antAssigned;
-    boolean isComplete = false;
-    boolean isAssigned = false;
+public class TemporaryTestTask extends Task {
+    
+    public TemporaryTestTask() {
+        super();
+    }
+    
     @Override
     public int getPriority() {
         return 0;
@@ -22,22 +23,7 @@ public class TemporaryTestTask implements Task{
 
     @Override
     public Position getTargetLocation() {
-        return new Position(99, 99);  // Within 100x100 grid bounds (0-99)
-    }
-
-    @Override
-    public AntBehavior getBehaviorStrategy() {
-        return null;
-    }
-
-    @Override
-    public AntMovement getMovementStrategy() {
-        return null;
-    }
-
-    @Override
-    public boolean isComplete() {
-        return isComplete;
+        return new Position(99, 99);
     }
 
     @Override
@@ -48,22 +34,17 @@ public class TemporaryTestTask implements Task{
                 getTargetLocation(), 
                 ant.getWorld().getTileGrid()
             ));
+            setPhase(TaskPhase.MOVING_TO_TARGET);
+        }
+        
+        // Check if ant reached the target
+        if (ant.getPosition().equals(getTargetLocation())) {
+            setPhase(TaskPhase.COMPLETE);
         }
     }
 
     @Override
     public String getDescription() {
         return "Temporary task to test movement implementation";
-    }
-
-    @Override
-    public boolean isAssigned() {
-        return isAssigned;
-    }
-
-    @Override
-    public void setAssigned(boolean status) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setAssigned'");
     }
 }

@@ -97,6 +97,8 @@ public class ColonyMediator {
         if(foodPosition == null){
             return;
         }
+        //TODO: make generic reportHungry that works for Ant
+        //TODO: instead of knownfoodpositions, tell WorkerAnt to go to food chamber. (less omnipotent behavior from mediator)
         ant.assignTask(new EatTask(foodPosition));
         antColony.deleteFoodPosition(foodPosition);
     }
@@ -108,7 +110,7 @@ public class ColonyMediator {
     private Position getBestFoodPosition(Position position){
         List<Position> foodPositions = antColony.getFoodPositions();
         if(!foodPositions.isEmpty()){
-            return foodPositions.getFirst();
+            return foodPositions.getFirst(); // TODO: dependant on ant's position
         }
         return null;
     }

@@ -1,33 +1,71 @@
 package model.tasks;
 
 import model.ants.behavior.AntBehavior;
+import model.ants.behavior.EatBehavior;
 import model.ants.movement.AntMovement;
+import model.ants.movement.NoMovement;
 import model.ants.movement.PathfindingMovement;
+import model.ants.state.AntState;
 import model.ants.TaskPerformerAnt;
 import model.datastructures.Position;
 
-public class EatTask implements Task{
+public class EatTask extends Task {
     private Position foodPosition;
-    private boolean needNewPath;
+    private int eatingProgress;
+    private static final int EATING_DURATION = 600; // temp value to debugging
+    
     public EatTask(Position foodPosition) {
+        super();  // Initializes phase = NOT_STARTED, isAssigned = false
         this.foodPosition = foodPosition;
-        this.needNewPath = true;
+        this.eatingProgress = 0;
     }
+    
     @Override
     public void execute(TaskPerformerAnt ant) {
-        if (needNewPath) {
-            ant.setMovement(new PathfindingMovement(
+        switch (phase) {
+            case NOT_STARTED:
+                ant.setState(AntState.MOVING);
+                ant.setMovement(new PathfindingMovement(
                     ant.getPosition(),
-                    getTargetLocation(),
+                    foodPosition,
                     ant.getWorld().getTileGrid()
-            ));
-            needNewPath = false;
+                ));
+                ant.setBehavior(null);
+                setPhase(TaskPhase.MOVING_TO_TARGET);
+                break;
+                
+            case MOVING_TO_TARGET:
+                if (ant.getPosition().isAdjacentTo(foodPosition)) {
+                    ant.setState(AntState.EATING);
+                    ant.setMovement(new NoMovement());
+                    ant.setBehavior(new EatBehavior());
+                    setPhase(TaskPhase.WORKING);
+                }
+                break;
+                
+            case WORKING:
+                // Track eating progress (behavior handles hunger restoration)
+                eatingProgress++;
+                if (eatingProgress >= EATING_DURATION) {
+                    ant.setState(AntState.RESTING);
+                    ant.setMovement(new NoMovement());
+                    ant.setBehavior(null);
+                    setPhase(TaskPhase.COMPLETE);
+                }
+                break;
+                
+            case COMPLETE:
+                // Task done, nothing to configure
+                break;
+                
+            default:
+                break;
         }
     }
-
+    
     @Override
     public int getPriority() {
-        return 0;
+        return 10;  // High priority, eating is important!
     }
 
     @Override
@@ -36,32 +74,13 @@ public class EatTask implements Task{
     }
 
     @Override
-    public AntBehavior getBehaviorStrategy() {
-        return null;
-    }
-
-    @Override
-    public AntMovement getMovementStrategy() {
-        return null;
-    }
-
-    @Override
-    public boolean isComplete() {
-        return false;
-    }
-
-    @Override
     public String getDescription() {
-        return "ant is hungry, ant go eat";
-    }
-
-    @Override
-    public boolean isAssigned() {
-        return false;
-    }
-
-    @Override
-    public void setAssigned(boolean status) {
-
+        return switch (phase) {
+            case NOT_STARTED -> "Waiting to start";
+            case MOVING_TO_TARGET -> "Moving to food";
+            case WORKING -> "Eating (" + (eatingProgress * 100 / EATING_DURATION) + "%)";
+            case COMPLETE -> "Finished eating";
+            default -> "Eating task";
+        };
     }
 }
