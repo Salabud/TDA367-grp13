@@ -1,6 +1,8 @@
 package controller;
 
+import controller.mouseTool.MouseTool;
 import controller.mouseTool.PlaceDirt;
+import controller.mouseTool.PlaceFood;
 import controller.mouseTool.Shovel;
 import javafx.scene.control.ComboBox;
 import model.Model;
@@ -24,7 +26,7 @@ public class Controller implements InputHandler {
     private View view;
     private GameInterface gameInterface;
     private boolean suppressFirstClick;
-    private Tool currentTool;
+    private MouseTool currentTool;
     private boolean dragging;
     
     public Controller(Model model, View view) {
@@ -33,7 +35,7 @@ public class Controller implements InputHandler {
         gameInterface = view.getGameInterface();
         setupButtonHandlers();
         suppressFirstClick = true;
-        currentTool = Tool.SELECT;
+        currentTool = null;
         dragging = false;
 
     }
@@ -82,17 +84,6 @@ public class Controller implements InputHandler {
             // Convert screen coordinates to world coordinates
             double worldX = event.getX();
             double worldY = event.getY();
-
-            /*
-            //Testing stuff, not meant to stick around
-            int intX = (int)(worldX/8);
-            int intY = (int)(worldY/8);
-            Position mousePosition = new Position(intX, intY);
-            switch (currentTool){
-                case SHOVEL -> {Shovel.getInstance().execute(model.getWorld(), mousePosition);}
-            }
-
-             */
         }
     }
     @Override
@@ -133,10 +124,7 @@ public class Controller implements InputHandler {
         int intY = (int)(worldY / 8);
         Position mousePosition = new Position(intX, intY);
 
-        switch (currentTool) {
-            case SHOVEL -> Shovel.getInstance().execute(model.getWorld(), mousePosition);
-            case PLACE_DIRT -> PlaceDirt.getInstance().execute(model.getWorld(), mousePosition);
-        }
+        currentTool.execute(model.getWorld(), mousePosition);
     }
 
     /**
@@ -164,7 +152,11 @@ public class Controller implements InputHandler {
         ComboBox<Tool> toolCombo = gameInterface.getTools();
         toolCombo.valueProperty().addListener((obs, oldTool, newTool) -> {
           if (newTool != null){
-              currentTool = newTool;
+              switch(newTool){
+                  case PLACE_DIRT -> currentTool = PlaceDirt.getInstance();
+                  case SHOVEL -> currentTool = Shovel.getInstance();
+                  case PLACE_FOOD ->  currentTool = PlaceFood.getInstance();
+              }
           }
         });
         }

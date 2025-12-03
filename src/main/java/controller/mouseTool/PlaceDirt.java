@@ -8,6 +8,8 @@ import model.world.World;
 public class PlaceDirt extends MouseTool{
     private static PlaceDirt INSTANCE;
     private PlaceDirt(){
+        draggedTriggered = true;
+        pressTriggered = true;
     }
 
     @Override
