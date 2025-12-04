@@ -24,7 +24,7 @@ public class SelectWindow{
         width = 160;
         height = 200;
         this.gc = gc;
-        Font.loadFont(getClass().getResourceAsStream("/fonts/Daydream.otf"), 40);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PKMN RBYGSC.ttf"), 60);
 
 
     }
@@ -33,7 +33,7 @@ public class SelectWindow{
         gc.setFill(Color.WHITE);
         gc.fillRoundRect(x,y,width,height,15,15);
         gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Daydream"));
+        gc.setFont(Font.font("PKMN RBYGSC", 14));
         switch (entity.getType()){
             case BEING -> {
                 Being being = (Being) entity;
@@ -41,9 +41,9 @@ public class SelectWindow{
                     case ANT -> {
                         Ant ant = (Ant) being;
                         gc.fillText(ant.getAntType().toString(),x+10,y+30);
-                        gc.fillText("Hunger: " + (int)ant.getHunger(), x+10,y+60);
-                        gc.fillText("Health: " + (int)ant.getHealth() + "/" + (int)ant.getMaxHealth(), x+10,y+90);
-                        gc.fillText("Age: " + (int)ant.getAge() + " days",x+10,y+120);
+                        gc.fillText("HUNGER: " + (int)ant.getHunger(), x+10,y+60);
+                        gc.fillText("HEALTH: " + (int)ant.getHealth() + "/" + (int)ant.getMaxHealth(), x+10,y+90);
+                        gc.fillText("AGE: " + (int)ant.getAge() + " days",x+10,y+120);
                         gc.fillText("ID: " + ant.getColonyId(), x+10, y+150);
                     }
                 }
