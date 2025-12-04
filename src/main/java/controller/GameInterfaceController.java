@@ -4,21 +4,17 @@ import controller.mouseTool.*;
 import javafx.scene.control.ComboBox;
 import model.Model;
 import model.datastructures.Position;
-import model.world.MaterialType;
-import model.world.Tile;
 import view.Tool;
 import view.View;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import view.GameInterface;
-//Ludvig ---- I would like to rename this class to GameInterfaceController. We need separate controllers for different game states, so I'm not sure what "Controller.java" would be used for
 /**
  * Controller class - Mediator between Model and View.
  * Follows Single Responsibility Principle, handles user input and coordinates actions.
  * Extensibly implements InputHandler (following the observer pattern) to process View events.
  */
-public class Controller implements InputHandler {
+public class GameInterfaceController implements InputHandler {
     private Model model;
     private View view;
     private GameInterface gameInterface;
@@ -27,7 +23,7 @@ public class Controller implements InputHandler {
     private boolean dragging;
 
     
-    public Controller(Model model, View view) {
+    public GameInterfaceController(Model model, View view) {
         this.model = model;
         this.view = view;
         gameInterface = view.getGameInterface();
