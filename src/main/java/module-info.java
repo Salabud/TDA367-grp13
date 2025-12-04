@@ -35,4 +35,6 @@ module com.example.antsimulator {
     opens model.datastructures to javafx.fxml;
     exports controller.mouseTool;
     opens controller.mouseTool to javafx.fxml;
+    exports view.sprite;
+    opens view.sprite to javafx.fxml;
 }
