@@ -10,6 +10,7 @@ import model.colony.ColonyTaskBoard;
 import model.datastructures.Position;
 import model.Entity;
 import model.tasks.FeedQueenTask;
+import model.tasks.MoveCarryableTask;
 import model.tasks.TemporaryTestTask;
 
 /**
@@ -44,9 +45,8 @@ public class World {
                 entityGrid[x][y] = new ArrayList<>();
             }
         }
-
-
     }
+  
     public World withStartWorld(){
         //Hardcoded starting world
         for (int x = 0; x < 100; x++){
@@ -90,11 +90,7 @@ public class World {
 
         AntFactory factory = AntFactory.getInstance();
         TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 30, colonyMediator);
-        TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 60, 34, colonyMediator);
         QueenAnt queen = factory.createQueenAnt(this, colony, 0, 20, 60, colonyMediator);
-        ant1.assignTask(new FeedQueenTask(queen));
-        ant2.assignTask(new TemporaryTestTask());
-
         //Showcase entities
         //Item dirt = new Item(new Position(27, 24), MaterialType.DIRT);
         //addEntity(dirt);
@@ -105,6 +101,7 @@ public class World {
         colony.addFoodPosition(new Position(46, 25));
         Larva larva1 = factory.createLarva(this, colony, 3,23,35,colonyMediator);
 
+        ant1.assignTask(new FeedQueenTask(queen, food));
         tilesChanged = true;
         return this;
     }

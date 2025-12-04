@@ -51,6 +51,7 @@ public final class AntFactory {
                 .position(new Position(x, y))
                 .type(EntityType.WORKER_ANT)
                 .mediator(mediator)
+                .maxHunger(40)
                 .buildWorkerAnt();
         ant.setEntityId(EntityIdManager.getInstance().getNextId());
         world.addEntity(ant);

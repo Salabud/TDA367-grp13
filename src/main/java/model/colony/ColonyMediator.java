@@ -1,10 +1,15 @@
 package model.colony;
 
+import model.ants.Larva;
 import model.ants.TaskPerformerAnt;
 import model.colony.antnest.Tunnel;
 import model.datastructures.Position;
+import model.Entity;
 import model.tasks.EatTask;
+import model.tasks.FeedLarvaTask;
 import model.tasks.Task;
+import model.world.Item;
+import model.world.MaterialType;
 
 import java.util.List;
 
@@ -22,9 +27,10 @@ public class ColonyMediator {
      * If the ant is suitable for the task, it gets assigned the task.
      * @param ant : The ant requesting a task.
      */
-    public void getBestTask(TaskPerformerAnt ant){
-        for(Task task : taskBoard.getTaskBoard()){ //TODO: iterate through non-assigned tasks only
-            if (ant.isAvailableForTask(task)){
+    public void suggestBestTask(TaskPerformerAnt ant){
+        for(Task task : taskBoard.getTaskBoard()){
+            // Only consider unassigned tasks
+            if (!task.isAssigned() && ant.isAvailableForTask(task)){
                 assignTask(ant, task);
                 break;
             }
@@ -38,7 +44,15 @@ public class ColonyMediator {
      */
     private void assignTask(TaskPerformerAnt ant, Task task){
         ant.assignTask(task);
-        taskBoard.removeTask(task); // TODO: flag task as assigned instead of removing
+        task.setAssigned(true);
+    }
+    
+    /**
+     * Called when a task is completed. Removes the task from the taskboard.
+     * @param task : The completed task.
+     */
+    public void reportTaskCompleted(Task task){
+        taskBoard.removeTask(task);
     }
 
     /**
@@ -97,12 +111,18 @@ public class ColonyMediator {
         if(foodPosition == null){
             return;
         }
-        //TODO: make generic reportHungry that works for Ant
-        //TODO: instead of knownfoodpositions, tell WorkerAnt to go to food chamber. (less omnipotent behavior from mediator)
-        ant.assignTask(new EatTask(foodPosition));
+        
+        Item foodItem = findFoodItemAt(ant, foodPosition);
+        if(foodItem == null){
+            // Food was already eaten or removed
+            antColony.deleteFoodPosition(foodPosition);
+            return;
+        }
+        
+        ant.assignTask(new EatTask(foodItem));
         antColony.deleteFoodPosition(foodPosition);
     }
-
+    
     /***
      * TODO: Implement a better way of picking a food
      * @return
@@ -113,5 +133,37 @@ public class ColonyMediator {
             return foodPositions.getFirst(); // TODO: dependant on ant's position
         }
         return null;
+    }
+
+    /**
+     * Find a food Item at the given position.
+     */
+    private Item findFoodItemAt(TaskPerformerAnt ant, Position position) {
+        List<Entity>[][] entityGrid = ant.getWorld().getEntityGrid();
+        int x = position.getX();
+        int y = position.getY();
+        
+        for (Entity entity : entityGrid[x][y]) {
+            if (entity instanceof Item item && item.getMaterialType() == MaterialType.FOOD) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Report that a larva is hungry and needs to be fed.
+     * Creates a FeedLarvaTask and adds it to the task board.
+     * Does not create duplicate tasks for the same larva.
+     * @param larva : The hungry larva
+     */
+    public void reportLarvaHungry(Larva larva) {
+        for (Task task : taskBoard.getTaskBoard()) {
+            if (task instanceof FeedLarvaTask feedTask && feedTask.getLarva() == larva) {
+                return;
+            }
+        }
+        
+        taskBoard.addTask(new FeedLarvaTask(larva));
     }
 }
