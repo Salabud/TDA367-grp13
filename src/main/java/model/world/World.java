@@ -3,10 +3,7 @@ package model.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.ants.AntFactory;
-import model.ants.Larva;
-import model.ants.QueenAnt;
-import model.ants.TaskPerformerAnt;
+import model.ants.*;
 import model.colony.AntColony;
 import model.colony.ColonyMediator;
 import model.colony.ColonyTaskBoard;
@@ -27,6 +24,9 @@ public class World {
     private List<Tile> tiles; // Current tiles in the world, for easy rendering access
     private final int gridSize;
     private boolean tilesChanged;
+    private ColonyMediator colonyMediator;
+    private AntColony colony;
+    private ColonyTaskBoard taskBoard;
 
     public World(){
         this.tilesChanged = false;
@@ -35,59 +35,76 @@ public class World {
         this.tileGrid = new Tile[gridSize][gridSize];
         this.entities = new ArrayList<>();
         this.tiles = new ArrayList<>();
+        colonyMediator = new ColonyMediator();
+        taskBoard = new ColonyTaskBoard();
+        colony = new AntColony(colonyMediator, taskBoard);
+        colonyMediator.setAntColony(colony);
+        colonyMediator.setColonyTaskBoard(taskBoard);
         for (int x=0; x<gridSize; x++) {
             for (int y=0; y < gridSize; y++) {
                 entityGrid[x][y] = new ArrayList<>();
             }
         }
-
+    }
+  
+    public World withStartWorld(){
         //Hardcoded starting world
-        ColonyMediator mediator = new ColonyMediator();
-        ColonyTaskBoard taskBoard = new ColonyTaskBoard();
-        AntColony colony = new AntColony(mediator, taskBoard);
-        mediator.setAntColony(colony);
-        mediator.setColonyTaskBoard(taskBoard);
-        Item food3 = new Item(new Position(5,5), MaterialType.FOOD);
-        addEntity(food3);
-
-        AntFactory factory = AntFactory.getInstance();
-        TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, mediator);
-        TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, mediator);
-        TaskPerformerAnt ant3 = factory.createWorkerAnt(this, colony, 0, 79, 5, mediator);
-        QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, mediator);
-        ant1.assignTask(new FeedQueenTask(queen));
-        ant2.assignTask(new TemporaryTestTask());
-        ant3.assignTask(new MoveCarryableTask(food3, new Position(15, 5)));
-
-        Tile tile1 = new Tile(24, 28, MaterialType.DIRT);
-        addTile(tile1);
-        tilesChanged = true;
-
-        //Showcase entities
-        Item dirt = new Item(new Position(27, 24), MaterialType.DIRT);
-        addEntity(dirt);
-        Item food = new Item(new Position(28, 24), MaterialType.FOOD);
-        addEntity(food);
-        Item food2 = new Item(new Position(25,25), MaterialType.FOOD);
-        addEntity(food2);
-
-        colony.addFoodPosition(new Position(25, 25));
-        Larva larva1 = factory.createLarva(this, colony, 3,23,28,mediator);
-
-        for (int x = 20; x < 100; x++){
-            for (int y = 50; y < 70; y++){
+        for (int x = 0; x < 100; x++){
+                Tile tile = new Tile(x,20,MaterialType.GRASS);
+                tiles.add(tile);
+                tileGrid[x][20] = tile;
+        }
+        for (int x = 0; x < 100; x++){
+            for (int y = 21; y < 100; y++){
                 Tile tile = new Tile(x,y,MaterialType.DIRT);
                 tiles.add(tile);
                 tileGrid[x][y] = tile;
+            }
+        }
+
+        for (int x = 20; x < 90; x++){
+            for (int y = 50; y < 70; y++){
+                tiles.remove(tileGrid[x][y]);
+                tileGrid[x][y] = null;
             }
         }
         for (int x = 20; x < 70; x++){
             for (int y = 30; y < 40; y++){
-                Tile tile = new Tile(x,y,MaterialType.DIRT);
-                tiles.add(tile);
-                tileGrid[x][y] = tile;
+                tiles.remove(tileGrid[x][y]);
+                tileGrid[x][y] = null;
             }
         }
+        for (int x = 43; x < 47; x++){
+            for (int y = 19; y < 60; y++){
+                tiles.remove(tileGrid[x][y]);
+                tileGrid[x][y] = null;
+            }
+        }
+
+        colonyMediator = new ColonyMediator();
+        taskBoard = new ColonyTaskBoard();
+        colony = new AntColony(colonyMediator, taskBoard);
+        colonyMediator.setAntColony(colony);
+        colonyMediator.setColonyTaskBoard(taskBoard);
+
+
+        AntFactory factory = AntFactory.getInstance();
+        TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 30, colonyMediator);
+        QueenAnt queen = factory.createQueenAnt(this, colony, 0, 20, 60, colonyMediator);
+        ant1.assignTask(new FeedQueenTask(queen));
+
+        //Showcase entities
+        //Item dirt = new Item(new Position(27, 24), MaterialType.DIRT);
+        //addEntity(dirt);
+        Item food = new Item(new Position(45, 24), MaterialType.FOOD);
+        addEntity(food);
+        Item food2 = new Item(new Position(46,25), MaterialType.FOOD);
+        addEntity(food2);
+        colony.addFoodPosition(new Position(46, 25));
+        Larva larva1 = factory.createLarva(this, colony, 3,23,35,colonyMediator);
+
+        tilesChanged = true;
+        return this;
     }
 
     /**
@@ -155,6 +172,16 @@ public class World {
     }
 
     /**
+     * Remove a tile from the world (without turning into an item)
+     * @param position the position of the tile to be removed
+     */
+    public void removeTile(Position position){
+        tiles.remove(tileGrid[position.getX()][position.getY()]);
+        tileGrid[position.getX()][position.getY()] = null;
+        tilesChanged = true;
+    }
+
+    /**
      * Adds a tile to the world at its position.
      * @param tile : The tile to be added.
      */
@@ -166,6 +193,9 @@ public class World {
 
     public List<Entity> getEntities(){
         return entities;
+    }
+    public List<Entity>[][] getEntityGrid(){
+        return entityGrid;
     }
 
     /**
@@ -221,5 +251,14 @@ public class World {
     }
     public void setTilesChanged(boolean bool){
         this.tilesChanged = bool;
+    }
+
+    public AntColony getAntColony() { return colony;
+    }
+    public ColonyMediator getColonyMediator(){
+        return colonyMediator;
+    }
+    public ColonyTaskBoard getTaskBoard(){
+        return taskBoard;
     }
 }

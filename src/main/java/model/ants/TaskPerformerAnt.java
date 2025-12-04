@@ -4,6 +4,7 @@ import model.Carryable;
 import model.datastructures.Position;
 import model.tasks.EatTask;
 import model.tasks.Task;
+import org.json.JSONObject;
 
 /** Abstract class for ants that can perform tasks. E.g. WorkerAnt, QueenAnt, (TODO: SoldierAnt)*/
 public class TaskPerformerAnt extends Ant{
@@ -26,11 +27,25 @@ public class TaskPerformerAnt extends Ant{
 
     @Override
     public void update() {
-        if(getHunger() < 30 && !(currentTask instanceof EatTask)){ //30 placeholder for now
+        // Report hunger if below temp threshold (30) no matter current task
+        if (getHunger() < 30 && !(currentTask instanceof EatTask)) {
             mediator.reportHungry(this);
         }
+        
+        // Execute current task
         if (currentTask != null) {
             currentTask.execute(this);
+            
+            // Check if task just completed
+            if (currentTask.isComplete()) {
+                mediator.reportTaskCompleted(currentTask);
+                currentTask = null;
+            }
+        }
+        
+        // If idle (no task), request a new task from mediator
+        if (currentTask == null) {
+            mediator.getBestTask(this);
         }
 
         // If carrying something, place it at current position before moving
@@ -68,5 +83,11 @@ public class TaskPerformerAnt extends Ant{
             carriedObject.moveTo(new Position(getX(), getY()));
             carriedObject = null;
         }
+    }
+
+    @Override
+    public JSONObject toJSON(){
+        JSONObject obj = super.toJSON();
+        return obj;
     }
 }

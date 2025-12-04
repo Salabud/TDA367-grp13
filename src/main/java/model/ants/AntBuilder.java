@@ -24,7 +24,7 @@ public class AntBuilder {
     private float health;
     private float maxHealth;
     private float hunger = 31;
-    private float maxHunger;
+    private float maxHunger = 100;
     private int age;
     private int movementInterval;
     private EntityType type;
@@ -62,7 +62,7 @@ public class AntBuilder {
      * @return : A WorkerAnt instance.
      */
     public WorkerAnt buildWorkerAnt() {
-        WorkerAnt ant = new WorkerAnt(type, world, colonyId, position.getX(), position.getY(), mediator);
+        WorkerAnt ant = new WorkerAnt(world, colonyId, position.getX(), position.getY(), mediator);
         applyBeingFields(ant);
         applyAntFields(ant);
         return ant;

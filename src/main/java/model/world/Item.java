@@ -4,6 +4,7 @@ import model.Carryable;
 import model.datastructures.Position;
 import model.Entity;
 import model.EntityType;
+import org.json.JSONObject;
 
 /**
  * Represents an item in the world with a specific material type.
@@ -24,5 +25,11 @@ public class Item extends Entity implements Carryable {
 
     public void moveTo(Position position){
         this.position = position;
+    }
+    @Override
+    public JSONObject toJSON(){
+        JSONObject obj = super.toJSON();
+        obj.put("materialType", materialType);
+        return obj;
     }
 }

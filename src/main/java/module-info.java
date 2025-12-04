@@ -6,6 +6,7 @@ module com.example.antsimulator {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires java.desktop;
+    requires org.json;
     exports app;
     exports model.tasks;
     exports model;
@@ -32,4 +33,6 @@ module com.example.antsimulator {
     opens model.ants.status to javafx.fxml;
     exports model.datastructures;
     opens model.datastructures to javafx.fxml;
+    exports controller.mouseTool;
+    opens controller.mouseTool to javafx.fxml;
 }
