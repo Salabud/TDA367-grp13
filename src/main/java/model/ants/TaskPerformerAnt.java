@@ -1,11 +1,15 @@
 package model.ants;
 
+import model.Entity;
+import model.datastructures.Position;
 import model.tasks.EatTask;
 import model.tasks.Task;
 
 /** Abstract class for ants that can perform tasks. E.g. WorkerAnt, QueenAnt, (TODO: SoldierAnt)*/
 public class TaskPerformerAnt extends Ant{
     protected Task currentTask;
+    // "Inventory" that can hold 1 entity.
+    private Entity inventory;
 
     /**
      * Checks if the ant is available to take on a new task.
@@ -15,6 +19,7 @@ public class TaskPerformerAnt extends Ant{
     public boolean isAvailableForTask(Task task) {
         return true; // Simplified for now, TODO: implement logic based on ant state, status, etc.
     }
+
 
     
     public void assignTask(Task task) {
@@ -32,5 +37,15 @@ public class TaskPerformerAnt extends Ant{
 
         //System.out.println("ant tick");
         super.update();
+    }
+
+    public void attemptCarry(Entity entity) {
+        if (this.position.isAdjacentTo(entity.getPosition())){
+            this.inventory = entity;
+        }
+    }
+
+    public Entity getInventory() {
+        return this.inventory;
     }
 }

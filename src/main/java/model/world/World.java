@@ -12,7 +12,8 @@ import model.colony.ColonyMediator;
 import model.colony.ColonyTaskBoard;
 import model.datastructures.Position;
 import model.Entity;
-import model.tasks.FeedQueenTask;
+//import model.tasks.FeedQueenTask;
+import model.tasks.MoveItemAToB;
 import model.tasks.TemporaryTestTask;
 
 /**
@@ -46,14 +47,17 @@ public class World {
         AntColony colony = new AntColony(mediator, taskBoard);
         mediator.setAntColony(colony);
         mediator.setColonyTaskBoard(taskBoard);
-        
+        Item food3 = new Item(new Position(5,5), MaterialType.FOOD);
+        addEntity(food3);
+
         AntFactory factory = AntFactory.getInstance();
         TaskPerformerAnt ant1 = factory.createWorkerAnt(this, colony, 0, 30, 0, mediator);
         TaskPerformerAnt ant2 = factory.createWorkerAnt(this, colony, 0, 79, 0, mediator);
+        TaskPerformerAnt ant3 = factory.createWorkerAnt(this, colony, 0, 79, 5, mediator);
         QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, mediator);
         ant1.assignTask(new FeedQueenTask(queen));
         ant2.assignTask(new TemporaryTestTask());
-
+        ant3.assignTask(new MoveItemAToB(food3, new Position(15, 5)));
 
         Tile tile1 = new Tile(24, 28, MaterialType.DIRT);
         addTile(tile1);
@@ -66,6 +70,7 @@ public class World {
         addEntity(food);
         Item food2 = new Item(new Position(25,25), MaterialType.FOOD);
         addEntity(food2);
+
         colony.addFoodPosition(new Position(25, 25));
         Larva larva1 = factory.createLarva(this, colony, 3,23,28,mediator);
 
