@@ -45,7 +45,7 @@ public class TaskPerformerAnt extends Ant{
         
         // If idle (no task), request a new task from mediator
         if (currentTask == null) {
-            mediator.getBestTask(this);
+            mediator.suggestBestTask(this);
         }
 
         // If carrying something, place it at current position before moving
