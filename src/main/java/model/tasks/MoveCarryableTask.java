@@ -1,37 +1,33 @@
 package model.tasks;
 
-import model.Entity;
-import model.EntityType;
+import model.Carryable;
 import model.ants.Ant;
 import model.ants.TaskPerformerAnt;
-import model.ants.WorkerAnt;
 import model.ants.behavior.AntBehavior;
 import model.ants.movement.AntMovement;
 import model.ants.movement.NoMovement;
 import model.ants.movement.PathfindingMovement;
 import model.ants.state.AntState;
 import model.datastructures.Position;
-import model.world.Item;
-import model.world.MaterialType;
 
 /**
  * A temporary task used for testing movement implementations.
  * Implements a simple carry behaviour: go to (5,5), pick up food there,
  * walk to (10,10) and drop it.
  */
-public class MoveItemAToB extends Task{
+public class MoveCarryableTask extends Task{
     private Ant antAssigned;
     boolean isComplete = false;
     boolean isAssigned = false;
     int step = 1;
-    Position itemPosition;
+    Position carryablePosition;
     Position endPosition;
-    Entity entity;
-    public MoveItemAToB(Entity entity, Position endPosition){
+    Carryable carryableObject;
+    public MoveCarryableTask(Carryable carryableObject, Position endPosition){
         super();
-        this.itemPosition = entity.getPosition();
+        this.carryablePosition = carryableObject.getPosition();
         this.endPosition = endPosition;
-        this.entity = entity;
+        this.carryableObject = carryableObject;
     }
 
     @Override
@@ -41,12 +37,12 @@ public class MoveItemAToB extends Task{
 
     @Override
     public Position getTargetLocation() {
-        return null;
+        return carryablePosition;  // Initial target is the carryable object
     }
 
 
-    public Position getitemPosition() {
-        return this.itemPosition;  // food location created in World constructor
+    public Position getCarryablePosition() {
+        return this.carryablePosition;
     }
 
     public AntBehavior getBehaviorStrategy() {
@@ -78,11 +74,11 @@ public class MoveItemAToB extends Task{
                 break;
 
             case MOVING_TO_TARGET:
-                if (ant.getPosition().isAdjacentTo(itemPosition)){
+                if (ant.getPosition().isAdjacentTo(carryablePosition)){
                     ant.setState(AntState.WORKING);
                     ant.setMovement(new NoMovement());
                     setPhase(TaskPhase.RETURNING);
-                    ant.attemptCarry(entity);
+                    ant.attemptCarry(carryableObject);
                 }
                 break;
 
@@ -93,7 +89,7 @@ public class MoveItemAToB extends Task{
                         endPosition,
                         ant.getWorld().getTileGrid()
                 ));
-                if (ant.getPosition().isAdjacentTo(itemPosition)){
+                if (ant.getPosition().isAdjacentTo(carryablePosition)){
                     setPhase(TaskPhase.COMPLETE);
                 }
             case COMPLETE:

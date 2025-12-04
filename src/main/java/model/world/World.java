@@ -12,8 +12,8 @@ import model.colony.ColonyMediator;
 import model.colony.ColonyTaskBoard;
 import model.datastructures.Position;
 import model.Entity;
-//import model.tasks.FeedQueenTask;
-import model.tasks.MoveItemAToB;
+import model.tasks.FeedQueenTask;
+import model.tasks.MoveCarryableTask;
 import model.tasks.TemporaryTestTask;
 
 /**
@@ -57,7 +57,7 @@ public class World {
         QueenAnt queen = factory.createQueenAnt(this, colony, 0, 10, 10, mediator);
         ant1.assignTask(new FeedQueenTask(queen));
         ant2.assignTask(new TemporaryTestTask());
-        ant3.assignTask(new MoveItemAToB(food3, new Position(15, 5)));
+        ant3.assignTask(new MoveCarryableTask(food3, new Position(15, 5)));
 
         Tile tile1 = new Tile(24, 28, MaterialType.DIRT);
         addTile(tile1);

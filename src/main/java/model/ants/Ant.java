@@ -2,6 +2,7 @@ package model.ants;
 
 import model.ants.behavior.AntBehavior;
 import model.ants.movement.AntMovement;
+import model.ants.movement.NoMovement;
 import model.ants.state.AntState;
 import model.ants.status.Status;
 import model.Being;
@@ -62,6 +63,11 @@ public abstract class Ant extends Being {
         // Execute movement strategy (if any)
         if (movement != null) {
             movement.move(this);
+            
+            // If movement just completed, switch to NoMovement
+            if (movement.isComplete() && !(movement instanceof NoMovement)) {
+                movement = new NoMovement();
+            }
         }
         
         // Execute behavior strategy (if any)

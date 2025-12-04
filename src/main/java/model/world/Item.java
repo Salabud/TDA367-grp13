@@ -8,7 +8,6 @@ import model.EntityType;
 /**
  * Represents an item in the world with a specific material type.
  * The pickupable equivalent of a broken tile.
- * TODO: Implement carryable interface
  */
 public class Item extends Entity implements Carryable {
     private MaterialType materialType;
@@ -23,7 +22,7 @@ public class Item extends Entity implements Carryable {
         return materialType;
     }
 
-    public void move(Position position){
-
+    public void moveTo(Position position){
+        this.position = position;
     }
 }
