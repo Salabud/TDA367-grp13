@@ -27,7 +27,7 @@ public class ColonyMediator {
      * If the ant is suitable for the task, it gets assigned the task.
      * @param ant : The ant requesting a task.
      */
-    public void getBestTask(TaskPerformerAnt ant){
+    public void suggestBestTask(TaskPerformerAnt ant){
         for(Task task : taskBoard.getTaskBoard()){
             // Only consider unassigned tasks
             if (!task.isAssigned() && ant.isAvailableForTask(task)){
