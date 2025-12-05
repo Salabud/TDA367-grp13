@@ -43,10 +43,8 @@ public class AntColony {
      */
     public void update() {
         ticksSinceLastBirth++;
-        System.out.println(ticksSinceLastBirth);
-        
+
         if (shouldRequestBirth()) {
-            System.out.println("AntColony Requesting birth");
             mediator.requestBirth(queen);
             ticksSinceLastBirth = 0;
         }

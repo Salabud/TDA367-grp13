@@ -11,7 +11,7 @@ import model.world.World;
  * simulation.
  */
 public abstract class Entity implements Updateable {
-    protected World world;
+    protected World world; // Maybe shouldn't know this
     protected Position position;
     protected int movementInterval;
     protected EntityType type; // Final?

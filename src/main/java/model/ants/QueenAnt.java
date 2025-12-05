@@ -31,10 +31,9 @@ public class QueenAnt extends TaskPerformerAnt {
 
     @Override
     public void update() {
-        // Report hunger to mediator when below threshold
+        // Report hunger to mediator (only mark reported if task was created)
         if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger && mediator != null) {
-            mediator.reportQueenHungry(this);
-            hasReportedHunger = true;
+            hasReportedHunger = mediator.reportQueenHungry(this);
         }
         
         // Reset the flag once hunger is restored

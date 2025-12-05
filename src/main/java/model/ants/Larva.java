@@ -15,7 +15,7 @@ import java.util.List;
 /** Represents a larva in the simulation. */
 public class Larva extends Ant implements Carryable {
     private float TRANSFORM_AGE = 5*60F; // In seconds
-    private static final float HUNGER_THRESHOLD = 50f; // Report hunger when below this level
+    private static final float HUNGER_THRESHOLD = 30f; // Report hunger when below this level
     private boolean hasReportedHunger = false; // Prevent spamming reports
 
     public Larva(World world, int colonyId, int x, int y, ColonyMediator mediator){
@@ -45,14 +45,13 @@ public class Larva extends Ant implements Carryable {
 
     @Override
     public void update(){
-        // Report hunger to mediator
+        // Report hunger to mediator (only mark reported if task was created)
         if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger && mediator != null) {
-            mediator.reportLarvaHungry(this);
-            hasReportedHunger = true;
+            hasReportedHunger = mediator.reportLarvaHungry(this);
         }
         
         // Reset the flag once hunger is restored
-        if (getHunger() >= HUNGER_THRESHOLD) {
+        if (getHunger() >= HUNGER_THRESHOLD && hasReportedHunger) {
             hasReportedHunger = false;
         }
         
