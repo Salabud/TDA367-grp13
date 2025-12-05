@@ -17,7 +17,7 @@ public class FeedBehavior implements AntBehavior {
     private Being targetBeing;
 
     private static final int EATING_DURATION = 60; // in ticks
-    private static final float TOTAL_HUNGER_RESTORED = 50f;
+    private static final float TOTAL_HUNGER_RESTORED = 10f;
     private static final float HUNGER_PER_TICK = TOTAL_HUNGER_RESTORED / EATING_DURATION;
 
     /**

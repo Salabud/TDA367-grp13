@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * Contains common attributes and methods shared by all entities in te simulation.
  */
 public abstract class Entity implements Updateable {
-    protected World world;
+    protected World world; // Maybe shouldn't know this
     protected Position position;
     protected int movementInterval;
     protected EntityType type; //Final?

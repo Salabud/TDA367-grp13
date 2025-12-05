@@ -19,7 +19,7 @@ import model.colony.ColonyMediator;
 public abstract class Ant extends Being {
     protected int colonyId;
     protected String nickname;
-    protected AntColony colony;
+    protected AntColony colony; //TODO: maybe shouldn't know this
     protected ColonyMediator mediator;
     protected List<Status> statuses;
     protected AntState state;

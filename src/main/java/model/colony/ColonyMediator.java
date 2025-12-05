@@ -107,7 +107,7 @@ public class ColonyMediator {
             return;
         }
         
-        ant.assignTask(new EatTask(food));
+        ant.interruptWithTask(new EatTask(food));
         antColony.deleteKnownFood(food);
     }
 
@@ -130,21 +130,23 @@ public class ColonyMediator {
      * Creates a FeedBeingTask and adds it to the task board.
      * Does not create duplicate tasks for the same larva.
      * @param larva : The hungry larva
+     * @return true if a task was created, false otherwise
      */
-    public void reportLarvaHungry(Larva larva) {
+    public boolean reportLarvaHungry(Larva larva) {
         for (Task task : taskBoard.getTaskBoard()) {
             if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == larva) {
-                return;
+                return true; // Task already exists
             }
         }
         
         Item food = findBestFood(larva.getPosition());
         if (food == null) {
-            return;
+            return false; // No food available
         }
 
         taskBoard.addTask(new FeedBeingTask(larva, food, 2, "larva"));
         antColony.deleteKnownFood(food);
+        return true;
     }
 
     /**
@@ -152,21 +154,23 @@ public class ColonyMediator {
      * Creates a FeedBeingTask and adds it to the task board.
      * Does not create duplicate tasks for the queen.
      * @param queen : The hungry queen
+     * @return true if a task was created, false otherwise
      */
-    public void reportQueenHungry(QueenAnt queen) {
+    public boolean reportQueenHungry(QueenAnt queen) {
         for (Task task : taskBoard.getTaskBoard()) {
             if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == queen) {
-                return;
+                return true; // Task already exists
             }
         }
         
         Item food = findBestFood(queen.getPosition());
         if (food == null) {
-            return;
+            return false; // No food available
         }
         
         taskBoard.addTask(new FeedBeingTask(queen, food, 1, "queen"));
         antColony.deleteKnownFood(food);
+        return true;
     }
 
     /**
@@ -187,7 +191,6 @@ public class ColonyMediator {
             return;
         }
 
-        System.out.println("ColonyMediator adding and assigning birth task");
         taskBoard.addTask(birthTask);
         queen.assignTask(birthTask);
         birthTask.setAssigned(true);

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 /** Abstract class for ants that can perform tasks. E.g. WorkerAnt, QueenAnt, (TODO: SoldierAnt)*/
 public class TaskPerformerAnt extends Ant{
     protected Task currentTask;
+    protected Task previousTask; // Task to resume after interruption
     // "Inventory" that can hold 1 object.
     private Carryable carriedObject = null;
 
@@ -64,6 +65,18 @@ public class TaskPerformerAnt extends Ant{
     public void assignTask(Task task) {
         this.currentTask = task;
     }
+    
+    /**
+     * Interrupt the current task with an urgent task (e.g., eating when hungry).
+     * The current task is saved and will be resumed after the interrupting task completes.
+     * @param urgentTask : the task that needs immediate attention
+     */
+    public void interruptWithTask(Task urgentTask) {
+        if (currentTask != null && !currentTask.isComplete()) {
+            previousTask = currentTask;
+        }
+        currentTask = urgentTask;
+    }
 
     @Override
     public void update() {
@@ -74,7 +87,15 @@ public class TaskPerformerAnt extends Ant{
             // Check if task just completed
             if (currentTask.isComplete()) {
                 mediator.reportTaskCompleted(currentTask);
+                System.out.println("TaskPerformerAnt: reported completed task");
                 currentTask = null;
+                
+                // Resume previous task if one was interrupted
+                if (previousTask != null && !previousTask.isComplete()) {
+                    currentTask = previousTask;
+                    previousTask = null;
+                    System.out.println("TaskPerformerAnt: resuming previous task");
+                }
             }
         }
         

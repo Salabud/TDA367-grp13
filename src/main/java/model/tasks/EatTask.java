@@ -42,7 +42,6 @@ public class EatTask extends Task {
                 break;
                 
             case WORKING:
-                // Behavior handles eating progress - check if it's done
                 if (ant.getBehavior() != null && ant.getBehavior().isComplete()) {
                     ant.setState(AntState.RESTING);
                     ant.setMovement(new NoMovement());
