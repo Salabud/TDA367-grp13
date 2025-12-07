@@ -25,12 +25,14 @@ public class WorldCanvas extends Canvas {
     private Color sky;
     private int outlineThickness;
 
+    private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
+
 
 
     public WorldCanvas() {
-        cellsize = 8;
-        setWidth(800);
-        setHeight(800);
+        cellsize = metaData.getCellsize();
+        setWidth(metaData.getScreenWidth());
+        setHeight(metaData.getScreenHeight());
         gc = getGraphicsContext2D();
         outlineThickness = 2;
 
@@ -52,12 +54,15 @@ public class WorldCanvas extends Canvas {
         gc.setFill(background);
         gc.fillRect(0,0,getWidth(),getHeight());
 
-        //paint sky
+        //paint sky and border
         gc.setFill(sky);
-        gc.fillRect(0,0,800,160);
+        gc.fillRect(0,0,getWidth(),cellsize*20);
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0,0, metaData.getSquareOffset(), metaData.getScreenHeight());
+        gc.fillRect(metaData.getScreenHeight()+ metaData.getSquareOffset(), 0, metaData.getSquareOffset(), metaData.getScreenHeight());
 
         for (Tile tile : world.getTiles()){
-            int posX = tile.getX()*cellsize;
+            int posX = tile.getX()*cellsize + metaData.getSquareOffset();
             int posY = tile.getY()*cellsize;
             switch (tile.getMaterialType()) {
                 case MaterialType.DIRT:
@@ -79,19 +84,19 @@ public class WorldCanvas extends Canvas {
                 gc.setFill(Color.BLACK);
                 //northern outlines
                 if (world.getTileGrid()[x][y] != null && y > 0 && world.getTileGrid()[x][y-1] == null){
-                    gc.fillRect(x*cellsize-1,y*cellsize-1, cellsize + outlineThickness, outlineThickness);
+                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize-1, cellsize + outlineThickness, outlineThickness);
                 }
                 //southern outlines
                 if (world.getTileGrid()[x][y] != null && y < 99  && world.getTileGrid()[x][y+1] == null){
-                    gc.fillRect(x*cellsize-1,y*cellsize+cellsize-1, cellsize+outlineThickness, outlineThickness);
+                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize+cellsize-1, cellsize+outlineThickness, outlineThickness);
                 }
                 //eastern outlines
                 if (world.getTileGrid()[x][y] != null && x < 99 && world.getTileGrid()[x+1][y] == null){
-                    gc.fillRect(x*cellsize + cellsize-1,y*cellsize,  outlineThickness, cellsize);
+                    gc.fillRect(x*cellsize + cellsize-1 + metaData.getSquareOffset(),y*cellsize,  outlineThickness, cellsize);
                 }
                 //western outlines
                 if (world.getTileGrid()[x][y] != null && x > 0 && world.getTileGrid()[x-1][y] == null){
-                    gc.fillRect(x*cellsize-1,y*cellsize -1,outlineThickness, cellsize+outlineThickness);
+                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize -1,outlineThickness, cellsize+outlineThickness);
                 }
             }
         }

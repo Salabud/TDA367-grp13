@@ -4,6 +4,7 @@ import controller.mouseTool.*;
 import javafx.scene.control.ComboBox;
 import model.Model;
 import model.datastructures.Position;
+import view.MetaDataRegistry;
 import view.Tool;
 import view.View;
 import javafx.scene.input.KeyEvent;
@@ -21,6 +22,7 @@ public class GameInterfaceController implements InputHandler {
     private boolean suppressFirstClick;
     private MouseTool currentTool;
     private boolean dragging;
+    private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
 
     
     public GameInterfaceController(Model model, View view) {
@@ -113,11 +115,11 @@ public class GameInterfaceController implements InputHandler {
     }
 
     private void applyTool(MouseEvent event) {
-        double worldX = event.getX();
+        double worldX = event.getX() - metaData.getSquareOffset();
         double worldY = event.getY();
 
-        int posX = (int)(worldX / 8);
-        int posY = (int)(worldY / 8);
+        int posX = (int)(worldX / metaData.getCellsize());
+        int posY = (int)(worldY / metaData.getCellsize());
         Position mousePosition = new Position(posX, posY);
 
         currentTool.execute(model.getWorld(), mousePosition);

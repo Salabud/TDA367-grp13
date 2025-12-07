@@ -18,9 +18,9 @@ public class SelectWindow{
     private int width;
     private int height;
 
-    public SelectWindow(GraphicsContext gc){
-        x = 640;
-        y = 600;
+    public SelectWindow(int x, int y, GraphicsContext gc){
+        this.x = x;
+        this.y = y;
         width = 160;
         height = 200;
         this.gc = gc;
