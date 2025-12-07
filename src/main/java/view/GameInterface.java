@@ -20,30 +20,32 @@ public class GameInterface {
     private Button pauseButton;
     private ComboBox<Tool> tools;
     private String font;
+    private MetaDataRegistry metaData;
 
     public GameInterface(){
 
         font = "-fx-base: rgb(50, 41 ,47); -fx-padding: 0 0 0 0; -fx-font-size: 12px; -fx-font-family: 'Daydream';";
 
         nodes = new ArrayList<>();
+        metaData = MetaDataRegistry.getInstance();
 
         exitButton = new Button("Exit");
         exitButton.setLayoutY(0);
-        exitButton.setLayoutX(0);
+        exitButton.setLayoutX(metaData.getSquareOffset());
         exitButton.setPrefSize(80,40);
         exitButton.setFocusTraversable(false);
         exitButton.setStyle(font);
         nodes.add(exitButton);
 
         saveButton = new Button("Save");
-        saveButton.setLayoutX(80);
+        saveButton.setLayoutX(80 + metaData.getSquareOffset());
         saveButton.setPrefSize(80,40);
         saveButton.setFocusTraversable(false);
         saveButton.setStyle(font);
         nodes.add(saveButton);
 
         pauseButton = new Button("Pause");
-        pauseButton.setLayoutX(280);
+        pauseButton.setLayoutX(metaData.getScreenHeight()/2 - 140 + metaData.getSquareOffset());
         pauseButton.setPrefWidth(100);
         pauseButton.setPrefHeight(40);
         pauseButton.setFocusTraversable(false);
@@ -51,7 +53,7 @@ public class GameInterface {
         nodes.add(pauseButton);
 
         speed1Button = new Button(">");
-        speed1Button.setLayoutX(380);
+        speed1Button.setLayoutX(metaData.getScreenHeight()/2 - 20 + metaData.getSquareOffset());
         speed1Button.setPrefWidth(40);
         speed1Button.setPrefHeight(40);
         speed1Button.setFocusTraversable(false);
@@ -60,7 +62,7 @@ public class GameInterface {
 
 
         speed3Button = new Button(">>");
-        speed3Button.setLayoutX(420);
+        speed3Button.setLayoutX(metaData.getScreenHeight()/2 + 20 + metaData.getSquareOffset());
         speed3Button.setPrefSize(40, 40);
         speed3Button.setFocusTraversable(false);
         speed3Button.setStyle(font);
@@ -68,7 +70,7 @@ public class GameInterface {
 
         tools = new ComboBox<>();
         tools.setFocusTraversable(false);
-        tools.setLayoutX(600);
+        tools.setLayoutX(metaData.getScreenHeight() - 200 + metaData.getSquareOffset());
         tools.setPrefSize(200,40);
         tools.getItems().addAll(Tool.values());
         tools.setValue(Tool.SELECT);

@@ -20,6 +20,7 @@ public class View implements ModelListener {
     private InputHandler inputHandler;
     private GameInterface gameInterface;
     private MusicHandler musicHandler;
+    private final MetaDataRegistry metaDataRegistry = MetaDataRegistry.getInstance();
 
     // Canvas components for rendering
     private WorldCanvas worldCanvas;
@@ -52,7 +53,7 @@ public class View implements ModelListener {
         root.setCenter(mainPane);
         
         // Create scene
-        scene = new Scene(root,800,800);
+        scene = new Scene(root, metaDataRegistry.getScreenWidth(), metaDataRegistry.getScreenHeight());
         stage.setScene(scene);
         stage.setTitle("Ant Simulator");
         stage.setResizable(false);

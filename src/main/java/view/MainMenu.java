@@ -23,6 +23,7 @@ public class MainMenu {
     private String backGroundColor;
     private String buttonColor;
     private Label titleLabel;
+    private MetaDataRegistry metaData = MetaDataRegistry.getInstance();
 
     private MainMenu(){
         nodes = new ArrayList<>();
@@ -33,7 +34,7 @@ public class MainMenu {
         titleLabel = new Label("Ant Simulator");
         titleLabel.setFont(new Font(60));
         titleLabel.setLayoutX(0);
-        titleLabel.setMinWidth(800);
+        titleLabel.setMinWidth(metaData.getScreenWidth());
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setLayoutY(50);
         titleLabel.setStyle("-fx-font-family: 'Daydream'; -fx-font-size: 40px; -fx-text-fill: rgb(250, 149, 0)");
@@ -66,6 +67,8 @@ public class MainMenu {
         settingsButton.setFocusTraversable(false);
         nodes.add(settingsButton);
 
+        refreshSize();
+
     }
 
     public static MainMenu getInstance() {
@@ -94,5 +97,13 @@ public class MainMenu {
 
     public String getBackGroundColor() {
         return backGroundColor;
+    }
+
+    public void refreshSize(){
+        newGameButton.setLayoutX(metaData.getScreenWidth()/2-300);
+
+        loadGameButton.setLayoutX(metaData.getScreenWidth()/2-300);
+
+        settingsButton.setLayoutX(metaData.getScreenWidth()/2-300);
     }
 }

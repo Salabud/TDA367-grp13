@@ -18,7 +18,7 @@ import java.util.List;
 public class EntityCanvas extends Canvas {
     private List<Entity> entities;
     private final GraphicsContext gc = getGraphicsContext2D();
-    private int cellsize; //TODO: Cellsize dynamically reflect window dimensions
+    private int cellsize;
     private final Sprite workerAnt;
     private final Sprite larva;
     private final Sprite food;
@@ -30,12 +30,13 @@ public class EntityCanvas extends Canvas {
     private final Sprite selectionSprite;
     private int selectedEntityId = -1;
     private SelectWindow selectWindow;
+    private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
 
 
     public EntityCanvas(){
-        this.cellsize = 8;
-        setWidth(800);
-        setHeight(800);
+        this.cellsize = metaData.getCellsize();
+        setWidth(metaData.getScreenWidth());
+        setHeight(metaData.getScreenHeight());
 
         // Being sprites
         this.beingOutline = new CircleSprite(cellsize+4, Color.BLACK, gc);
@@ -51,7 +52,7 @@ public class EntityCanvas extends Canvas {
 
         // Other sprites
         this.selectionSprite = new SelectSprite(cellsize+8, Color.WHITE, gc);
-        this.selectWindow = new SelectWindow(gc);
+        this.selectWindow = new SelectWindow(metaData.getScreenWidth()- metaData.getSquareOffset()-160, metaData.getScreenHeight()-200, gc);
     }
 
     /**
@@ -71,7 +72,7 @@ public class EntityCanvas extends Canvas {
         Entity selectedEntity = null;
 
         for (Entity entity : entities) {
-            int posX = entity.getX()*cellsize;
+            int posX = entity.getX()*cellsize + metaData.getSquareOffset();
             int posY = entity.getY()*cellsize;
             gc.setFill(Color.BLACK);
             switch (entity.getType()) {
@@ -112,7 +113,7 @@ public class EntityCanvas extends Canvas {
             }
         }
         if (selectedEntity != null){
-            selectionSprite.paint(selectedEntity.getX()*cellsize-5, selectedEntity.getY()*cellsize-5);
+            selectionSprite.paint(selectedEntity.getX()*cellsize-5 + metaData.getSquareOffset(), selectedEntity.getY()*cellsize-5);
         }
     }
 
