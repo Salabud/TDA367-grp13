@@ -41,11 +41,11 @@ public abstract class Entity implements Updateable {
     }
 
     public void removePositionFromEntityGrid() {
-        this.world.removeEntity(this);
+        //this.world.removeEntity(this);
     }
 
     public void addPositionToEntityGrid() {
-        this.world.addEntity(this);
+        //this.world.addEntity(this);
     }
 
     public void setEntityId(int entityId) {
