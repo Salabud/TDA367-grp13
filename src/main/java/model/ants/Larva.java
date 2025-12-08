@@ -14,7 +14,7 @@ import java.util.List;
 
 /** Represents a larva in the simulation. */
 public class Larva extends Ant implements Carryable {
-    private float TRANSFORM_AGE = 5*60F; // In seconds
+    private float TRANSFORM_AGE = 1*30F; // In seconds // Not correct seconds
     private static final float HUNGER_THRESHOLD = 30f; // Report hunger when below this level
     private boolean hasReportedHunger = false; // Prevent spamming reports
 
@@ -54,7 +54,7 @@ public class Larva extends Ant implements Carryable {
         if (getHunger() >= HUNGER_THRESHOLD && hasReportedHunger) {
             hasReportedHunger = false;
         }
-        
+
         if (this.getAge() > TRANSFORM_AGE){
             becomeWorker();
 
