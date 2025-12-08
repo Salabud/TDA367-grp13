@@ -1,8 +1,12 @@
 package model.colony;
 
+import java.util.List;
+
+import model.ants.AntFactory;
 import model.ants.Larva;
 import model.ants.QueenAnt;
 import model.ants.TaskPerformerAnt;
+import model.ants.status.Status;
 import model.colony.antnest.Tunnel;
 import model.datastructures.Position;
 import model.tasks.BirthTask;
@@ -10,8 +14,7 @@ import model.tasks.EatTask;
 import model.tasks.FeedBeingTask;
 import model.tasks.Task;
 import model.world.Item;
-
-import java.util.List;
+import model.world.World;
 
 /**
  * Mediator class for managing communication and task assignment within an ant colony between ants,
@@ -22,6 +25,7 @@ import java.util.List;
 public class ColonyMediator {
     private ColonyTaskBoard taskBoard;
     private AntColony antColony;
+    AntFactory factory = AntFactory.getInstance();
 
     /**
      * Suggests the most appropriate available task for the given ant.
@@ -196,5 +200,31 @@ public class ColonyMediator {
         taskBoard.addTask(birthTask);
         queen.assignTask(birthTask);
         birthTask.setAssigned(true);
+    }
+
+    public void turnLarvaToWorker(Larva larva){
+        World world = larva.getWorld();
+        AntColony tempAntColony = larva.getColony();
+        int tempColonyId = larva.getColonyId();
+        int larvaX = larva.getX();
+        int larvaY = larva.getY();
+        float larvaAge = larva.getAge();
+        String tempNickname = null;
+        float larvaHealth = larva.getHealth();
+        float larvaMaxHealth = larva.getMaxHealth();
+        float larvaCurrentHunger = larva.getHunger();
+        float larvaMaxHunger = larva.getMaxHunger();
+        int larvaMovementInterval = larva.getMovementInterval();
+        List<Status> larvaStatuses = larva.getStatuses();
+        
+        // Temporary, change it back when factory is fixed. // Mayo
+        int intAge = (int) larvaAge;
+
+        world.removeEntity(larva);
+        tempAntColony.getAnts().remove(larva);
+        
+        factory.loadWorkerAnt(world, tempAntColony, tempColonyId, larvaX, larvaY, intAge,
+                tempNickname, this, larvaHealth, larvaMaxHealth, larvaCurrentHunger, larvaMaxHunger,
+                larvaMovementInterval, larvaStatuses);
     }
 }

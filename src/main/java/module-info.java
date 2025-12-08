@@ -7,6 +7,7 @@ module com.example.antsimulator {
     requires java.sql;
     requires java.desktop;
     requires org.json;
+    requires com.example.antsimulator;
     exports app;
     exports model.tasks;
     exports model;

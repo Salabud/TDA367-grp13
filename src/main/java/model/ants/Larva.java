@@ -40,7 +40,7 @@ public class Larva extends Ant implements Carryable {
 
     //TODO: Implement becomeWorker
     public void becomeWorker(){
-        System.out.println("becoming worker");
+        mediator.turnLarvaToWorker(this);
     }
 
     @Override
@@ -57,6 +57,7 @@ public class Larva extends Ant implements Carryable {
         
         if (this.getAge() > TRANSFORM_AGE){
             becomeWorker();
+
         }
         super.update();
     }
