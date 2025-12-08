@@ -102,6 +102,7 @@ public class AntBuilder {
         ant.setMaxHunger(this.maxHunger);
         ant.setAge(this.age);
         ant.setMovementInterval(this.movementInterval);
+        ant.setWorld(this.world);
     }
 
     /**

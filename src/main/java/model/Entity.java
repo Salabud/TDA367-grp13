@@ -92,7 +92,9 @@ public abstract class Entity implements Updateable {
     public World getWorld() {
         return this.world;
     }
-
+    public void setWorld(World world) {
+        this.world = world;
+    }
     /**
      * Create a JSON Object of the entity
      * 
