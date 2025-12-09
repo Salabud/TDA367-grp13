@@ -13,7 +13,7 @@ public interface AntBehavior {
     /**
      * Perform one tick of this behavior's action.
      * 
-     * @param ant the ant performing this behavior
+     * @param ant : the ant performing this behavior
      */
     void perform(Ant ant);
     

@@ -2,13 +2,13 @@ package model.ants;
 
 import model.AntType;
 import model.BeingType;
-import model.colony.ColonyMediator;
+import model.colony.events.HungryEvent;
 import model.datastructures.Position;
 import model.EntityType;
-import model.tasks.EatTask;
-import model.tasks.FeedBeingTask;
-import model.tasks.MoveCarryableTask;
-import model.tasks.Task;
+import model.colony.tasks.EatTask;
+import model.colony.tasks.FeedBeingTask;
+import model.colony.tasks.MoveCarryableTask;
+import model.colony.tasks.Task;
 import model.world.World;
 
 import java.util.ArrayList;
@@ -18,22 +18,22 @@ public class QueenAnt extends TaskPerformerAnt {
     private static final float HUNGER_THRESHOLD = 50f; // Report hunger when below this level
     private boolean hasReportedHunger = false; // Prevent spamming reports
 
-    public QueenAnt(EntityType type, World world, int colonyId, int x, int y, ColonyMediator mediator){
+    public QueenAnt(EntityType type, World world, int colonyId, int x, int y){
         this.type = EntityType.BEING;
         this.beingType = BeingType.ANT;
         this.antType = AntType.QUEEN;
         this.world = world;
         this.colonyId = colonyId;
         this.position = new Position(x,y);
-        this.mediator = mediator;
         this.statuses = new ArrayList<>();
     }
 
     @Override
     public void update() {
-        // Report hunger to mediator (only mark reported if task was created)
-        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger && mediator != null) {
-            hasReportedHunger = mediator.reportQueenHungry(this);
+        // Broadcast hunger event (hasReportedHunger prevents spamming)
+        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger) {
+            broadcastEvent(new HungryEvent(this));
+            hasReportedHunger = true;
         }
         
         // Reset the flag once hunger is restored

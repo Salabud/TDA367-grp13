@@ -4,7 +4,7 @@ import model.AntType;
 import model.ants.status.Status;
 import model.BeingType;
 import model.Carryable;
-import model.colony.ColonyMediator;
+import model.colony.events.HungryEvent;
 import model.datastructures.Position;
 import model.EntityType;
 import model.world.World;
@@ -18,9 +18,8 @@ public class Larva extends Ant implements Carryable {
     private static final float HUNGER_THRESHOLD = 30f; // Report hunger when below this level
     private boolean hasReportedHunger = false; // Prevent spamming reports
 
-    public Larva(World world, int colonyId, int x, int y, ColonyMediator mediator){
+    public Larva(World world, int colonyId, int x, int y){
         this.position = new Position(x,y);
-        this.mediator = mediator;
         type = EntityType.BEING;
         beingType = BeingType.ANT;
         antType = AntType.LARVA;
@@ -28,10 +27,9 @@ public class Larva extends Ant implements Carryable {
         this.world = world;
     }
     public Larva(World world, int colonyId, int x, int y, int age,
-                 String nickname, ColonyMediator mediator, float health, float maxHealth, float hunger,
+                 String nickname, float health, float maxHealth, float hunger,
                  float maxHunger, int movementInterval, List<Status> statuses){
         position = new Position(x,y);
-        this.mediator = mediator;
     }
 
     @Override
@@ -46,9 +44,10 @@ public class Larva extends Ant implements Carryable {
 
     @Override
     public void update(){
-        // Report hunger to mediator (only mark reported if task was created)
-        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger && mediator != null) {
-            hasReportedHunger = mediator.reportLarvaHungry(this);
+        // Broadcast hunger event (hasReportedHunger prevents spamming)
+        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger) {
+            broadcastEvent(new HungryEvent(this));
+            hasReportedHunger = true;
         }
         
         // Reset the flag once hunger is restored

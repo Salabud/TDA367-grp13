@@ -21,7 +21,7 @@ public class EatBehavior implements AntBehavior {
     /**
      * Create an eating behavior for a specific food item.
      * 
-     * @param foodItem the food item to consume
+     * @param foodItem : the food item to consume
      */
     public EatBehavior(Item foodItem) {
         this.foodItem = foodItem;

@@ -1,4 +1,4 @@
-package model.tasks;
+package model.colony.tasks;
 
 import model.ants.movement.RandomMovement;
 import model.ants.TaskPerformerAnt;

@@ -1,6 +1,6 @@
 package model.colony;
 
-import model.tasks.Task;
+import model.colony.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Comparator;

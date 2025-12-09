@@ -9,9 +9,6 @@ import model.colony.ColonyMediator;
 import model.colony.ColonyTaskBoard;
 import model.datastructures.Position;
 import model.Entity;
-import model.tasks.FeedBeingTask;
-import model.tasks.MoveCarryableTask;
-import model.tasks.TemporaryTestTask;
 
 /**
  * Represents the world in which entities exist and interact.
@@ -223,8 +220,7 @@ public class World {
      * Updates all entities in the world one simulation tick.
      */
     public void tick(){
-        // Update colony (checks for birth requests, etc.)
-        colony.update();
+        colonyMediator.update();
         
         for (Entity entity : entities) {
             entity.update();

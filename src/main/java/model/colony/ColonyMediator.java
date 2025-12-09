@@ -1,27 +1,84 @@
 package model.colony;
 
+import model.Being;
 import model.ants.Larva;
 import model.ants.QueenAnt;
 import model.ants.TaskPerformerAnt;
 import model.colony.antnest.Tunnel;
+import model.colony.events.*;
 import model.datastructures.Position;
-import model.tasks.BirthTask;
-import model.tasks.EatTask;
-import model.tasks.FeedBeingTask;
-import model.tasks.Task;
+import model.colony.tasks.BirthTask;
+import model.colony.tasks.EatTask;
+import model.colony.tasks.FeedBeingTask;
+import model.colony.tasks.Task;
 import model.world.Item;
 
 import java.util.List;
 
 /**
  * Mediator class for managing communication and task assignment within an ant colony between ants,
- * following the mediator pattern. Think of it as a hivemind that helps coordinate the activities of individual ants.
+ * following the observer and mediator pattern. Think of it as a hivemind that helps coordinate the activities of individual ants.
  *
- * <p>Ants can report discoveries to the mediator, which then creates appropriate tasks.
+ * <p>Ants broadcast events which this mediator listens to and handles appropriately.
+ * <p>Also handles colony-wide decisions like birth control based on colony state.
  */
-public class ColonyMediator {
+public class ColonyMediator implements ColonyEventListener {
     private ColonyTaskBoard taskBoard;
     private AntColony antColony;
+    
+    // Birth control
+    private int ticksSinceLastBirth = 0;
+    private static final int BIRTH_COOLDOWN = 100;
+    private static final int MIN_FOOD_FOR_BIRTH = 2;
+    private static final int BASE_LARVA_COUNT = 1;
+    private static final int FOOD_PER_EXTRA_LARVA = 3;
+    private static final int MAX_LARVA_COUNT = 100;
+    
+    @Override
+    public void onColonyEvent(ColonyEvent event) {
+        switch (event) {
+            case HungryEvent hungryEvent -> handleHungryEvent(hungryEvent);
+            case FoodDiscoveredEvent foodEvent -> handleFoodDiscovered(foodEvent);
+            case TaskCompletedEvent taskEvent -> handleTaskCompleted(taskEvent);
+            case BecameIdleEvent idleEvent -> handleBecameIdle(idleEvent);
+            case BirthRequestEvent birthEvent -> handleBirthRequest(birthEvent);
+            default -> { }
+        }
+    }
+    
+    private void handleHungryEvent(HungryEvent event) {
+        Being hungryBeing = event.getHungryBeing();
+        
+        if (hungryBeing instanceof Larva larva) {
+            handleLarvaHungry(larva);
+        } else if (hungryBeing instanceof QueenAnt queen) {
+            handleQueenHungry(queen);
+        } else if (hungryBeing instanceof TaskPerformerAnt ant) {
+            handleAntHungry(ant);
+        }
+    }
+    
+    private void handleFoodDiscovered(FoodDiscoveredEvent event) {
+        Item food = event.getFood();
+        List<Item> knownFood = antColony.getKnownFood();
+        if (!knownFood.contains(food)) {
+            antColony.addKnownFood(food);
+        }
+    }
+    
+    private void handleTaskCompleted(TaskCompletedEvent event) {
+        taskBoard.removeTask(event.getTask());
+    }
+    
+    private void handleBecameIdle(BecameIdleEvent event) {
+        if (event.getSource() instanceof TaskPerformerAnt ant) {
+            suggestBestTask(ant);
+        }
+    }
+    
+    private void handleBirthRequest(BirthRequestEvent event) {
+        requestBirth(event.getQueen());
+    }
 
     /**
      * Suggests the most appropriate available task for the given ant.
@@ -71,108 +128,52 @@ public class ColonyMediator {
         this.antColony = antColony;
     }
 
-    // Discovery & Reporting ===========================================
-    
-    /**
-     * Report that food was discovered by a scouting ant.
-     * Adds the food to the colony's known food list if not already known.
-     * @param food : The food item discovered
-     */
-    public void reportFoodDiscovered(Item food) {
-        List<Item> knownFood = antColony.getKnownFood();
-        if (!knownFood.contains(food)) {
-            antColony.addKnownFood(food);
-        }
-    }
-    
-    /**
-     * Report that a tunnel is blocked and needs clearing.
-     * @param tunnel : The blocked tunnel
-     */
-    public void reportBlockedTunnel(Tunnel tunnel) {
-        // TODO: Create and add ClearTunnelTask
-        // taskBoard.addTask(new ClearTunnelTask(tunnel));
-    }
-    
-    /**
-     * Report that a new tunnel needs to be dug.
-     * @param tunnel : The tunnel that needs digging
-     */
-    public void reportTunnelNeedsDigging(Tunnel tunnel) {
-        // TODO: Create and add DigTunnelTask
-        // taskBoard.addTask(new DigTunnelTask(tunnel));
-    }
+    // Birth control stuff
 
-    public void reportHungry(TaskPerformerAnt ant){
-        Item food = findBestFood(ant.getPosition());
-        if (food == null) {
+    /**
+     * Update method called each tick to check colony-wide conditions.
+     * Currently handles birth control decisions.
+     * //TODO: Also handle AntNest (chamber, tunnels) stuff
+     */
+    public void update() {
+        ticksSinceLastBirth++;
+        checkBirthNeeded();
+    }
+    
+    /**
+     * Check if the colony needs a new birth and request it if conditions are met.
+     */
+    private void checkBirthNeeded() {
+        QueenAnt queen = antColony.getQueen();
+        
+        if (queen == null) {
             return;
         }
         
-        ant.interruptWithTask(new EatTask(food));
-        antColony.deleteKnownFood(food);
-    }
-
-    /**
-     * Find the best available food item, preferring closer food.
-     * @param position the position to find food near
-     * @return the best food Item, or null if none available
-     */
-    private Item findBestFood(Position position) {
-        List<Item> knownFood = antColony.getKnownFood();
-        if (knownFood.isEmpty()) {
-            return null;
-        }
-        // TODO: Sort by distance to position
-        return knownFood.getFirst();
-    }
-
-    /**
-     * Report that a larva is hungry and needs to be fed.
-     * Creates a FeedBeingTask and adds it to the task board.
-     * Does not create duplicate tasks for the same larva.
-     * @param larva : The hungry larva
-     * @return true if a task was created, false otherwise
-     */
-    public boolean reportLarvaHungry(Larva larva) {
-        for (Task task : taskBoard.getTaskBoard()) {
-            if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == larva) {
-                return true; // Task already exists
-            }
+        if (ticksSinceLastBirth < BIRTH_COOLDOWN) {
+            return;
         }
         
-        Item food = findBestFood(larva.getPosition());
-        if (food == null) {
-            return false; // No food available
+        if (antColony.getKnownFood().size() < MIN_FOOD_FOR_BIRTH) {
+            return;
         }
-
-        taskBoard.addTask(new FeedBeingTask(larva, food, 2, "larva"));
-        antColony.deleteKnownFood(food);
-        return true;
+        
+        long larvaCount = antColony.getLarvaCount();
+        if (larvaCount < getTargetLarvaCount()) {
+            requestBirth(queen);
+            ticksSinceLastBirth = 0;
+        }
     }
-
+    
     /**
-     * Report that the queen is hungry and needs to be fed.
-     * Creates a FeedBeingTask and adds it to the task board.
-     * Does not create duplicate tasks for the queen.
-     * @param queen : The hungry queen
-     * @return true if a task was created, false otherwise
+     * Calculate target larva count based on food availability.
+     * More food = colony can sustain more larvae.
+     * @return the target number of larvae
      */
-    public boolean reportQueenHungry(QueenAnt queen) {
-        for (Task task : taskBoard.getTaskBoard()) {
-            if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == queen) {
-                return true; // Task already exists
-            }
-        }
-        
-        Item food = findBestFood(queen.getPosition());
-        if (food == null) {
-            return false; // No food available
-        }
-        
-        taskBoard.addTask(new FeedBeingTask(queen, food, 1, "queen"));
-        antColony.deleteKnownFood(food);
-        return true;
+    private int getTargetLarvaCount() {
+        int foodCount = antColony.getKnownFood().size();
+        int target = BASE_LARVA_COUNT + (foodCount / FOOD_PER_EXTRA_LARVA);
+        return Math.min(target, MAX_LARVA_COUNT);
     }
 
     /**
@@ -196,5 +197,94 @@ public class ColonyMediator {
         taskBoard.addTask(birthTask);
         queen.assignTask(birthTask);
         birthTask.setAssigned(true);
+    }
+
+    /**
+     * Handle a TaskPerformerAnt being hungry.
+     * Finds food and interrupts with an EatTask.
+     */
+    private void handleAntHungry(TaskPerformerAnt ant) {
+        Item food = findBestFood(ant.getPosition());
+        if (food == null) {
+            return;
+        }
+        
+        ant.interruptWithTask(new EatTask(food));
+        antColony.deleteKnownFood(food);
+    }
+
+    /**
+     * Find the best available food item, preferring closer food.
+     * @param position : the position to find food near
+     * @return the best food Item, or null if none available
+     */
+    private Item findBestFood(Position position) {
+        List<Item> knownFood = antColony.getKnownFood();
+        if (knownFood.isEmpty()) {
+            return null;
+        }
+        // TODO: Sort by distance to position
+        return knownFood.getFirst();
+    }
+
+    /**
+     * Handle a larva being hungry.
+     * Creates a FeedBeingTask and adds it to the task board.
+     * Does not create duplicate tasks for the same larva.
+     */
+    private void handleLarvaHungry(Larva larva) {
+        for (Task task : taskBoard.getTaskBoard()) {
+            if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == larva) {
+                return; // Task already exists
+            }
+        }
+        
+        Item food = findBestFood(larva.getPosition());
+        if (food == null) {
+            return;
+        }
+
+        taskBoard.addTask(new FeedBeingTask(larva, food, 2, "larva"));
+        antColony.deleteKnownFood(food);
+    }
+
+    /**
+     * Handle the queen being hungry.
+     * Creates a FeedBeingTask and adds it to the task board.
+     * Does not create duplicate tasks for the queen.
+     */
+    private void handleQueenHungry(QueenAnt queen) {
+        for (Task task : taskBoard.getTaskBoard()) {
+            if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == queen) {
+                return; // Task already exists
+            }
+        }
+        
+        Item food = findBestFood(queen.getPosition());
+        if (food == null) {
+            return; // No food available
+        }
+        
+        taskBoard.addTask(new FeedBeingTask(queen, food, 1, "queen"));
+        antColony.deleteKnownFood(food);
+    }
+
+    // TODO: Make these into events and handle these events properly
+    /**
+     * Report that a tunnel is blocked and needs clearing.
+     * @param tunnel : The blocked tunnel
+     */
+    public void reportBlockedTunnel(Tunnel tunnel) {
+        // TODO: Create and add ClearTunnelTask
+        // taskBoard.addTask(new ClearTunnelTask(tunnel));
+    }
+    
+    /**
+     * Report that a new tunnel needs to be dug.
+     * @param tunnel : The tunnel that needs digging
+     */
+    public void reportTunnelNeedsDigging(Tunnel tunnel) {
+        // TODO: Create and add DigTunnelTask
+        // taskBoard.addTask(new DigTunnelTask(tunnel));
     }
 }
