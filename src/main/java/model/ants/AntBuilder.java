@@ -63,9 +63,10 @@ public class AntBuilder {
      * @return : A WorkerAnt instance.
      */
     public WorkerAnt buildWorkerAnt() {
-        WorkerAnt ant = new WorkerAnt(world, colonyId, position.getX(), position.getY(), mediator);
+        WorkerAnt ant = new WorkerAnt(world, colonyId, position.getX(), position.getY());
         applyBeingFields(ant);
         applyAntFields(ant);
+        registerListeners(ant);
         return ant;
     }
 
@@ -74,9 +75,10 @@ public class AntBuilder {
      * @return : A QueenAnt instance.
      */
     public QueenAnt buildQueenAnt() {
-        QueenAnt ant = new QueenAnt(type, world, colonyId, position.getX(), position.getY(), mediator);
+        QueenAnt ant = new QueenAnt(type, world, colonyId, position.getX(), position.getY());
         applyBeingFields(ant);
         applyAntFields(ant);
+        registerListeners(ant);
         return ant;
     }
 
@@ -85,9 +87,10 @@ public class AntBuilder {
      * @return : A Larva instance.
      */
     public Larva buildLarva() {
-        Larva larva = new Larva(world, colonyId, position.getX(), position.getY(), mediator);
+        Larva larva = new Larva(world, colonyId, position.getX(), position.getY());
         applyBeingFields(larva);
         applyAntFields(larva);
+        registerListeners(larva);
         return larva;
     }
 
@@ -115,5 +118,16 @@ public class AntBuilder {
         ant.state = this.state;
         ant.behavior = this.behavior;
         ant.movement = this.movement;
+    }
+    
+    /**
+     * Registers the mediator as an event listener for the ant.
+     * This enables the observer pattern for ant-mediator communication.
+     * @param ant the ant to register listeners for
+     */
+    private void registerListeners(Ant ant) {
+        if (mediator != null) {
+            ant.addEventListener(mediator);
+        }
     }
 }

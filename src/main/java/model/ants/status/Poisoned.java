@@ -1,8 +1,8 @@
 package model.ants.status;
 
 import model.ants.Ant;
-import model.tasks.FeedBeingTask;
-import model.tasks.Task;
+import model.colony.tasks.FeedBeingTask;
+import model.colony.tasks.Task;
 
 public class Poisoned implements Status {
 

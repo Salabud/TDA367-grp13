@@ -1,7 +1,7 @@
 package model.ants.status;
 
 import model.ants.Ant;
-import model.tasks.Task;
+import model.colony.tasks.Task;
 
 /**
  * Interface for ant status effects, 

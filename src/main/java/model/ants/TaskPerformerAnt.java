@@ -2,13 +2,12 @@ package model.ants;
 
 import model.AntType;
 import model.Carryable;
-import model.ants.movement.NoMovement;
-import model.ants.movement.PathfindingMovement;
-import model.ants.movement.RandomMovement;
 import model.ants.state.AntState;
 import model.ants.status.Status;
+import model.colony.events.BecameIdleEvent;
+import model.colony.events.TaskCompletedEvent;
 import model.datastructures.Position;
-import model.tasks.Task;
+import model.colony.tasks.Task;
 import org.json.JSONObject;
 
 /** Abstract class for ants that can perform tasks. E.g. WorkerAnt, QueenAnt, (TODO: SoldierAnt)*/
@@ -88,7 +87,7 @@ public class TaskPerformerAnt extends Ant{
             
             // Check if task just completed
             if (currentTask.isComplete()) {
-                mediator.reportTaskCompleted(currentTask);
+                broadcastEvent(new TaskCompletedEvent(currentTask, this));
                 currentTask = null;
                 
                 // Resume previous task if one was interrupted
@@ -99,10 +98,10 @@ public class TaskPerformerAnt extends Ant{
             }
         }
         
-        // If idle (no task), request a new task from mediator
+        // If idle (no task), broadcast idle event to get a new task
         if (currentTask == null) {
             setState(AntState.IDLE);
-            mediator.suggestBestTask(this);
+            broadcastEvent(new BecameIdleEvent(this));
         }
 
         // If carrying something, place it at current position before moving

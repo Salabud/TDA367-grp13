@@ -3,7 +3,7 @@ package model.ants.behavior;
 import model.Entity;
 import model.ants.Ant;
 import model.colony.AntColony;
-import model.colony.ColonyMediator;
+import model.colony.events.FoodDiscoveredEvent;
 import model.world.Item;
 import model.world.MaterialType;
 import model.world.World;
@@ -12,11 +12,11 @@ import java.util.List;
 
 /**
  * Behavior for observing surroundings and reporting discoveries.
- * Scans a square area around the ant and reports any unknown food to the mediator.
+ * Scans a square area around the ant and reports any unknown food via events.
  */
 public class ScoutBehavior implements AntBehavior {
 
-    //TODO: Introduce Scoutable interface (for items and larva)
+    //TODO: Introduce Scoutable interface (for items and beings)
     private static final int DEFAULT_DETECTION_SIZE = 5;
     private final int detectionSize;
 
@@ -31,10 +31,9 @@ public class ScoutBehavior implements AntBehavior {
     @Override
     public void perform(Ant ant) {
         World world = ant.getWorld();
-        ColonyMediator mediator = ant.getMediator();
         AntColony colony = ant.getColony();
         
-        if (world == null || mediator == null || colony == null) {
+        if (world == null || colony == null) {
             return;
         }
         
@@ -64,7 +63,7 @@ public class ScoutBehavior implements AntBehavior {
                         item.isScouted() == false) {
                         if (!isKnownFood(item, knownFood)) {
                             System.out.println("reported a scouted item");
-                            mediator.reportFoodDiscovered(item);
+                            ant.broadcastEvent(new FoodDiscoveredEvent(item, ant));
                         }
                     } //TODO: Also report corpses/larva that are not in the nursery.
                 }

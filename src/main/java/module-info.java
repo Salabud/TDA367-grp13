@@ -8,7 +8,7 @@ module com.example.antsimulator {
     requires java.desktop;
     requires org.json;
     exports app;
-    exports model.tasks;
+    exports model.colony.tasks;
     exports model;
     opens model to javafx.fxml;
     exports view;
@@ -21,6 +21,8 @@ module com.example.antsimulator {
     opens model.colony to javafx.fxml;
     exports model.colony.antnest;
     opens model.colony.antnest to javafx.fxml;
+    exports model.colony.events;
+    opens model.colony.events to javafx.fxml;
     exports model.ants.behavior;
     opens model.ants.behavior to javafx.fxml;
     exports model.world;

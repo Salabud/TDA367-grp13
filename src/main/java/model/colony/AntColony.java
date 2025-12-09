@@ -12,84 +12,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an ant colony, serving as a container for its ants,
- * nest, and task board.
+ * Represents an ant colony, serving as a data container for its ants,
+ * nest, and known resources. Does not contain business logic, 
+ * coordination is handled by ColonyMediator.
  */
 public class AntColony {
     private List<Ant> ants;
-    private ColonyMediator mediator;
-    private ColonyTaskBoard taskBoard;
+    private ColonyTaskBoard taskBoard; //TODO: We don't need this here
     private List<Item> knownFood;
     private QueenAnt queen;
-    
-    // Birth control
-    private int ticksSinceLastBirth = 0;
-    private static final int BIRTH_COOLDOWN = 100;
-    private static final int MIN_FOOD_FOR_BIRTH = 2;
-    private static final int BASE_LARVA_COUNT = 1;
-    private static final int FOOD_PER_EXTRA_LARVA = 3;
-    private static final int MAX_LARVA_COUNT = 100;
 
     public AntColony(ColonyMediator mediator, ColonyTaskBoard taskBoard){
         ants = new ArrayList<>();
         knownFood = new ArrayList<>();
-        this.mediator = mediator;
         this.taskBoard = taskBoard;
-    }
-
-    /**
-     * Update the colony state each tick.
-     * Checks if conditions are met to request a new birth.
-     */
-    public void update() {
-        ticksSinceLastBirth++;
-
-        if (shouldRequestBirth()) {
-            mediator.requestBirth(queen);
-            ticksSinceLastBirth = 0;
-        }
-    }
-    
-    /**
-     * Check if the colony should request the queen to give birth.
-     */
-    private boolean shouldRequestBirth() {
-        if (queen == null) {
-            return false;
-        }
-        
-        if (ticksSinceLastBirth < BIRTH_COOLDOWN) {
-            return false;
-        }
-        
-        if (knownFood.size() < MIN_FOOD_FOR_BIRTH) {
-            return false;
-        }
-
-        long larvaCount = ants.stream()
-                .filter(ant -> ant.getAntType() == AntType.LARVA)
-                .count();
-        return larvaCount < getTargetLarvaCount();
-    }
-    
-    /**
-     * Calculate target larva count based on food availability.
-     * More food = colony can sustain more larvae.
-     * @return the target number of larvae
-     * TODO: Add more prerequisites for birth
-     */
-    private int getTargetLarvaCount() {
-        int foodCount = knownFood.size();
-        int target = BASE_LARVA_COUNT + (foodCount / FOOD_PER_EXTRA_LARVA);
-        return Math.min(target, MAX_LARVA_COUNT);
     }
 
     public void addAnt(Ant ant) {
         this.ants.add(ant);
         
         // Track the queen
-        if (ant instanceof QueenAnt queen) {
-            this.queen = queen;
+        if (ant instanceof QueenAnt queenAnt) {
+            this.queen = queenAnt;
         }
     }
     
@@ -99,6 +43,16 @@ public class AntColony {
     
     public List<Ant> getAnts() {
         return ants;
+    }
+    
+    /**
+     * Get the current count of larvae in the colony.
+     * @return the number of larvae
+     */
+    public long getLarvaCount() {
+        return ants.stream()
+                .filter(ant -> ant.getAntType() == AntType.LARVA)
+                .count();
     }
 
     public List<Position> getFoodPositions(){

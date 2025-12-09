@@ -13,19 +13,22 @@ import model.ants.movement.NoMovement;
 import model.ants.state.AntState;
 import model.ants.status.Status;
 import model.colony.AntColony;
-import model.colony.ColonyMediator;
+import model.colony.events.ColonyEvent;
+import model.colony.events.ColonyEventListener;
 
 /** Abstract class representing an ant in the simulation. */
 public abstract class Ant extends Being {
     protected int colonyId;
     protected String nickname;
-    protected AntColony colony; //TODO: ant maybe shouldn't know this
-    protected ColonyMediator mediator; //TODO: make this observer pattern
+    protected AntColony colony;
     protected List<Status> statuses;
     protected AntState state;
     protected AntBehavior behavior;
     protected AntMovement movement;
     protected AntType antType;
+    
+    // Event listeners for observer pattern
+    private final List<ColonyEventListener> eventListeners = new ArrayList<>();
 
     public AntMovement getMovement() {
         return movement;
@@ -104,8 +107,34 @@ public abstract class Ant extends Being {
         return antType;
     }
     
-    public ColonyMediator getMediator() {
-        return mediator;
+    // Event broadcasting methods ==========================================
+    
+    /**
+     * Adds an event listener to receive colony events from this ant.
+     * @param listener the listener to add
+     */
+    public void addEventListener(ColonyEventListener listener) {
+        if (listener != null && !eventListeners.contains(listener)) {
+            eventListeners.add(listener);
+        }
+    }
+    
+    /**
+     * Removes an event listener.
+     * @param listener the listener to remove
+     */
+    public void removeEventListener(ColonyEventListener listener) {
+        eventListeners.remove(listener);
+    }
+    
+    /**
+     * Broadcasts an event to all registered listeners.
+     * @param event the event to broadcast
+     */
+    public void broadcastEvent(ColonyEvent event) {
+        for (ColonyEventListener listener : eventListeners) {
+            listener.onColonyEvent(event);
+        }
     }
     
     public AntColony getColony() {

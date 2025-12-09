@@ -23,7 +23,7 @@ public class FeedBehavior implements AntBehavior {
     /**
      * Create an eating behavior for a specific food item.
      *
-     * @param foodItem the food item to consume
+     * @param foodItem : the food item to consume
      */
     public FeedBehavior(Item foodItem, Being targetBeing) {
         this.foodItem = foodItem;

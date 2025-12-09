@@ -3,14 +3,14 @@ package model.ants;
 import model.AntType;
 import model.BeingType;
 import model.ants.behavior.ScoutBehavior;
-import model.colony.ColonyMediator;
+import model.colony.events.HungryEvent;
 import model.datastructures.Position;
 import model.EntityType;
 import model.ants.movement.RandomMovement;
 import model.ants.state.AntState;
-import model.tasks.BirthTask;
-import model.tasks.EatTask;
-import model.tasks.Task;
+import model.colony.tasks.BirthTask;
+import model.colony.tasks.EatTask;
+import model.colony.tasks.Task;
 import model.world.World;
 import org.json.JSONObject;
 
@@ -18,23 +18,33 @@ import java.util.ArrayList;
 
 /** Represents a worker ant in the simulation. */
 public class WorkerAnt extends TaskPerformerAnt {
+    private static final float HUNGER_THRESHOLD = 30f;
+    private boolean hasReportedHunger = false;
 
-    public WorkerAnt(World world, int colonyId, int x, int y, ColonyMediator mediator){
+    public WorkerAnt(World world, int colonyId, int x, int y){
         this.type = EntityType.BEING;
         this.beingType = BeingType.ANT;
         this.antType = AntType.WORKER_ANT;
         this.world = world;
         this.colonyId = colonyId;
         this.position = new Position(x,y);
-        this.mediator = mediator;
         this.statuses = new ArrayList<>();
     }
 
     @Override
     public void update() {
-        if (getHunger() < 30 && getState() != AntState.FEEDING && !(currentTask instanceof EatTask)) {
-            mediator.reportHungry(this);
+        // Broadcast hunger event (hasReportedHunger prevents spamming)
+        if (getHunger() < HUNGER_THRESHOLD && getState() != AntState.FEEDING 
+                && !(currentTask instanceof EatTask) && !hasReportedHunger) {
+            broadcastEvent(new HungryEvent(this));
+            hasReportedHunger = true;
         }
+        
+        // Reset the flag once hunger is restored
+        if (getHunger() >= HUNGER_THRESHOLD) {
+            hasReportedHunger = false;
+        }
+        
         if (currentTask == null && this.state == AntState.IDLE && !(this.movement instanceof RandomMovement)) {
             this.behavior = new ScoutBehavior();
             this.movement = new RandomMovement(this, world.getTileGrid());

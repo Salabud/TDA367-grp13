@@ -1,4 +1,4 @@
-package model.tasks;
+package model.colony.tasks;
 
 import model.Carryable;
 import model.ants.Ant;
