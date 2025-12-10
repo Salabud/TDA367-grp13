@@ -1,5 +1,6 @@
 package view;
 
+import model.ModelPresentor;
 import model.ants.Ant;
 import model.Being;
 import model.Entity;
@@ -16,7 +17,6 @@ import java.util.List;
  * Canvas for rendering entities in the simulation.
  */
 public class EntityCanvas extends Canvas {
-    private List<Entity> entities;
     private final GraphicsContext gc = getGraphicsContext2D();
     private int cellsize;
     private final Sprite workerAnt;
@@ -25,8 +25,6 @@ public class EntityCanvas extends Canvas {
     private final Sprite queen;
     private final Sprite dirt;
     private final Sprite poison;
-    private final Sprite itemOutline;
-    private final Sprite beingOutline;
     private final Sprite selectionSprite;
     private int selectedEntityId = -1;
     private SelectWindow selectWindow;
@@ -34,50 +32,39 @@ public class EntityCanvas extends Canvas {
 
 
     public EntityCanvas(){
-        this.cellsize = metaData.getCellsize();
-        setWidth(metaData.getScreenWidth());
-        setHeight(metaData.getScreenHeight());
+        this.cellsize = (int)(metaData.getCellSize()* metaData.getZoom());
+        setWidth(metaData.getResolutionY());
+        setHeight(metaData.getResolutionX());
 
         // Being sprites
-        this.beingOutline = new CircleSprite(cellsize+4, Color.BLACK, gc);
-        this.workerAnt = new CircleSprite(cellsize, Color.rgb(250, 149, 0), gc);
-        this.larva = new CircleSprite(cellsize, Color.WHITE, gc);
-        this.queen = new CircleSprite(cellsize, Color.YELLOW, gc);
+        this.workerAnt = new CircleSprite(1, Color.rgb(250, 149, 0), gc);
+        this.larva = new CircleSprite(1, Color.WHITE, gc);
+        this.queen = new CircleSprite(1, Color.YELLOW, gc);
 
         // Item Sprites
-        this.itemOutline = new DiamondSprite(cellsize+6, Color.BLACK, gc);
+        //this.itemOutline = new DiamondSprite(cellsize+6, Color.BLACK, gc);
         this.food = new DiamondSprite(cellsize+2, Color.GREEN, gc);
         this.dirt = new DiamondSprite(cellsize+2, Color.rgb(50,41,47), gc);
         this.poison = new DiamondSprite(cellsize+2, Color.PURPLE, gc);
 
         // Other sprites
-        this.selectionSprite = new SelectSprite(cellsize+8, Color.WHITE, gc);
-        this.selectWindow = new SelectWindow(metaData.getScreenWidth()- metaData.getSquareOffset()-160, metaData.getScreenHeight()-200, gc);
-    }
-
-    /**
-     * Updates the list of entities to render.
-     * @param entities : The new list of entities.
-     */
-    public void updateEntities(List<Entity> entities) {
-        this.entities = entities;
-        render();
+        this.selectionSprite = new SelectSprite(1.4, Color.WHITE, gc);
+        this.selectWindow = new SelectWindow(metaData.getResolutionY()- metaData.getSquareOffset()-160, metaData.getResolutionX()-200, gc);
     }
 
     /**
      * Renders the entities onto the canvas.
      */
-    public void render() {
+    public void render(ModelPresentor modelPresentor) {
+        List<Entity> entities = modelPresentor.getEntityList();
         gc.clearRect(0, 0, getWidth(), getHeight());
         Entity selectedEntity = null;
 
         for (Entity entity : entities) {
-            int posX = entity.getX()*cellsize + metaData.getSquareOffset();
-            int posY = entity.getY()*cellsize;
-            gc.setFill(Color.BLACK);
+            int posX = (int) ((entity.getX()*cellsize + metaData.getSquareOffset()) + metaData.getCameraX());
+            int posY = (int) ((entity.getY()*cellsize + metaData.getSquareOffset()) + metaData.getCameraY());
             switch (entity.getType()) {
                 case BEING:
-                    beingOutline.paint(posX-2,posY-2);
                     Being being = (Being) entity;
                     switch(being.getBeingType()){
                         case ANT:
@@ -97,7 +84,6 @@ public class EntityCanvas extends Canvas {
                     break;
                 case EntityType.ITEM:
                     Item item = (Item) entity;
-                    itemOutline.paint(posX-2,posY-2);
                     switch (item.getMaterialType()){
                         case DIRT -> dirt.paint(posX,posY);
                         case FOOD -> food.paint(posX,posY);
@@ -113,11 +99,15 @@ public class EntityCanvas extends Canvas {
             }
         }
         if (selectedEntity != null){
-            selectionSprite.paint(selectedEntity.getX()*cellsize-5 + metaData.getSquareOffset(), selectedEntity.getY()*cellsize-5);
+            selectionSprite.paint((int) (selectedEntity.getX()*cellsize + metaData.getCameraX()), (int) (selectedEntity.getY()*cellsize + metaData.getCameraY()));
         }
     }
 
     public void setSelectedEntity(int selectedEntityId) {
         this.selectedEntityId = selectedEntityId;
+    }
+
+    public void updateCellsize() {
+        this.cellsize = (int) metaData.getCellSize();
     }
 }

@@ -3,7 +3,6 @@ package view;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class GameInterface {
         nodes.add(saveButton);
 
         pauseButton = new Button("Pause");
-        pauseButton.setLayoutX(metaData.getScreenHeight()/2 - 140 + metaData.getSquareOffset());
+        pauseButton.setLayoutX(metaData.getResolutionX()/2 - 140 + metaData.getSquareOffset());
         pauseButton.setPrefWidth(100);
         pauseButton.setPrefHeight(40);
         pauseButton.setFocusTraversable(false);
@@ -53,7 +52,7 @@ public class GameInterface {
         nodes.add(pauseButton);
 
         speed1Button = new Button(">");
-        speed1Button.setLayoutX(metaData.getScreenHeight()/2 - 20 + metaData.getSquareOffset());
+        speed1Button.setLayoutX(metaData.getResolutionX()/2 - 20 + metaData.getSquareOffset());
         speed1Button.setPrefWidth(40);
         speed1Button.setPrefHeight(40);
         speed1Button.setFocusTraversable(false);
@@ -62,7 +61,7 @@ public class GameInterface {
 
 
         speed3Button = new Button(">>");
-        speed3Button.setLayoutX(metaData.getScreenHeight()/2 + 20 + metaData.getSquareOffset());
+        speed3Button.setLayoutX(metaData.getResolutionX()/2 + 20 + metaData.getSquareOffset());
         speed3Button.setPrefSize(40, 40);
         speed3Button.setFocusTraversable(false);
         speed3Button.setStyle(font);
@@ -70,7 +69,7 @@ public class GameInterface {
 
         tools = new ComboBox<>();
         tools.setFocusTraversable(false);
-        tools.setLayoutX(metaData.getScreenHeight() - 200 + metaData.getSquareOffset());
+        tools.setLayoutX(metaData.getResolutionX() - 200 + metaData.getSquareOffset());
         tools.setPrefSize(200,40);
         tools.getItems().addAll(Tool.values());
         tools.setValue(Tool.SELECT);
@@ -112,6 +111,7 @@ public class GameInterface {
                 break;
         }
     }
+
     public Button getPauseButton(){
         return  pauseButton;
     }

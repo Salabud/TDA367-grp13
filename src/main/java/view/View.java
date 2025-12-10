@@ -2,6 +2,7 @@ package view;
 
 import controller.InputHandler;
 import model.ModelListener;
+import model.ModelPresentor;
 import model.world.World;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,7 @@ public class View implements ModelListener {
     private GameInterface gameInterface;
     private MusicHandler musicHandler;
     private final MetaDataRegistry metaDataRegistry = MetaDataRegistry.getInstance();
+    private ModelPresentor modelPresentor;
 
     // Canvas components for rendering
     private WorldCanvas worldCanvas;
@@ -29,9 +31,10 @@ public class View implements ModelListener {
     private Pane mainPane;
 
 
-    public View(Stage stage) {
+    public View(ModelPresentor modelPresentor, Stage stage) {
         this.stage = stage;
         this.root = new BorderPane();
+        this.modelPresentor = modelPresentor;
 
         // Create UI elements
         gameInterface = new GameInterface();
@@ -53,7 +56,7 @@ public class View implements ModelListener {
         root.setCenter(mainPane);
         
         // Create scene
-        scene = new Scene(root, metaDataRegistry.getScreenWidth(), metaDataRegistry.getScreenHeight());
+        scene = new Scene(root, metaDataRegistry.getResolutionY(), metaDataRegistry.getResolutionX());
         stage.setScene(scene);
         stage.setTitle("Ant Simulator");
         stage.setResizable(false);
@@ -79,6 +82,7 @@ public class View implements ModelListener {
     private void setupInputHandlers() {
         if (inputHandler != null && scene != null) {
             scene.setOnKeyPressed(inputHandler::handleKeyPress);
+            scene.setOnKeyReleased(inputHandler::handleKeyRelease);
             scene.setOnMouseClicked(inputHandler::handleMouseClick);
             scene.setOnMouseMoved(inputHandler::handleMouseMove);
             scene.setOnMousePressed(inputHandler::handleMousePressed);
@@ -100,16 +104,11 @@ public class View implements ModelListener {
     public void onTilesetChanged(World world) {
         // Update specific entity rendering
         if (worldCanvas != null) {
-            worldCanvas.render(world);
+            worldCanvas.render(modelPresentor);
         }
     }
     @Override
-    public void onEntitiesChanged(World world) {
-        // Update specific entity rendering
-        if (entityCanvas != null) {
-            entityCanvas.updateEntities(world.getEntities());
-
-        }
+    public void onTick() {
     }
     
     @Override
@@ -138,12 +137,6 @@ public class View implements ModelListener {
         mainPane.getChildren().addAll(gameInterface.getNodes());
 
     }
-
-    public void renderInterface() {
-        if (interfaceCanvas != null) {
-            interfaceCanvas.render();
-        }
-    }
     
     public Stage getStage() {
         return stage;
@@ -151,6 +144,12 @@ public class View implements ModelListener {
 
     public GameInterface getGameInterface(){
         return gameInterface;
+    }
+
+    public void updateZoom(){
+        entityCanvas.updateCellsize();
+        worldCanvas.updateCellsize();
+        rePaint();
     }
 
     /**
@@ -162,5 +161,18 @@ public class View implements ModelListener {
 
     public void setSelectedEntity(int entityId){
         entityCanvas.setSelectedEntity(entityId);
+    }
+
+    public void rePaint(){
+        worldCanvas.render(modelPresentor);
+        entityCanvas.render(modelPresentor);
+    }
+
+    public void render() {
+        // Update specific entity rendering
+        if (entityCanvas != null) {
+            entityCanvas.render(modelPresentor);
+
+        }
     }
 }

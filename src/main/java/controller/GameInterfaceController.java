@@ -2,20 +2,28 @@ package controller;
 
 import controller.mouseTool.*;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyCode;
 import model.Model;
+import model.ModelListener;
 import model.datastructures.Position;
+import model.world.World;
 import view.MetaDataRegistry;
 import view.Tool;
 import view.View;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import view.GameInterface;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Controller class - Mediator between Model and View.
  * Follows Single Responsibility Principle, handles user input and coordinates actions.
  * Extensibly implements InputHandler (following the observer pattern) to process View events.
  */
-public class GameInterfaceController implements InputHandler {
+public class GameInterfaceController implements InputHandler, ModelListener {
     private Model model;
     private View view;
     private GameInterface gameInterface;
@@ -23,7 +31,7 @@ public class GameInterfaceController implements InputHandler {
     private MouseTool currentTool;
     private boolean dragging;
     private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
-
+    private Set<KeyCode> keysPressed;
     
     public GameInterfaceController(Model model, View view) {
         this.model = model;
@@ -34,6 +42,7 @@ public class GameInterfaceController implements InputHandler {
         currentTool = null;
         dragging = false;
         currentTool = SelectTool.getInstance();
+        keysPressed = new HashSet<>();
 
         // Connect controller to tools
         SelectTool.getInstance().setController(this);
@@ -44,24 +53,27 @@ public class GameInterfaceController implements InputHandler {
      * Handles key press events.
      * @param event : The key event to handle.
      */
-    @Override
     public void handleKeyPress(KeyEvent event) {
+        keysPressed.add(event.getCode());
+
         switch (event.getCode()) {
-            case W:
             case UP:
-                // Move camera up or handle up action
+                pan(0,50);
                 break;
-            case S:
             case DOWN:
-                // Move camera down or handle down action
+                pan(0,-50);
                 break;
-            case A:
             case LEFT:
-                // Move camera left or handle left action
+                pan(50,0);
                 break;
-            case D:
             case RIGHT:
-                // Move camera right or handle right action
+                pan(-50,0);
+                break;
+            case ADD:
+                zoom(metaData.getZoom()+0.2);
+                break;
+            case SUBTRACT:
+                zoom(metaData.getZoom()-0.2);
                 break;
             case SPACE:
                 // Pause/Resume game
@@ -70,6 +82,9 @@ public class GameInterfaceController implements InputHandler {
             default:
                 break;
         }
+    }
+    public void handleKeyRelease(KeyEvent event) {
+        //keysPressed.remove(event.getCode());
     }
 
     /**
@@ -116,11 +131,11 @@ public class GameInterfaceController implements InputHandler {
     }
 
     private void applyTool(MouseEvent event) {
-        double worldX = event.getX() - metaData.getSquareOffset();
-        double worldY = event.getY();
+        double worldX = event.getX() - metaData.getSquareOffset() - metaData.getCameraX();
+        double worldY = event.getY() - metaData.getCameraY();
 
-        int posX = (int)(worldX / metaData.getCellsize());
-        int posY = (int)(worldY / metaData.getCellsize());
+        int posX = (int)(worldX / (metaData.getCellSize()));
+        int posY = (int)(worldY / (metaData.getCellSize()));
         Position mousePosition = new Position(posX, posY);
 
         currentTool.execute(model.getWorld(), mousePosition);
@@ -203,6 +218,32 @@ public class GameInterfaceController implements InputHandler {
     }
 
 
+    /**
+     * Change the level of zoom in the simulation
+     * @param zoom
+     */
+    public void zoom(double zoom){
+        double oldZoom = metaData.getZoom();
+        double cameraX = metaData.getCameraX();
+        double cameraY = metaData.getCameraY();
+        double screenWidth = metaData.getResolutionY()/zoom;
+        double screenHeight = metaData.getResolutionX()/zoom;
+
+
+        metaData.setZoom(zoom); //zoom is a double between 1 and 2 (2 = 2x zoom)
+
+        // adjust camera so same world point remains centered
+        //metaData.setCameraX((int) (cameraX-(screenWidth*zoom -screenWidth)/2));
+        //metaData.setCameraY((int) (cameraY-(screenHeight*zoom -screenHeight)/2));
+        view.updateZoom();
+    }
+    public void pan(int x, int y){
+        metaData.setCameraX(metaData.getCameraX()+x);
+        metaData.setCameraY(metaData.getCameraY()+y);
+        view.updateZoom();
+    }
+
+
 
 
     /**
@@ -216,5 +257,31 @@ public class GameInterfaceController implements InputHandler {
     
     public void stopGame() {
         // model.stop();
+    }
+
+    @Override
+    public void onModelUpdated() {
+
+    }
+
+    @Override
+    public void onTick() {
+        //Does not work for some reason. Threading?
+        //System.out.println(Arrays.toString(keysPressed.toArray()));
+        if (keysPressed.contains(KeyCode.DOWN))  pan(0, 4);
+        if (keysPressed.contains(KeyCode.DOWN))  pan(0, -4);
+        if (keysPressed.contains(KeyCode.LEFT))  pan(4, 0);
+        if (keysPressed.contains(KeyCode.RIGHT)) pan(-4, 0);
+
+    }
+
+    @Override
+    public void onTilesetChanged(World world) {
+
+    }
+
+    @Override
+    public void onGameStateChanged(String newState) {
+
     }
 }
