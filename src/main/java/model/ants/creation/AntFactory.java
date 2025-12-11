@@ -6,7 +6,9 @@ import model.ants.WorkerAnt;
 import model.ants.status.Status;
 import model.colony.events.ColonyEventListener;
 import model.datastructures.Position;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,20 +59,17 @@ public final class AntFactory {
      * Loads a WorkerAnt from saved state. 
      * TODO: pass in AntData as ONE parameter
      * */
-    public WorkerAnt loadWorkerAnt(Position position, int age, String nickname,
-                                   float health, float maxHealth,
-                                   float hunger, float maxHunger,
-                                   int movementInterval, List<Status> statuses) {
+    public WorkerAnt loadWorkerAnt(JSONObject object) {
         return new AntBuilder()
-                .position(position)
-                .age(age)
-                .nickname(nickname)
-                .health(health)
-                .maxHealth(maxHealth)
-                .hunger(hunger)
-                .maxHunger(maxHunger)
-                .movementInterval(movementInterval)
-                .statuses(statuses)
+                .position(new Position(object.getInt("x"), object.getInt("y") ))
+                .age(object.getFloat("age"))
+                .nickname(object.getString("nickname"))
+                .health(object.getFloat("health"))
+                .maxHealth(object.getFloat("maxHealth"))
+                .hunger(object.getFloat("Hunger"))
+                .maxHunger(object.getFloat("maxHunger"))
+                .movementInterval(object.getInt("movementInterval"))
+                .statuses(new ArrayList<>())//TODO Implement statuses, as well as currentTask etc. that we currently aren't saving
                 .buildWorkerAnt();
     }
 
@@ -82,20 +81,17 @@ public final class AntFactory {
     /** Loads a QueenAnt from saved state.  
     * TODO: pass in AntData as ONE parameter
     */
-    public QueenAnt loadQueenAnt(Position position, int age, String nickname,
-                                 float health, float maxHealth,
-                                 float hunger, float maxHunger,
-                                 int movementInterval, List<Status> statuses) {
+    public QueenAnt loadQueenAnt(JSONObject object) {
         return new AntBuilder()
-                .position(position)
-                .age(age)
-                .nickname(nickname)
-                .health(health)
-                .maxHealth(maxHealth)
-                .hunger(hunger)
-                .maxHunger(maxHunger)
-                .movementInterval(movementInterval)
-                .statuses(statuses)
+                .position(new Position(object.getInt("x"), object.getInt("y") ))
+                .age(object.getFloat("age"))
+                .nickname(object.getString("nickname"))
+                .health(object.getFloat("health"))
+                .maxHealth(object.getFloat("maxHealth"))
+                .hunger(object.getFloat("Hunger"))
+                .maxHunger(object.getFloat("maxHunger"))
+                .movementInterval(object.getInt("movementInterval"))
+                .statuses(new ArrayList<>())//TODO Implement statuses, as well as currentTask etc. that we currently aren't saving
                 .buildQueenAnt();
     }
 
@@ -108,20 +104,17 @@ public final class AntFactory {
      * Loads a Larva from saved state.
      * TODO: pass in AntData as ONE parameter
      */
-    public Larva loadLarva(Position position, int age, String nickname,
-                           float health, float maxHealth,
-                           float hunger, float maxHunger,
-                           int movementInterval, List<Status> statuses) {
+    public Larva loadLarva(JSONObject object) {
         return new AntBuilder()
-                .position(position)
-                .age(age)
-                .nickname(nickname)
-                .health(health)
-                .maxHealth(maxHealth)
-                .hunger(hunger)
-                .maxHunger(maxHunger)
-                .movementInterval(movementInterval)
-                .statuses(statuses)
+                .position(new Position(object.getInt("x"), object.getInt("y") ))
+                .age(object.getFloat("age"))
+                .nickname(object.getString("nickname"))
+                .health(object.getFloat("health"))
+                .maxHealth(object.getFloat("maxHealth"))
+                .hunger(object.getFloat("Hunger"))
+                .maxHunger(object.getFloat("maxHunger"))
+                .movementInterval(object.getInt("movementInterval"))
+                .statuses(new ArrayList<>())//TODO Implement statuses, as well as currentTask etc. that we currently aren't saving
                 .buildLarva();
     }
 }

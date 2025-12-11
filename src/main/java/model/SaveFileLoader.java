@@ -97,15 +97,9 @@ public class SaveFileLoader {
                             String nickname = entity.optString("nickname", null);
                             
                             Ant ant = switch (antType) {
-                                case WORKER_ANT -> AntFactory.getInstance().loadWorkerAnt(
-                                        position, age, nickname,
-                                        health, maxHealth, hunger, maxHunger, movementInterval, statuses);
-                                case QUEEN -> AntFactory.getInstance().loadQueenAnt(
-                                        position, age, nickname,
-                                        health, maxHealth, hunger, maxHunger, movementInterval, statuses);
-                                case LARVA -> AntFactory.getInstance().loadLarva(
-                                        position, age, nickname,
-                                        health, maxHealth, hunger, maxHunger, movementInterval, statuses);
+                                case WORKER_ANT -> AntFactory.getInstance().loadWorkerAnt(entity);
+                                case QUEEN -> AntFactory.getInstance().loadQueenAnt(entity);
+                                case LARVA -> AntFactory.getInstance().loadLarva(entity);
                             };
                             
                             // Register with world and colony

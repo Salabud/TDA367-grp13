@@ -24,7 +24,7 @@ public class AntBuilder {
     private Float maxHealth;
     private Float hunger;
     private Float maxHunger;
-    private Integer age;
+    private Float age;
     private Integer movementInterval;
     private List<Status> statuses;
     private String nickname;
@@ -38,7 +38,7 @@ public class AntBuilder {
     public AntBuilder maxHealth(float maxHealth) { this.maxHealth = maxHealth; return this; }
     public AntBuilder hunger(float hunger) { this.hunger = hunger; return this; }
     public AntBuilder maxHunger(float maxHunger) { this.maxHunger = maxHunger; return this; }
-    public AntBuilder age(int age) { this.age = age; return this; }
+    public AntBuilder age(float age) { this.age = age; return this; }
     public AntBuilder movementInterval(int movementInterval) { this.movementInterval = movementInterval; return this; }
     public AntBuilder statuses(List<Status> statuses) { this.statuses = statuses; return this; }
     public AntBuilder nickname(String nickname) { this.nickname = nickname; return this; }
