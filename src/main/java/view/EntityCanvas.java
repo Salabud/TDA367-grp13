@@ -39,9 +39,9 @@ public class EntityCanvas extends Canvas {
         setHeight(metaData.getResolutionX());
 
         // Being sprites
-        this.workerAnt = new ImageSprite(1.5, gc, new Image(getClass().getResourceAsStream("/sprites/ant_orange.png"),32,32,false,false));
+        this.workerAnt = new ImageSprite(1.5, gc, new Image(getClass().getResourceAsStream("/sprites/ant_blue.png"),32,32,false,false));
         this.larva = new ImageSprite(1, gc, new Image(getClass().getResourceAsStream("/sprites/larva.png"),32,32,false,false));
-        this.queen = new ImageSprite(2, gc, new Image(getClass().getResourceAsStream("/sprites/queen_orange.png"),32,32,false,false));
+        this.queen = new ImageSprite(2, gc, new Image(getClass().getResourceAsStream("/sprites/queen_blue.png"),32,32,false,false));
 
         // Item Sprites
         //this.itemOutline = new DiamondSprite(cellsize+6, Color.BLACK, gc);
