@@ -1,17 +1,20 @@
 package model.world;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import model.ants.*;
+import model.Entity;
+import model.EntityIdManager;
+import model.ants.Larva;
+import model.ants.QueenAnt;
+import model.ants.WorkerAnt;
 import model.ants.creation.AntFactory;
 import model.ants.creation.AntSpawner;
 import model.colony.AntColony;
-import model.colony.HiveMind;
 import model.colony.ColonyTaskBoard;
+import model.colony.HiveMind;
 import model.datastructures.Position;
-import model.Entity;
-import model.EntityIdManager;
 
 /**
  * Represents the world in which entities exist and interact.
@@ -30,6 +33,7 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
     private AntColony colony;
     private ColonyTaskBoard taskBoard;
     private AntSpawner spawner;
+    HashMap<Entity, Position> entityPositionHashMap = new HashMap<>();
 
     public World(){
         this.tilesChanged = false;
@@ -160,6 +164,7 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
         int y = entity.getY();
         if (inBounds(x, y)) {
             entityGrid[x][y].add(entity);
+            entityPositionHashMap.put(entity, new Position(x, y));
             entities.add(entity);
         }
     }
@@ -174,6 +179,7 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
         int y = entity.getY();
         if (inBounds(x, y)) {
             entityGrid[x][y].remove(entity);
+            entityPositionHashMap.remove(entity);
             entities.remove(entity);
         }
     }
@@ -201,14 +207,24 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
     }
 
     /**
-     * Creates and adds a tile to the world at specified position if empty.
+     * Adds a tile to the world at its position.
      * @param tile : The tile to be added.
+     */
+    @Override
+    public void addTile(Tile tile){
+        tiles.add(tile);
+        tileGrid[tile.getPosition().getX()][tile.getPosition().getY()] = tile;
+        tilesChanged = true;
+    }
+
+    /**
+     * Creates and adds a tile to the world at specified position if empty.
      * @param x : The x-coordinate of the tile.
      * @param y : The y-coordinate of the tile.
      * @param materialType : The material type of the tile.
      */
-    public void addTile(Tile tile, int x, int y, MaterialType materialType){
-        tile = new Tile(x, y, materialType);
+    public void addTile(int x, int y, MaterialType materialType){
+        Tile tile = new Tile(x, y, materialType);
         if (inBounds(x, y) && tileGrid[x][y] == null) {
           tiles.add(tile);
           tileGrid[x][y] = tile;
@@ -227,16 +243,6 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
         tilesChanged = true;
     }
 
-    /**
-     * Adds a tile to the world at its position.
-     * @param tile : The tile to be added.
-     */
-    @Override
-    public void addTile(Tile tile){
-        tiles.add(tile);
-        tileGrid[tile.getPosition().getX()][tile.getPosition().getY()] = tile;
-        tilesChanged = true;
-    }
 
     @Override
     public List<Entity> getEntityList(){
@@ -268,6 +274,13 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
             WorldContext worldContext = new WorldContext(entities,entityGrid,tiles,tileGrid,gridSize);
             entity.update();
             entity.setWorldContext(worldContext);
+        }
+        updateEntityGrid();
+        for(Entity entity: entityPositionHashMap.keySet()){
+            if (entity instanceof QueenAnt){
+                System.out.println(entity.getPosition());
+                System.out.println(entityPositionHashMap.get(entity));
+            }
         }
     }
 
@@ -301,6 +314,21 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
       }
       return null;
     }
+    @Override
+    public void updateEntityGrid(){
+        for(Entity entity : entityPositionHashMap.keySet()){
+            Position oldPosition = entityPositionHashMap.get(entity);
+            Position newPosition = entity.getPosition();
+
+            if (oldPosition.equals(newPosition)){continue;}
+
+            entityGrid[oldPosition.getX()][oldPosition.getY()].remove(entity);
+            entityGrid[newPosition.getX()][newPosition.getY()].add(entity);
+
+            entityPositionHashMap.put(entity, newPosition);
+        }
+    }
+
     public boolean checkTilesChanged(){
         return tilesChanged;
     }
