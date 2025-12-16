@@ -19,7 +19,7 @@ import model.colony.events.ColonyEventListener;
 public abstract class Ant extends Being {
     protected int colonyId;
     protected String nickname;
-    protected AntColony colony;
+    protected AntColony colony; //TODO: depricated; remove this reference (now handled via events)
     protected List<Status> statuses;
     protected AntState state;
     protected AntBehavior behavior;
