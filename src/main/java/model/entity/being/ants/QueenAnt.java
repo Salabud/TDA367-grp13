@@ -1,15 +1,15 @@
 package model.entity.being.ants;
 
-import model.entity.being.BeingType;
+import java.util.ArrayList;
+
 import model.colony.events.HungryEvent;
-import model.datastructures.Position;
-import model.entity.EntityType;
 import model.colony.tasks.EatTask;
 import model.colony.tasks.FeedBeingTask;
 import model.colony.tasks.MoveCarryableTask;
 import model.colony.tasks.Task;
-
-import java.util.ArrayList;
+import model.datastructures.Position;
+import model.entity.EntityType;
+import model.entity.being.BeingType;
 
 /** Represents the queen ant in the simulation. */
 public class QueenAnt extends TaskPerformerAnt {
@@ -34,8 +34,10 @@ public class QueenAnt extends TaskPerformerAnt {
 
     @Override
     public void update() {
+
+        boolean isHungry = getHunger() < HUNGER_THRESHOLD;
         // Broadcast hunger event (hasReportedHunger prevents spamming)
-        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger) {
+        if (isHungry && !hasReportedHunger) {
             broadcastEvent(new HungryEvent(this));
             hasReportedHunger = true;
         }

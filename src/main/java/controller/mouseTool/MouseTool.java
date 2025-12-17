@@ -60,4 +60,14 @@ public abstract class MouseTool {
     public boolean isReleaseTriggered() {
         return releaseTriggered;
     }
+
+    protected boolean isInbound(World world, int x, int y) {
+        int s = world.getGridSize();
+        return x >= 0 && x < s && y >= 0 && y < s;
+    }
+
+    protected boolean hasValidCrossNeighbors(World world, int x, int y) {
+        int s = world.getGridSize();
+        return x >= 1 && x <= s - 2 && y >= 1 && y <= s - 2;
+    }
 }

@@ -1,8 +1,8 @@
 package model.entity.being.ants.status;
 
-import model.entity.being.ants.Ant;
 import model.colony.tasks.FeedBeingTask;
 import model.colony.tasks.Task;
+import model.entity.being.ants.Ant;
 
 /**
  * Status effect representing poisoning in an ant.
@@ -12,10 +12,12 @@ public class Poisoned implements Status {
 
     private float poisonDamagePerTick;
     private float poisonHungerPerTick;
+    private float BASE_POISON_DAMAGE = 0.3F;
+    private float BASE_HUNGER_DAMAGE = 0.2F;
 
     public Poisoned() {
-        this.poisonDamagePerTick = 0.3F;
-        this.poisonHungerPerTick = 0.2F;
+        this.poisonDamagePerTick = BASE_POISON_DAMAGE;
+        this.poisonHungerPerTick = BASE_HUNGER_DAMAGE;
      }
 
     public void applyStatusEffect(Ant ant) {

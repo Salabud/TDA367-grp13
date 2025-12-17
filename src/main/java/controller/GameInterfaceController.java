@@ -6,16 +6,21 @@
  */
 package controller;
 
-import controller.mouseTool.*;
+import controller.mouseTool.MouseTool;
+import controller.mouseTool.PlaceDirt;
+import controller.mouseTool.PlaceFood;
+import controller.mouseTool.PlacePoison;
+import controller.mouseTool.SelectTool;
+import controller.mouseTool.Shovel;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import model.Model;
 import model.datastructures.Position;
+import view.GameInterface;
 import view.MetaDataRegistry;
 import view.Tool;
 import view.View;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import view.GameInterface;
 /**
  * Controller class - Mediator between Model and View.
  * Follows Single Responsibility Principle, handles user input and coordinates actions.
@@ -29,6 +34,8 @@ public class GameInterfaceController implements InputHandler {
     private MouseTool currentTool;
     private boolean dragging;
     private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
+    private static final int TICKS_PER_SECOND = 60;
+    private static final int SLOW_TICKS_PER_SECOND = 20;
 
     
     public GameInterfaceController(Model model, View view) {
@@ -196,11 +203,11 @@ public class GameInterfaceController implements InputHandler {
      * Handles world tick speed button toggles.
      */
     private void handleSpeed1Button(){
-        model.setTickrate(60);
+        model.setTickrate(TICKS_PER_SECOND);
         gameInterface.setPressedButton(">");
     }
     private void handleSpeed3Button(){
-        model.setTickrate(20);
+        model.setTickrate(SLOW_TICKS_PER_SECOND);
         gameInterface.setPressedButton(">>>");
     }
 
