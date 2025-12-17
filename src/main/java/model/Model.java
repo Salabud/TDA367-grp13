@@ -1,10 +1,5 @@
 package model;
 
-import model.saving.SaveFileCreator;
-import model.saving.SaveFileLoader;
-import model.world.World;
-import javafx.application.Platform;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +7,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
+import model.saving.SaveFileCreator;
+import model.saving.SaveFileLoader;
+import model.world.World;
+
 /**
  * The Model class represents the core data and logic of the ant simulation.
  * It manages the worlds, entities, and the game state, and notifies listeners of changes.
  */
 public class Model {
-    private int startingTickrate;
+    private int startingTickrate = 60;
     private int tickrate;
     private List<World> worlds;
     private List<ModelListener> listeners;
@@ -28,10 +28,9 @@ public class Model {
     public Model() {
         this.worlds = new ArrayList<>();
         this.listeners = new ArrayList<>();
-        this.startingTickrate = 60;
-        this.tickrate = startingTickrate;
         this.gameState = "MAIN_MENU";
         this.isRunning = false;
+        this.tickrate = startingTickrate;
     }
     public void initialise(){
         setGameState("MAIN_MENU");

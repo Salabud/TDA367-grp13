@@ -76,10 +76,14 @@ public class RandomMovement implements AntMovement {
                 int nx = current.getX() + dir[0];
                 int ny = current.getY() + dir[1];
                 String nKey = nx + "," + ny;
-                
-                if (nx >= 0 && nx < gridWidth && ny >= skyLimit && ny < gridHeight
-                        && !visited.contains(nKey)
-                        && tileGrid[nx][ny] == null) {
+
+                boolean inBoundsX = nx >= 0 && nx < gridWidth;
+                boolean inBoundsY = ny >= 0 && ny < gridHeight;
+                boolean aboveSky = ny >= skyLimit;
+                boolean notVisited = !visited.contains(nKey);
+                boolean isEmpty = tileGrid[nx][ny] == null;
+
+                if (inBoundsX && inBoundsY && aboveSky && notVisited && isEmpty) {
                     visited.add(nKey);
                     queue.add(new Position(nx, ny));
                 }

@@ -1,17 +1,21 @@
 package view.canvas;
 
-import model.entity.being.ants.Ant;
-import model.entity.being.Being;
-import model.entity.Entity;
-import model.entity.EntityType;
-import model.entity.item.Item;
+import java.util.List;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import model.entity.Entity;
+import model.entity.EntityType;
+import model.entity.being.Being;
+import model.entity.being.ants.Ant;
+import model.entity.item.Item;
 import view.MetaDataRegistry;
-import view.sprite.*;
-
-import java.util.List;
+import view.sprite.CircleSprite;
+import view.sprite.DiamondSprite;
+import view.sprite.SelectSprite;
+import view.sprite.SelectWindow;
+import view.sprite.Sprite;
 
 /**
  * Canvas for rendering entities in the simulation.
@@ -53,7 +57,10 @@ public class EntityCanvas extends Canvas {
 
         // Other sprites
         this.selectionSprite = new SelectSprite(cellsize+8, Color.WHITE, gc);
-        this.selectWindow = new SelectWindow(metaData.getScreenWidth()- metaData.getSquareOffset()-160, metaData.getScreenHeight()-200, gc);
+
+        int INSPECTION_WINDOW_WIDTH = 160;
+        int INSPECTION_WINDOW_HEIGHT = 200;
+        this.selectWindow = new SelectWindow(metaData.getScreenWidth()- metaData.getSquareOffset()-INSPECTION_WINDOW_WIDTH, metaData.getScreenHeight()-INSPECTION_WINDOW_HEIGHT, gc);
     }
 
     /**

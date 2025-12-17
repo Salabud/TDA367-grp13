@@ -1,18 +1,19 @@
 package model.entity.being.ants;
 
-import model.entity.being.BeingType;
-import model.entity.being.ants.behavior.ScoutBehavior;
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
 import model.colony.events.HungryEvent;
-import model.datastructures.Position;
-import model.entity.EntityType;
-import model.entity.being.ants.movement.RandomMovement;
-import model.entity.being.ants.state.AntState;
 import model.colony.tasks.BirthTask;
 import model.colony.tasks.EatTask;
 import model.colony.tasks.Task;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import model.datastructures.Position;
+import model.entity.EntityType;
+import model.entity.being.BeingType;
+import model.entity.being.ants.behavior.ScoutBehavior;
+import model.entity.being.ants.movement.RandomMovement;
+import model.entity.being.ants.state.AntState;
 
 /** Represents a worker ant in the simulation. */
 public class WorkerAnt extends TaskPerformerAnt {
@@ -38,8 +39,11 @@ public class WorkerAnt extends TaskPerformerAnt {
     @Override
     public void update() {
         // Broadcast hunger event (hasReportedHunger prevents spamming)
-        if (getHunger() < HUNGER_THRESHOLD && getState() != AntState.FEEDING 
-                && !(currentTask instanceof EatTask) && !hasReportedHunger) {
+        boolean isHungry = getHunger() < HUNGER_THRESHOLD;
+        boolean isNotFeeding = (!(getState() != AntState.FEEDING));
+        boolean isNotEating = !(currentTask instanceof EatTask);
+
+        if (isHungry && isNotFeeding && isNotEating && !hasReportedHunger) {
             broadcastEvent(new HungryEvent(this));
             hasReportedHunger = true;
         }
@@ -48,6 +52,7 @@ public class WorkerAnt extends TaskPerformerAnt {
         if (getHunger() >= HUNGER_THRESHOLD) {
             hasReportedHunger = false;
         }
+        
         
         if (currentTask == null && this.state == AntState.IDLE && !(this.movement instanceof RandomMovement)) {
             this.behavior = new ScoutBehavior();

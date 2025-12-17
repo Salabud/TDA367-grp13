@@ -9,9 +9,10 @@ import model.entity.being.ants.Ant;
 public class Starving implements Status{
 
     private float starvationDamagePerTick;
+    private float BASE_STARVATION_DAMAGE = 0.3F;
 
     public Starving() {
-        this.starvationDamagePerTick = 0.3F;
+        this.starvationDamagePerTick = BASE_STARVATION_DAMAGE;
     }
 
     public void applyStatusEffect(Ant ant) {

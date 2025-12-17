@@ -25,8 +25,7 @@ public class Shovel extends MouseTool{
     public void execute(World world, Position position){
         int x = position.getX();
         int y = position.getY();
-
-        if (position.getX() > 1 && position.getX() < 98 && position.getY() > 1 && position.getY() < 98){
+        if (hasValidCrossNeighbors(world, x, y)){
             world.removeTile(position);
             world.removeTile(new Position(x-1,y));
             world.removeTile(new Position(x+1,y));

@@ -26,8 +26,7 @@ public class PlaceFood extends MouseTool{
     public void execute(World world, Position position){
         int x = position.getX();
         int y = position.getY();
-
-        if (position.getX() > 1 && position.getX() < 98 && position.getY() > 1 && position.getY() < 98){
+        if (hasValidCrossNeighbors(world, x, y)){
             if (world.getTileGrid()[x][y] == null && world.getEntityGrid()[x][y].isEmpty()) {
                 world.addEntity(new Item(world, position, MaterialType.FOOD));
             }

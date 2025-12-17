@@ -39,14 +39,16 @@ public class Larva extends Ant implements Carryable {
 
     @Override
     public void update(){
+
+        boolean isHungry = getHunger() < HUNGER_THRESHOLD;
         // Broadcast hunger event (hasReportedHunger prevents spamming)
-        if (getHunger() < HUNGER_THRESHOLD && !hasReportedHunger) {
+        if (isHungry && !hasReportedHunger) {
             broadcastEvent(new HungryEvent(this));
             hasReportedHunger = true;
         }
         
         // Reset the flag once hunger is restored
-        if (getHunger() >= HUNGER_THRESHOLD && hasReportedHunger) {
+        if (!isHungry && hasReportedHunger) {
             hasReportedHunger = false;
         }
         

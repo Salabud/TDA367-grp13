@@ -345,4 +345,8 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
     public ColonyTaskBoard getTaskBoard(){
         return taskBoard;
     }
+
+    public int getGridSize(){
+        return this.gridSize;
+    }
 }
