@@ -52,6 +52,11 @@ public class MainMenuController implements InputHandler{
 
     }
 
+    @Override
+    public void handleKeyRelease(KeyEvent keyEvent) {
+
+    }
+
     private void setupButtonHandlers(){
         MainMenu.getInstance().getNewGameButton().setOnAction(e -> {
             try {

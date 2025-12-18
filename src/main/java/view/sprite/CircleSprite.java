@@ -2,6 +2,7 @@ package view.sprite;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import view.MetaDataRegistry;
 
 /**
  * CircleSprite is a concrete implementation of Sprite that represents circular shapes.
@@ -18,7 +19,13 @@ public class CircleSprite extends Sprite{
 
     @Override
     public void paint(int x, int y){
+        double centerOffsetX = (MetaDataRegistry.getInstance().getCellSize()-width*MetaDataRegistry.getInstance().getCellSize())/2;
+        double centerOffsetY = (MetaDataRegistry.getInstance().getCellSize()-height*MetaDataRegistry.getInstance().getCellSize())/2;
+        double cellSize = MetaDataRegistry.getInstance().getCellSize();
+
+        gc.setFill(Color.BLACK);
+        gc.fillOval(x+centerOffsetX-2,y+centerOffsetY-2, width*cellSize+4, height*cellSize+4);
         gc.setFill(color);
-        gc.fillOval(x, y, width, height);
+        gc.fillOval(x+centerOffsetX,y+centerOffsetY, width*cellSize, height*cellSize);
     }
 }

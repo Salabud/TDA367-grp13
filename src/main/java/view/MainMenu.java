@@ -32,7 +32,7 @@ public class MainMenu {
         titleLabel = new Label("Ant Simulator");
         titleLabel.setFont(new Font(60));
         titleLabel.setLayoutX(0);
-        titleLabel.setMinWidth(metaData.getScreenWidth());
+        titleLabel.setMinWidth(metaData.getResolutionY());
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setLayoutY(50);
         titleLabel.setStyle("-fx-font-family: 'Daydream'; -fx-font-size: 40px; -fx-text-fill: rgb(250, 149, 0)");
@@ -98,10 +98,10 @@ public class MainMenu {
     }
 
     public void refreshSize(){
-        newGameButton.setLayoutX(metaData.getScreenWidth()/2-300);
+        newGameButton.setLayoutX(metaData.getResolutionY()/2-300);
 
-        loadGameButton.setLayoutX(metaData.getScreenWidth()/2-300);
+        loadGameButton.setLayoutX(metaData.getResolutionY()/2-300);
 
-        settingsButton.setLayoutX(metaData.getScreenWidth()/2-300);
+        settingsButton.setLayoutX(metaData.getResolutionY()/2-300);
     }
 }

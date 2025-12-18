@@ -1,14 +1,16 @@
 package view.canvas;
 
+import model.ModelPresentor;
 import model.world.MaterialType;
 import model.world.Tile;
-import model.world.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import view.MetaDataRegistry;
 import view.sprite.Sprite;
 import view.sprite.SquareSprite;
+
+import java.util.List;
 
 /**
  * Canvas for rendering the world grid and tiles (for the most part terrain).
@@ -31,9 +33,9 @@ public class WorldCanvas extends Canvas {
 
 
     public WorldCanvas() {
-        cellsize = metaData.getCellsize();
-        setWidth(metaData.getScreenWidth());
-        setHeight(metaData.getScreenHeight());
+        cellsize = (int)(metaData.getCellSize()* metaData.getZoom());
+        setWidth(metaData.getResolutionY());
+        setHeight(metaData.getResolutionX());
         gc = getGraphicsContext2D();
         outlineThickness = 2;
 
@@ -50,21 +52,24 @@ public class WorldCanvas extends Canvas {
         sky = Color.rgb(110, 150, 230);
 
     }
-    public void render(World world) {
+    public void render(ModelPresentor modelPresentor) {
+        List<Tile> tiles = modelPresentor.getTiles();
+        Tile[][] tileGrid = modelPresentor.getTileGrid();
+
         //gc.clearRect(0, 0, getWidth(), getHeight());
         gc.setFill(background);
         gc.fillRect(0,0,getWidth(),getHeight());
 
         //paint sky and border
         gc.setFill(sky);
-        gc.fillRect(0,0,getWidth(),cellsize*20);
+        gc.fillRect(metaData.getCameraX(), metaData.getCameraY(), cellsize* metaData.getGridSize(),cellsize*20);
         gc.setFill(Color.BLACK);
-        gc.fillRect(0,0, metaData.getSquareOffset(), metaData.getScreenHeight());
-        gc.fillRect(metaData.getScreenHeight()+ metaData.getSquareOffset(), 0, metaData.getSquareOffset(), metaData.getScreenHeight());
+        gc.fillRect(0,0, metaData.getSquareOffset(), metaData.getResolutionX());
+        gc.fillRect(metaData.getResolutionX()+ metaData.getSquareOffset(), 0, metaData.getSquareOffset(), metaData.getResolutionX());
 
-        for (Tile tile : world.getTileList()){
-            int posX = tile.getX()*cellsize + metaData.getSquareOffset();
-            int posY = tile.getY()*cellsize;
+        for (Tile tile : tiles){
+            int posX = (int) ((tile.getX()*cellsize + metaData.getSquareOffset()) + metaData.getCameraX());
+            int posY = (int) ((tile.getY()*cellsize + metaData.getSquareOffset()) + metaData.getCameraY());
             switch (tile.getMaterialType()) {
                 case MaterialType.DIRT:
                     dirt.paint(posX,posY);
@@ -84,25 +89,35 @@ public class WorldCanvas extends Canvas {
             for (int y = 0; y < 100; y++){
                 gc.setFill(Color.BLACK);
                 //northern outlines
-                if (world.getTileGrid()[x][y] != null && y > 0 && world.getTileGrid()[x][y-1] == null){
-                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize-1, cellsize + outlineThickness, outlineThickness);
+                if (tileGrid[x][y] != null && y > 0 && tileGrid[x][y-1] == null){
+                    gc.fillRect(outlinePos(x) + metaData.getCameraX(),outlinePos(y) + metaData.getCameraY(), cellsize + outlineThickness, outlineThickness);
                 }
                 //southern outlines
-                if (world.getTileGrid()[x][y] != null && y < 99  && world.getTileGrid()[x][y+1] == null){
-                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize+cellsize-1, cellsize+outlineThickness, outlineThickness);
+                if (tileGrid[x][y] != null && y < 99  && tileGrid[x][y+1] == null){
+                    gc.fillRect(outlinePos(x) + metaData.getCameraX(),outlinePos(y)+cellsize + metaData.getCameraY(), cellsize+outlineThickness, outlineThickness);
                 }
                 //eastern outlines
-                if (world.getTileGrid()[x][y] != null && x < 99 && world.getTileGrid()[x+1][y] == null){
-                    gc.fillRect(x*cellsize + cellsize-1 + metaData.getSquareOffset(),y*cellsize,  outlineThickness, cellsize);
+                if (tileGrid[x][y] != null && x < 99 && tileGrid[x+1][y] == null){
+                    gc.fillRect(outlinePos(x)+cellsize + metaData.getCameraX(),outlinePos(y) + metaData.getCameraY(),  outlineThickness, cellsize);
                 }
                 //western outlines
-                if (world.getTileGrid()[x][y] != null && x > 0 && world.getTileGrid()[x-1][y] == null){
-                    gc.fillRect(x*cellsize-1 + metaData.getSquareOffset(),y*cellsize -1,outlineThickness, cellsize+outlineThickness);
+                if (tileGrid[x][y] != null && x > 0 && tileGrid[x-1][y] == null){
+                    gc.fillRect(outlinePos(x) + metaData.getCameraX(),outlinePos(y) + metaData.getCameraY(),outlineThickness, cellsize+outlineThickness);
                 }
             }
         }
+    }
 
+    /**
+     * Helper function to calculate where to draw outline strokes adjusted for zoom
+     * @param val the x or y value of the stroke
+     * @return the adjusted x or y value
+     */
+    public int outlinePos(int val){
+        return val*cellsize-1 + metaData.getSquareOffset();
+    }
 
-
+    public void updateCellsize() {
+        this.cellsize = (int) metaData.getCellSize();
     }
 }

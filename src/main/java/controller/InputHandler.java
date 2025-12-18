@@ -41,4 +41,10 @@ public interface InputHandler {
      * @param event
      */
     void handleMouseDragged(MouseEvent event);
+
+    /**
+     * Handle key release event
+     * @param keyEvent
+     */
+    void handleKeyRelease(KeyEvent keyEvent);
 }

@@ -21,10 +21,11 @@ public class Main extends Application {
         World world = new World();
         model = new Model();
         model.addWorld(world.withStartWorld());
-        View view = new View(stage);
+        View view = new View(model, stage);
         GameInterfaceController gameInterfaceController = new GameInterfaceController(model, view);
         MainMenuController mainMenuController = new MainMenuController(model, view);
         model.addListener(view);
+        model.addListener(gameInterfaceController);
         view.setInputHandler(mainMenuController);
         view.initialize();
         model.initialise();
@@ -35,7 +36,7 @@ public class Main extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                view.renderInterface();
+                view.render();
             }
         }.start();
     }

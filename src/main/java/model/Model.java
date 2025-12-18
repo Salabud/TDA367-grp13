@@ -1,7 +1,12 @@
 package model;
 
+import model.world.Tile;
+import model.world.World;
+import javafx.application.Platform;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,11 +17,13 @@ import model.saving.SaveFileCreator;
 import model.saving.SaveFileLoader;
 import model.world.World;
 
+import model.entity.Entity;
+
 /**
  * The Model class represents the core data and logic of the ant simulation.
  * It manages the worlds, entities, and the game state, and notifies listeners of changes.
  */
-public class Model {
+public class Model implements ModelPresentor{
     private int startingTickrate = 60;
     private int tickrate;
     private List<World> worlds;
@@ -50,7 +57,7 @@ public class Model {
             }
 
         };
-        notifyEntitiesChanged();
+        notifyTick();
 
     }
 
@@ -125,9 +132,9 @@ public class Model {
     /**
      * Notifies all listeners that the entities have changed.
      */
-    protected void notifyEntitiesChanged() {
+    protected void notifyTick() {
         for (ModelListener listener : listeners) {
-            listener.onEntitiesChanged(worlds.getFirst()); //Refactor when we are handling multiple worlds
+            listener.onTick(); //Refactor when we are handling multiple worlds
         }
     }
     
@@ -178,7 +185,7 @@ public class Model {
         for (ModelListener listener : listeners) {
             listener.onGameStateChanged(newState);
         }
-        notifyEntitiesChanged();
+        notifyTick();
 
     }
 
@@ -238,5 +245,25 @@ public class Model {
     }
     public World getWorld(){
         return worlds.getFirst();
+    }
+
+    @Override
+    public List<Entity>[][] getEntityGrid() { //TODO Make read only
+        return getWorld().getEntityGrid();
+    }
+
+    @Override
+    public List<Entity> getEntityList() {
+        return Collections.unmodifiableList(getWorld().getEntityList());
+    }
+
+    @Override
+    public Tile[][] getTileGrid() { //TODO Make read only
+        return getWorld().getTileGrid();
+    }
+
+    @Override
+    public List<Tile> getTiles() {
+        return Collections.unmodifiableList(getWorld().getTileList());
     }
 }

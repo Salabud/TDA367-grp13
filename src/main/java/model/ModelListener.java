@@ -15,7 +15,7 @@ public interface ModelListener {
     /**
      * Called when entities in the model have changed.
      */
-    void onEntitiesChanged(World world);
+    void onTick();
 
     /**
      * Called when the tiles of the map need to be redrawn
