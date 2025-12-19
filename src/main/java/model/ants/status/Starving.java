@@ -4,7 +4,7 @@ import model.ants.Ant;
 
 public class Starving implements Status{
 
-    private float starvationDamagePerTick;
+    private final float starvationDamagePerTick;
 
     public Starving() {
         this.starvationDamagePerTick = 0.3F;

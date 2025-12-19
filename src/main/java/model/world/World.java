@@ -18,10 +18,10 @@ import model.tasks.TemporaryTestTask;
  * Manages the grid of tiles and entities, and handles updates.
  */
 public class World {
-    private List<Entity> entities; // Current entities in the world, for easy iteration
-    private List<Entity>[][] entityGrid;
-    private Tile[][] tileGrid;
-    private List<Tile> tiles; // Current tiles in the world, for easy rendering access
+    private final List<Entity> entities; // Current entities in the world, for easy iteration
+    private final List<Entity>[][] entityGrid;
+    private final Tile[][] tileGrid;
+    private final List<Tile> tiles; // Current tiles in the world, for easy rendering access
     private final int gridSize;
     private boolean tilesChanged;
     private ColonyMediator colonyMediator;

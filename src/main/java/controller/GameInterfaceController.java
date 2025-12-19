@@ -28,14 +28,14 @@ import view.View;
  * Extensibly implements InputHandler (following the observer pattern) to process View events.
  */
 public class GameInterfaceController implements InputHandler, ModelListener {
-    private Model model;
-    private View view;
-    private GameInterface gameInterface;
+    private final Model model;
+    private final View view;
+    private final GameInterface gameInterface;
     private boolean suppressFirstClick;
     private MouseTool currentTool;
     private boolean dragging;
     private final MetaDataRegistry metaData = MetaDataRegistry.getInstance();
-    private Set<KeyCode> keysPressed;
+    private final Set<KeyCode> keysPressed;
     
     public GameInterfaceController(Model model, View view) {
         this.model = model;

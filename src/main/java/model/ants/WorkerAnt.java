@@ -45,10 +45,7 @@ public class WorkerAnt extends TaskPerformerAnt {
     @Override
     protected boolean isTaskTypeAllowed(Task task) {
         // Workers cannot give birth
-        if (task instanceof BirthTask) {
-            return false;
-        }
-        return true;
+        return !(task instanceof BirthTask);
     }
 
     /**

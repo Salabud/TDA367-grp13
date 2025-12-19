@@ -53,10 +53,7 @@ public class QueenAnt extends TaskPerformerAnt {
         if (task instanceof EatTask) {
             return false;
         }
-        if (task instanceof MoveCarryableTask) {
-            return false;
-        }
-        return true;
+        return !(task instanceof MoveCarryableTask);
     }
 
     public void layLarva(int amount){

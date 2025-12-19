@@ -6,8 +6,8 @@ import model.tasks.Task;
 
 public class Poisoned implements Status {
 
-    private float poisonDamagePerTick;
-    private float poisonHungerPerTick;
+    private final float poisonDamagePerTick;
+    private final float poisonHungerPerTick;
 
     public Poisoned() {
         this.poisonDamagePerTick = 0.3F;
@@ -20,9 +20,6 @@ public class Poisoned implements Status {
     }  
     @Override
     public boolean allowsTask(Task task) {
-        if (task instanceof FeedBeingTask) {
-            return false;
-        }
-        return true;
+        return !(task instanceof FeedBeingTask);
     }
 }

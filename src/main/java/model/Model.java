@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit;
  * It manages the worlds, entities, and the game state, and notifies listeners of changes.
  */
 public class Model implements ModelPresentor{
-    private int startingTickrate;
+    private final int startingTickrate;
     private int tickrate;
-    private List<World> worlds;
-    private List<ModelListener> listeners;
+    private final List<World> worlds;
+    private final List<ModelListener> listeners;
     private String gameState;
     private ScheduledExecutorService tickExecutor;
     private boolean isRunning;
@@ -50,7 +50,7 @@ public class Model implements ModelPresentor{
                 world.setTilesChanged(false);
             }
 
-        };
+        }
         notifyTick();
 
     }

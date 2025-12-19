@@ -16,10 +16,10 @@ import java.util.List;
  * nest, and task board.
  */
 public class AntColony {
-    private List<Ant> ants;
-    private ColonyMediator mediator;
-    private ColonyTaskBoard taskBoard;
-    private List<Item> knownFood;
+    private final List<Ant> ants;
+    private final ColonyMediator mediator;
+    private final ColonyTaskBoard taskBoard;
+    private final List<Item> knownFood;
     private QueenAnt queen;
     
     // Birth control
