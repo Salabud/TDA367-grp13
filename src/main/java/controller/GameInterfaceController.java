@@ -1,22 +1,26 @@
 package controller;
 
-import controller.mouseTool.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import controller.mouseTool.MouseTool;
+import controller.mouseTool.PlaceDirt;
+import controller.mouseTool.PlaceFood;
+import controller.mouseTool.PlacePoison;
+import controller.mouseTool.SelectTool;
+import controller.mouseTool.Shovel;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import model.Model;
 import model.ModelListener;
 import model.datastructures.Position;
 import model.world.World;
+import view.GameInterface;
 import view.MetaDataRegistry;
 import view.Tool;
 import view.View;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import view.GameInterface;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Controller class - Mediator between Model and View.

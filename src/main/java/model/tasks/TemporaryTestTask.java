@@ -1,10 +1,8 @@
 package model.tasks;
 
-import model.ants.behavior.AntBehavior;
-import model.ants.movement.AntMovement;
+import model.ants.TaskPerformerAnt;
 import model.ants.movement.NoMovement;
 import model.ants.movement.PathfindingMovement;
-import model.ants.TaskPerformerAnt;
 import model.datastructures.Position;
 
 /**
