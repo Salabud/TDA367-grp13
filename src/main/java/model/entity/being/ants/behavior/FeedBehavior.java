@@ -2,6 +2,7 @@ package model.entity.being.ants.behavior;
 
 import model.entity.being.Being;
 import model.entity.being.ants.Ant;
+import model.entity.being.ants.state.AntState;
 import model.entity.item.Item;
 
 /**
@@ -35,7 +36,6 @@ public class FeedBehavior implements AntBehavior {
     @Override
     public void perform(Ant ant) {
         if (isComplete) return;
-
         float newHunger = Math.min(targetBeing.getHunger() + HUNGER_PER_TICK, targetBeing.getMaxHunger());
         targetBeing.setHunger(newHunger);
 

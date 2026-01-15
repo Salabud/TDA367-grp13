@@ -41,7 +41,6 @@ public abstract class Entity implements Updateable {
         return this.entityId;
     }
 
-
     public void setEntityId(int entityId) {
         this.entityId = entityId;
     }
@@ -104,4 +103,5 @@ public abstract class Entity implements Updateable {
     public void setRemoveFlag(boolean removeFlag) {
         this.removeFlag = removeFlag;
     }
+    public boolean getRemoveFlag() {return this.removeFlag; }
 }

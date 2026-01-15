@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class Larva extends Ant implements Carryable {
     private static final float DEFAULT_MAX_HEALTH = 50f;
     private static final float DEFAULT_MAX_HUNGER = 50f;
-    private static final float TRANSFORM_AGE = 3 * 60;
+    private static final float DEFAULT_HUNGER = 31f;
+    private static final float TRANSFORM_AGE = 8;
     private static final float HUNGER_THRESHOLD = 30f;
     private boolean hasReportedHunger = false;
     private boolean hasRequestedTransform = false;
@@ -29,7 +30,7 @@ public class Larva extends Ant implements Carryable {
         this.maxHealth = DEFAULT_MAX_HEALTH;
         this.health = DEFAULT_MAX_HEALTH;
         this.maxHunger = DEFAULT_MAX_HUNGER;
-        this.hunger = DEFAULT_MAX_HUNGER;
+        this.hunger = DEFAULT_HUNGER;
     }
 
     @Override
@@ -44,6 +45,7 @@ public class Larva extends Ant implements Carryable {
         // Broadcast hunger event (hasReportedHunger prevents spamming)
         if (isHungry && !hasReportedHunger) {
             broadcastEvent(new HungryEvent(this));
+            System.out.println("Larva " + this.getEntityId() + ": reported hunger");
             hasReportedHunger = true;
         }
         

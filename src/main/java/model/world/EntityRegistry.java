@@ -12,5 +12,6 @@ public interface EntityRegistry {
     List<Entity>[][] getEntityGrid();
     void addEntity(Entity entity);
     void removeEntity(Entity entity);
+    private void rinseFlaggedEntities(List<Entity> entityList){};
     void updateEntityGrid();
 }

@@ -56,7 +56,7 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
     }
   
     public World withStartWorld(){
-        //Hardcoded starting world
+        //Hardcoded starting world, we will need a factory for this
         for (int x = 0; x < 100; x++){
                 Tile tile = new Tile(x,20,MaterialType.GRASS);
                 tiles.add(tile);
@@ -97,6 +97,7 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
         spawner = new AntSpawner();
         spawner.setWorld(this);
         spawner.setAntColony(colony);
+        spawner.setEventListener(hiveMind);
 
         AntFactory factory = AntFactory.getInstance();
         
@@ -150,6 +151,22 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
         larva1.addEventListener(spawner);
         addEntity(larva1);
         colony.addAnt(larva1);
+
+        Larva larva2 = factory.createLarva(new Position(60, 31));
+        larva2.setAge(1f);
+        larva2.setEntityId(EntityIdManager.getInstance().getNextId());
+        larva2.addEventListener(hiveMind);
+        larva2.addEventListener(spawner);
+        addEntity(larva2);
+        colony.addAnt(larva2);
+
+        Larva larva3 = factory.createLarva(new Position(59, 33));
+        larva2.setAge(3f);
+        larva3.setEntityId(EntityIdManager.getInstance().getNextId());
+        larva3.addEventListener(hiveMind);
+        larva3.addEventListener(spawner);
+        addEntity(larva3);
+        colony.addAnt(larva3);
         
         tilesChanged = true;
         return this;
@@ -167,6 +184,8 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
             entityGrid[x][y].add(entity);
             entityPositionHashMap.put(entity, new Position(x, y));
             entities.add(entity);
+            // Set world context immediately so entity has access to surroundings
+            entity.setWorldContext(new WorldContext(entities, entityGrid, tiles, tileGrid, gridSize));
         }
     }
 
@@ -271,10 +290,11 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
     @Override
     public void tick(){
         hiveMind.update();
+        rinseFlaggedEntities(entities);
         for (Entity entity : entities) {
-            WorldContext worldContext = new WorldContext(entities,entityGrid,tiles,tileGrid,gridSize);
+            // Set world context before update so entity has access to current surroundings
+            entity.setWorldContext(new WorldContext(entities, entityGrid, tiles, tileGrid, gridSize));
             entity.update();
-            entity.setWorldContext(worldContext);
         }
         updateEntityGrid();
     }
@@ -327,6 +347,14 @@ public class World implements EntityRegistry, TileRegistry, Tickable{
             entityGrid[newPosition.getX()][newPosition.getY()].add(entity);
 
             entityPositionHashMap.put(entity, newPosition);
+        }
+    }
+
+    private void rinseFlaggedEntities(List<Entity> entities){
+        for (Entity entity : entities) {
+            if (entity.getRemoveFlag()){
+                removeEntity(entity);
+            }
         }
     }
 

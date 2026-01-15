@@ -143,7 +143,6 @@ public class AntSpawner implements ColonyEventListener {
         // Add worker to world and colony
         world.addEntity(worker);
         antColony.addAnt(worker);
-        
         return worker;
     }
     

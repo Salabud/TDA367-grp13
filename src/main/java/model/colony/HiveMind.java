@@ -105,6 +105,7 @@ public class HiveMind implements ColonyEventListener {
     private void assignTask(TaskPerformerAnt ant, Task task){
         ant.assignTask(task);
         task.setAssigned(true);
+        System.out.println("HiveMind: Assigned " + task + " to ant " + ant.getEntityId());
     }
     
     /**
@@ -238,16 +239,19 @@ public class HiveMind implements ColonyEventListener {
     private void handleLarvaHungry(Larva larva) {
         for (Task task : taskBoard.getTaskBoard()) {
             if (task instanceof FeedBeingTask feedTask && feedTask.getTarget() == larva) {
+                System.out.println("HiveMind: FeedBeingTask for larva " + larva.getEntityId() + " already exists");
                 return; // Task already exists
             }
         }
         
         Item food = findBestFood(larva.getPosition());
         if (food == null) {
+            System.out.println("HiveMind: No food available, not creating feed task for larva " + larva.getEntityId());
             return;
         }
 
         taskBoard.addTask(new FeedBeingTask(larva, food, 2, "larva"));
+        System.out.println("HiveMind: Created FeedBeingTask for larva " + larva.getEntityId());
         antColony.deleteKnownFood(food);
     }
 

@@ -113,7 +113,6 @@ public class GameInterfaceController implements InputHandler, ModelListener {
         if(suppressFirstClick){
             suppressFirstClick = false;
         } else {
-            System.out.println("CLICK on scene");
             if (currentTool.isClickTriggered()) applyTool(event);
         }
     }

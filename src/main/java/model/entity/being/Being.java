@@ -16,7 +16,7 @@ public abstract class Being extends Entity {
     protected float hunger;
     protected float maxHunger;
     protected float age;
-    protected float hungerDepletionRate = 0.01F;
+    protected float hungerDepletionRate = 0.03F;
     protected float agingRate = 1 / 60F; // in "seconds"
     protected List<Status> statuses;
     protected BeingType beingType;

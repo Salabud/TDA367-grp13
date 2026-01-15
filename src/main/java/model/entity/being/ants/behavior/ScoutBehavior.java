@@ -2,7 +2,6 @@ package model.entity.being.ants.behavior;
 
 import model.entity.Entity;
 import model.entity.being.ants.Ant;
-import model.colony.AntColony;
 import model.colony.events.FoodDiscoveredEvent;
 import model.entity.item.Item;
 import model.world.MaterialType;
@@ -13,6 +12,7 @@ import java.util.List;
 /**
  * Behavior for observing surroundings and reporting discoveries.
  * Scans a square area around the ant and reports any unknown food via events.
+ * Uses the ColonyEvent pattern to notify listeners about discovered food.
  */
 public class ScoutBehavior implements AntBehavior {
 
@@ -31,15 +31,13 @@ public class ScoutBehavior implements AntBehavior {
     @Override
     public void perform(Ant ant) {
         WorldContext surroundings = ant.getSurroundings();
-        AntColony colony = ant.getColony();
         
-        if (surroundings== null || colony == null) {
+        if (surroundings == null) {
             return;
         }
         
         int antX = ant.getX();
         int antY = ant.getY();
-        List<Item> knownFood = colony.getKnownFood();
         List<Entity>[][] entityGrid = surroundings.getEntityGrid();
         int gridSize = entityGrid.length;
         
@@ -60,27 +58,15 @@ public class ScoutBehavior implements AntBehavior {
                 for (Entity entity : entitiesAtPosition) {
                     if (entity instanceof Item item && 
                         item.getMaterialType() == MaterialType.FOOD &&
-                            !item.isScouted()) {
-                        if (!isKnownFood(item, knownFood)) {
-                            System.out.println("reported a scouted item");
-                            ant.broadcastEvent(new FoodDiscoveredEvent(item, ant));
-                        }
+                        !item.isScouted()) {
+                        // Mark as scouted to prevent duplicate reports
+                        item.setScouted(true);
+                        // Broadcast discovery event to colony via the event pattern
+                        ant.broadcastEvent(new FoodDiscoveredEvent(item, ant));
                     } //TODO: Also report corpses/larva that are not in the nursery.
                 }
             }
         }
-    }
-    
-    /**
-     * Check if a food item is already in the known food list.
-     */
-    private boolean isKnownFood(Item food, List<Item> knownFood) {
-        for (Item known : knownFood) {
-            if (known.getPosition().equals(food.getPosition())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
